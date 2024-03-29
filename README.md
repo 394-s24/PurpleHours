@@ -86,3 +86,4 @@ Gitignore file created with [the Toptal tool](https://www.toptal.com/developers/
 ## License
 
 This project is licensed under the terms of the [MIT license](./LICENSE).
+
