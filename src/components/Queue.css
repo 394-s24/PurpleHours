@@ -3,10 +3,14 @@
   margin: 10px;
 }
 
-.queue .helping {
+.helping {
   margin: 0 40px;
 }
   
-.queue .upcoming {
+.upcoming {
   margin: 0 40px;
+}
+
+.queue Button {
+  margin-left: auto;
 }

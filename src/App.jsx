@@ -20,9 +20,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const queueData = [
-  { name: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
-  { name: 'James', issue: 'I found a bug', time: '1:30 PM' },
-  { name: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
+  {name: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
+  {name: 'James', issue: 'I found a bug', time: '1:30 PM' },
+  {name: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
 ];
 
 const App = () => {
@@ -30,8 +30,8 @@ const App = () => {
   const [queue, setQueue] = useState(queueData);
 
   const handleQueue = () => {
-    queueData.shift();
-    setQueue(queueData);
+    console.log('Handling queue');
+    setQueue(queue.slice(1));
   };
 
   return <Queue queue={queue} handleQueue={handleQueue} />;
