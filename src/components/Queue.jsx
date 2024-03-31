@@ -12,7 +12,7 @@ const Queue = ({ queue , handleQueue}) => {
         <h2>Currently helping</h2>
         <Card body className="helping">
           {first && (
-            <Group name={first.name} issue={first.issue} time={first.time} />
+            <Group names={first.names} issue={first.issue} time={first.time} />
           )}
           <Button onClick={handleQueue} variant="primary" >Done</Button>
         </Card>
@@ -24,7 +24,7 @@ const Queue = ({ queue , handleQueue}) => {
             <ListGroup.Item>
               <Group
                 key={index}
-                name={group.name}
+                names={group.names}
                 issue={group.issue}
                 time={group.time}
               />

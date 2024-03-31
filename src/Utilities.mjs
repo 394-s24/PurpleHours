@@ -45,41 +45,43 @@ async function writeGroupData(course, session, groupsData) {
 }
 
 async function retrieveGroupData(course, session) {
-    
-  // Reference to the location where you want to retrieve the data
-  const groupsRef = ref(db, `${course}/${session}/groups/`);
+  return new Promise((resolve, reject) => {
+    // Reference to the location where you want to retrieve the data
+    const groupsRef = ref(db, `${course}/${session}/groups/`);
 
-  onValue(groupsRef, (snapshot) => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      let res = [];
-      
-      for (const [key, value] of Object.entries(data)) {
-        console.log(`${key}: ${value}`);
-        res.push(value);
+    onValue(groupsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        let res = [];
+        
+        for (const [key, value] of Object.entries(data)) {
+          console.log(`${key}: ${value}`);
+          res.push(value);
+        }
+        console.log(res);
+        resolve(res);
+
+      } else {
+        console.log("No data available");
+        reject(null);
       }
-      console.log(res);
-      return res;
-
-    } else {
-      console.log("No data available");
-      return null;
-    }
-  }, {
-    onlyOnce: false
+    }, {
+      onlyOnce: false
+    });
   });
 }
 
+export { writeGroupData, retrieveGroupData };
 
 
+// (async () => {
+//   try {
+//     const data = await retrieveGroupData("cs211", "favouroh1");
+//     console.log("Data retrieved from the database:", data);
+//     // Do something with the data
+//   } catch (error) {
+//     // Handle errors here
+//     console.log("Error retrieving data", error);
+//   }
+// })();
 
-(async () => {
-  try {
-    const data = await retrieveGroupData("cs211", "favouroh1");
-    console.log("Data retrieved from the database:", data);
-    // Do something with the data
-  } catch (error) {
-    // Handle errors here
-    console.log("Error retrieving data", error);
-  }
-})();
