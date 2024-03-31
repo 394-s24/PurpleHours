@@ -1,0 +1,21 @@
+.queue-container {
+    /* styles for container */
+  }
+  
+.currently-helping {
+background-color: #f0ad4e; /* Or any color you prefer */
+/* additional styles */
+}
+
+.time {
+float: right;
+/* styles for time */
+}
+
+.end-session-btn {
+width: 100%;
+/* styles for end session button */
+}
+  
+  /* Additional custom styles for ListGroup.Item variants and layout */
+  

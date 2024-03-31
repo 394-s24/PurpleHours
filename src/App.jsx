@@ -2,6 +2,8 @@ import './App.css';
 import Queue from './components/Queue.jsx';
 import 'firebase/database';
 import { initializeApp } from "firebase/app";
+import "bootstrap/dist/css/bootstrap.min.css";
+// import {} from 'react-bootstrap';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
