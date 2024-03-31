@@ -3,7 +3,7 @@ import Queue from './components/Queue.jsx';
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { retrieveGroupData } from './Utilities.mjs';
 
 // Your web app's Firebase configuration
@@ -26,45 +26,37 @@ let queueData = [
   {names: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
 ];
 
-(async () => {
-  try {
-    console.log(queueData);
-    queueData = await retrieveGroupData("cs211", "favouroh1");
-    console.log(queueData);
-    for (var i = 0; i < queueData.length; i++) {
-      var value = queueData[i];
-      var unix_timestamp = value["time"];
-
-      var date = new Date(unix_timestamp * 1000);
-
-      var hours = date.getHours();
-      var minutes = "0" + date.getMinutes();
-
-      // Will display time in 10:30 format
-      var formattedTime = hours + ':' + minutes.substring(-2);
-      queueData[i]["time"] = formattedTime;
-
-      // Change names from array to string
-      var names = value["names"];
-      var namesString = names.join(", ");
-      queueData[i]["names"] = namesString;
-    }
-
-    console.log("Data retrieved from the database:", queueData);
-    // Do something with the data
-  } catch (error) {
-    // Handle errors here
-    console.log("Error retrieving data", error);
-  }
-})();
-
 const App = () => {
+  const [queue, setQueue] = useState([]);
 
-  const [queue, setQueue] = useState(queueData);
-  console.log(queueData);
+  useEffect(() => {
+    const fetchQueueData = async () => {
+      try {
+        let fetchedQueueData = await retrieveGroupData("cs211", "favouroh1");
+        for (var i = 0; i < fetchedQueueData.length; i++) {
+          var value = fetchedQueueData[i];
+          var unix_timestamp = value["time"];
+          var date = new Date(unix_timestamp * 1000);
+          var hours = date.getHours();
+          var minutes = "0" + date.getMinutes();
+          var formattedTime = hours + ':' + minutes.substr(-2);
+          fetchedQueueData[i]["time"] = formattedTime;
+          var names = value["names"];
+          var namesString = names.join(", ");
+          fetchedQueueData[i]["names"] = namesString;
+        }
+
+        setQueue(fetchedQueueData);
+      } catch (error) {
+        console.log("Error retrieving data", error);
+      }
+    };
+
+    fetchQueueData();
+  }, []);
+
   const handleQueue = () => {
-    console.log('Handling queue');
-    setQueue(queue.slice(1));
+    setQueue(currentQueue => currentQueue.slice(1));
   };
 
   return <Queue queue={queue} handleQueue={handleQueue} />;
