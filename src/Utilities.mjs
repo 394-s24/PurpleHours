@@ -1,6 +1,6 @@
 import 'firebase/database';
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from 'firebase/database';
+import { getDatabase, ref, set, onValue} from 'firebase/database';
 
 
 // Your web app's Firebase configuration
@@ -20,17 +20,18 @@ const app = initializeApp(firebaseConfig);
 // Create a reference to the database
 const db = getDatabase(app);
 
-async function writeGroupData(groupID, names, issue) {
+async function writeGroupData(course, session, groupsData) {
   
-  const groupsData = {
-    id: groupID,
-    names: names,
-    issue: issue,
-    time : Math.floor(Date.now() / 1000)
-  };
+  // const groupsData = {
+  // id: groupID,
+  // names: names,
+  // issue: issue,
+  // time : Math.floor(Date.now() / 1000),
+  // done : false,
+  // };
   
   // Reference to the location where you want to save the data
-  const groupsRef = ref(db, 'cs211/favouroh1/groups/' + groupsData["id"]);
+  const groupsRef = ref(db, `${course}/${session}/groups/` + groupsData["id"]);
 
   try {
     await set(groupsRef, groupsData)
@@ -43,11 +44,42 @@ async function writeGroupData(groupID, names, issue) {
   }
 }
 
-async function retrieveGroupData(class, oh_sec){
-  
+async function retrieveGroupData(course, session) {
+    
+  // Reference to the location where you want to retrieve the data
+  const groupsRef = ref(db, `${course}/${session}/groups/`);
 
+  onValue(groupsRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      let res = [];
+      
+      for (const [key, value] of Object.entries(data)) {
+        console.log(`${key}: ${value}`);
+        res.push(value);
+      }
+      console.log(res);
+      return res;
+
+    } else {
+      console.log("No data available");
+      return null;
+    }
+  }, {
+    onlyOnce: false
+  });
 }
 
 
 
 
+(async () => {
+  try {
+    const data = await retrieveGroupData("cs211", "favouroh1");
+    console.log("Data retrieved from the database:", data);
+    // Do something with the data
+  } catch (error) {
+    // Handle errors here
+    console.log("Error retrieving data", error);
+  }
+})();
