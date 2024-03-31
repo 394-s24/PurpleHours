@@ -20,24 +20,34 @@ const app = initializeApp(firebaseConfig);
 // Create a reference to the database
 const db = getDatabase(app);
 
-// Data to be added
-const groupsData = {
-  id: 0,
-  names: ["John", "Favour", "Charlie"],
-  issue: "debugging",
-  time : 1711920334
-};
+async function writeGroupData(groupID, names, issue) {
+  
+  const groupsData = {
+    id: groupID,
+    names: names,
+    issue: issue,
+    time : Math.floor(Date.now() / 1000)
+  };
+  
+  // Reference to the location where you want to save the data
+  const groupsRef = ref(db, 'cs211/favouroh1/groups/' + groupsData["id"]);
 
-// Reference to the location where you want to save the data
-const groupsRef = ref(db, 'cs211/favouroh1/groups/' + groupsData["id"]);
-
-// Write data to the database
-set(groupsRef, groupsData)
-  .then(() => {
+  try {
+    await set(groupsRef, groupsData)
+    
     console.log("Data saved successfully!");
-  })
-  .catch((error) => {
-    console.log("The write failed...", error);
-  });
+    return 200; 
+  } catch (error) {
+    console.error("The write failed...", error);
+    return 500; 
+  }
+}
+
+async function retrieveGroupData(class, oh_sec){
+  
+
+}
+
+
 
 
