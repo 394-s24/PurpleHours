@@ -1,5 +1,8 @@
 import './App.css';
 import Queue from './components/Queue.jsx';
+import Student from './components/Student.jsx';
+import TA from './components/TA.jsx';
+
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,46 +23,59 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-let queueData = [
-  {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
-  {names: 'James', issue: 'I found a bug', time: '1:30 PM' },
-  {names: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
-];
+// let queueData = [
+//   {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
+//   {names: 'James', issue: 'I found a bug', time: '1:30 PM' },
+//   {names: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
+// ];
 
 const App = () => {
-  const [queue, setQueue] = useState([]);
+  // const [queue, setQueue] = useState([]);
 
-  useEffect(() => {
-    const fetchQueueData = async () => {
-      try {
-        let fetchedQueueData = await retrieveGroupData("cs211", "favouroh1");
-        for (var i = 0; i < fetchedQueueData.length; i++) {
-          var value = fetchedQueueData[i];
-          var unix_timestamp = value["time"];
-          var date = new Date(unix_timestamp * 1000);
-          var hours = date.getHours();
-          var minutes = "0" + date.getMinutes();
-          var formattedTime = hours + ':' + minutes.substr(-2);
-          fetchedQueueData[i]["time"] = formattedTime;
-          var names = value["names"];
-          var namesString = names.join(", ");
-          fetchedQueueData[i]["names"] = namesString;
-        }
+  // useEffect(() => {
+  //   const fetchQueueData = async () => {
+  //     try {
+  //       let fetchedQueueData = await retrieveGroupData("cs211", "favouroh1");
+  //       for (var i = 0; i < fetchedQueueData.length; i++) {
+          
+  //         var value = fetchedQueueData[i];
+          
+  //         // Convert unix time to readable time
+  //         var unix_timestamp = value["time"];
+  //         var date = new Date(unix_timestamp * 1000);
+  //         var hours = date.getHours();
+  //         var minutes = "0" + date.getMinutes();
 
-        setQueue(fetchedQueueData);
-      } catch (error) {
-        console.log("Error retrieving data", error);
-      }
-    };
+  //         var formattedTime = hours + ':' + minutes.substr(-2);
+  //         fetchedQueueData[i]["time"] = formattedTime;
+          
+  //         // Convert list of names to string
+  //         var names = value["names"];
+  //         var namesString = names.join(", ");
+  //         fetchedQueueData[i]["names"] = namesString;
+  //       }
 
-    fetchQueueData();
-  }, []);
+  //       setQueue(fetchedQueueData);
 
-  const handleQueue = () => {
-    setQueue(currentQueue => currentQueue.slice(1));
-  };
+  //       console.log(fetchedQueueData);
+  //     } catch (error) {
+  //       console.log("Error retrieving data", error);
+  //     }
+  //   };
 
-  return <Queue queue={queue} handleQueue={handleQueue} />;
+  //   fetchQueueData();
+  // }, []);
+
+  // const handleQueue = () => {
+  //   setQueue(currentQueue => currentQueue.slice(1));
+  // };
+
+  return(
+    <div className="App">
+      <Student />
+      <TA />
+    </div>
+  );
 };
 
 export default App;
