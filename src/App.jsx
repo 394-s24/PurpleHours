@@ -3,7 +3,7 @@ import Queue from './components/Queue.jsx';
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {} from 'react-bootstrap';
+import { useState } from 'react';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -26,7 +26,15 @@ const queueData = [
 ];
 
 const App = () => {
-  return <Queue queue={queueData} />;
+
+  const [queue, setQueue] = useState(queueData);
+
+  const handleQueue = () => {
+    queueData.shift();
+    setQueue(queueData);
+  };
+
+  return <Queue queue={queue} handleQueue={handleQueue} />;
 };
 
 export default App;
