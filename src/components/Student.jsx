@@ -1,3 +1,10 @@
+import Queue from './Queue.jsx';
+
+import 'firebase/database';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { retrieveGroupData } from '../DatabaseFuncs.mjs';
+
 let queueData = [
   {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
   {names: 'James', issue: 'I found a bug', time: '1:30 PM' },
