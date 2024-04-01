@@ -1,3 +1,10 @@
+import Queue from './TAQueue.jsx';
+
+import 'firebase/database';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { retrieveGroupData } from '../DatabaseFuncs.mjs';
+
 let queueData = [
     {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
     {names: 'James', issue: 'I found a bug', time: '1:30 PM' },
@@ -11,22 +18,23 @@ useEffect(() => {
     const fetchQueueData = async () => {
     try {
         let fetchedQueueData = await retrieveGroupData("cs211", "favouroh1");
-        for (var i = 0; i < fetchedQueueData.length; i++) {
+        for (let i = 0; i < fetchedQueueData.length; i++) {
         
-        var value = fetchedQueueData[i];
+        let value = fetchedQueueData[i];
         
         // Convert unix time to readable time
-        var unix_timestamp = value["time"];
-        var date = new Date(unix_timestamp * 1000);
-        var hours = date.getHours();
-        var minutes = "0" + date.getMinutes();
+        let unix_timestamp = value["time"];
+        let date = new Date(unix_timestamp * 1000);
+        let hours = date.getHours();
+        let minutes = "0" + date.getMinutes();
 
-        var formattedTime = hours + ':' + minutes.substr(-2);
+        let formattedTime = hours + ':' + minutes.substr(-2);
         fetchedQueueData[i]["time"] = formattedTime;
         
         // Convert list of names to string
-        var names = value["names"];
-        var namesString = names.join(", ");
+        let namesObjects = value["names"];
+        let namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        let namesString = namesArray.join(", ");
         fetchedQueueData[i]["names"] = namesString;
         }
 

@@ -85,7 +85,7 @@ async function addToGroup(course, session, name, id) {
 
 export { writeGroupData, retrieveGroupData, addToGroup };
 
-addToGroup("cs211", "favouroh1", "Dave", "1");
+// addToGroup("cs211", "favouroh1", "Dave", "1");
 
 // (async () => {
 //   try {
