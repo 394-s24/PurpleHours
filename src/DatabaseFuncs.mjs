@@ -1,6 +1,21 @@
 import 'firebase/database';
-import { getDatabase, ref, set, onValue} from 'firebase/database';
-import app from './components/FirebaseApp';
+import { getDatabase, ref, set, push, onValue} from 'firebase/database';
+// import app from './components/FirebaseApp';
+import { initializeApp } from "firebase/app";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCHMX3LqauP2z1mdng1xgaeHRf5qjAA9bY",
+  authDomain: "purple-hours.firebaseapp.com",
+  databaseURL: "https://purple-hours-default-rtdb.firebaseio.com",
+  projectId: "purple-hours",
+  storageBucket: "purple-hours.appspot.com",
+  messagingSenderId: "289069179177",
+  appId: "1:289069179177:web:91b16f6e4da77b7f611738"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // Create a reference to the database
 const db = getDatabase(app);
@@ -56,8 +71,21 @@ async function retrieveGroupData(course, session) {
   });
 }
 
-export { writeGroupData, retrieveGroupData };
+async function addToGroup(course, session, name, id) {
+  try {
+    push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
+      name
+    });
+    console.log("Data updated successfully!");
+  }
+  catch (error) {
+    console.error("The update failed...", error);
+  }
+}
 
+export { writeGroupData, retrieveGroupData, addToGroup };
+
+addToGroup("cs211", "favouroh1", "Dave", "1");
 
 // (async () => {
 //   try {
