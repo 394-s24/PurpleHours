@@ -1,27 +1,13 @@
 import './App.css';
-import Queue from './components/Queue.jsx';
 import Student from './components/Student.jsx';
 import TA from './components/TA.jsx';
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useDbData } from './DatabaseFuncs.mjs';
 
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { retrieveGroupData } from './Utilities.mjs';
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyCHMX3LqauP2z1mdng1xgaeHRf5qjAA9bY',
-  authDomain: 'purple-hours.firebaseapp.com',
-  databaseURL: 'https://purple-hours-default-rtdb.firebaseio.com',
-  projectId: 'purple-hours',
-  storageBucket: 'purple-hours.appspot.com',
-  messagingSenderId: '289069179177',
-  appId: '1:289069179177:web:91b16f6e4da77b7f611738',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 
 // let queueData = [
 //   {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
@@ -30,6 +16,19 @@ const app = initializeApp(firebaseConfig);
 // ];
 
 const App = () => {
+
+  const [data, error] = useDbData("cs211", "favouroh1");
+  
+  if (data === undefined) {
+    return <div>Loading data...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading data: {error.toString()}</div>;
+  }
+
+  // console.log(queue)
+
   // const [queue, setQueue] = useState([]);
 
   // useEffect(() => {
@@ -72,8 +71,20 @@ const App = () => {
 
   return(
     <div className="App">
-      <Student />
-      <TA />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={ 
+            <div>
+              <Link to="/student">Student</Link>
+              <br />
+              <Link to="/ta">TA</Link>
+            </div>
+          }/>
+          <Route path="/student" element={<Student queue={data}/>} />
+          <Route path="/ta" element={<TA queue={data}/>} />
+          
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
