@@ -20,14 +20,14 @@ const Queue = ({ queue , handleQueue}) => {
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
           {rest.map((group, index) => (
-            <ListGroup.Item>
+            <ListGroup.Item key={index}>
               <Group
                 key={index}
                 names={group.names}
                 issue={group.issue}
                 time={group.time}
               />
-              <Button onClick={handleQueue} variant="primary" >Join</Button>
+              <Button key={group.id} onClick={() => handleQueue(group.id)} variant="primary" >Join</Button>
             </ListGroup.Item>
           ))}
         </ListGroup>

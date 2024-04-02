@@ -3,12 +3,12 @@ import Queue from './StudentQueue.jsx';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { retrieveGroupData } from '../DatabaseFuncs.mjs';
+import { retrieveGroupData, addToGroup } from '../DatabaseFuncs.mjs';
 
 let queueData = [
-  {names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
-  {names: 'James', issue: 'I found a bug', time: '1:30 PM' },
-  {names: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
+  {id: 0, names: 'Ella', issue: "My code doesn't work", time: '1:27 PM' },
+  {id: 1, names: 'James', issue: 'I found a bug', time: '1:30 PM' },
+  {id: 2, names: 'Anna', issue: 'Need help with an error', time: '1:45 PM' },
 ];
 
 const Student = () => {
@@ -21,6 +21,7 @@ const Student = () => {
         for (let i = 0; i < fetchedQueueData.length; i++) {
           
           let value = fetchedQueueData[i];
+          // let id = value["id"]
           
           // Convert unix time to readable time
           let unix_timestamp = value["time"];
@@ -49,8 +50,9 @@ const Student = () => {
     fetchQueueData();
   }, []);
 
-  const handleQueue = () => {
-    setQueue(currentQueue => currentQueue.slice(1));
+  const handleQueue = (id) => {
+    addToGroup("cs211", "favouroh1", "Jack", id)
+    // setQueue(currentQueue => currentQueue.slice(1));
   };
 
   return <Queue queue={queue} handleQueue={handleQueue} />;
