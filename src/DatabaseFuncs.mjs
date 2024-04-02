@@ -1,5 +1,6 @@
 import 'firebase/database';
 import { getDatabase, ref, set, push, onValue} from 'firebase/database';
+import { useCallback, useEffect, useState } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
 
@@ -83,7 +84,25 @@ async function addToGroup(course, session, name, id) {
   }
 }
 
-export { writeGroupData, retrieveGroupData, addToGroup };
+const useDbData = (course, session) => {
+  const [data, setData] = useState();
+  const [error, setError] = useState(null);
+
+  const groupsRef = ref(db, `${course}/${session}/groups/`);
+
+  useEffect(() => (
+    onValue(groupsRef, (snapshot) => {
+     setData( snapshot.val() );
+    }, (error) => {
+      setError(error);
+    })
+  ), [ groupsRef ]);
+
+  return [ data, error ];
+};
+
+
+export { writeGroupData, retrieveGroupData, addToGroup, useDbData};
 
 // addToGroup("cs211", "favouroh1", "Dave", "1");
 

@@ -1,7 +1,9 @@
 import './App.css';
 import Student from './components/Student.jsx';
 import TA from './components/TA.jsx';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { retrieveGroupData, useDbData } from './DatabaseFuncs.mjs';
 
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
@@ -14,6 +16,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // ];
 
 const App = () => {
+
+  const [data, error] = useDbData("cs211", "favouroh1");
+  // console.log(data)
+  const [queue, setQueue] = useState(data);
+  // console.log(queue)
+
   // const [queue, setQueue] = useState([]);
 
   // useEffect(() => {
@@ -65,7 +73,7 @@ const App = () => {
               <Link to="/ta">TA</Link>
             </div>
           }/>
-          <Route path="/student" element={<Student />} />
+          <Route path="/student" element={<Student queue={data}/>} />
           <Route path="/ta" element={<TA />} />
           
         </Routes>
