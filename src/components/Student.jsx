@@ -55,37 +55,49 @@ const Student = ({queue}) => {
   //   fetchQueueData();
   // }, []);
 
-  const refinedQueue = queue;
-  console.log(refinedQueue)
-  
-  for (let i = 0; i < refinedQueue.length; i++) {
-        
-    let value = refinedQueue[i];
-    // let id = value["id"]
-    
-    // Convert unix time to readable time
-    let unix_timestamp = value["time"];
-    let date = new Date(unix_timestamp * 1000);
-    let hours = date.getHours();
-    let minutes = "0" + date.getMinutes();
+  const [refinedQueue, setRefinedQueue] = useState([]);
 
-    let formattedTime = hours + ':' + minutes.substr(-2);
-    refinedQueue[i]["time"] = formattedTime;
-    
-    // Convert list of names to string
-    let namesObjects = value["names"];
-    let namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
-    let namesString = namesArray.join(", ");
-    refinedQueue[i]["names"] = namesString;
-  }
+  useEffect(() => {
+    // Check if the queue is not undefined or null
+    if (queue) {
+      //console.log(queue);
+      // Process the queue data to format it correctly
+      const formattedQueue = queue.map((item) => {
+        // Process the time value
+        const unixTimestamp = item.time;
+        const date = new Date(unixTimestamp * 1000);
+        const hours = date.getHours();
+        const minutes = "0" + date.getMinutes();
+        const formattedTime = isNaN(date.getTime()) ? "Invalid Time" : `${hours}:${minutes.substr(-2)}`;
+
+        // Process the names value
+        //const namesArray = item["names"]; // Assuming 'item.names' is already an array 
+        const namesObjects = item["names"];
+        const namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        const namesString = namesArray.join(", "); 
+        
+        //console.log(namesArray);
+        //const namesString = Array.isArray(namesArray) ? namesArray.join(", ") : "Invalid Names";
+
+        // Return a new object with formatted time and names
+        return {
+          ...item,
+          time: formattedTime,
+          names: namesString,
+        };
+      });
+
+      // Update the state with the new formatted queue
+      setRefinedQueue(formattedQueue);
+    }
+  }, [queue]); // Re-run this effect if the `queue` prop changes
 
   const handleQueue = (id) => {
-    addToGroup("cs211", "favouroh1", "Jack", id)
+    addToGroup("cs211", "favouroh1", "Jack", id);
+    // Additional logic may be needed here to reflect this change in state
   };
 
   return <StudentQueue queue={refinedQueue} handleQueue={handleQueue} />;
-  // console.log(queue)
-  // return <h1>Student</h1>
 };
 
 export default Student;

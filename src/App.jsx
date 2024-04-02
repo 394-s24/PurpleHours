@@ -18,8 +18,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
 
   const [data, error] = useDbData("cs211", "favouroh1");
-  // console.log(data)
+  
   const [queue, setQueue] = useState(data);
+
+  // Update the queue state when the data is fetched successfully
+  useEffect(() => {
+    if (data) {
+      setQueue(data);
+      }
+    }, [data]);
+  
+  // Conditional rendering for loading and error states
+    if (data === undefined) {
+      return <div>Loading data...</div>;
+    }
+  
+    if (error) {
+      return <div>Error loading data: {error.toString()}</div>;
+    }
+
   // console.log(queue)
 
   // const [queue, setQueue] = useState([]);
