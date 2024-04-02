@@ -87,18 +87,26 @@ async function addToGroup(course, session, name, id) {
 const useDbData = (course, session) => {
   const [data, setData] = useState();
   const [error, setError] = useState(null);
-
   const groupsRef = ref(db, `${course}/${session}/groups/`);
 
-  useEffect(() => (
-    onValue(groupsRef, (snapshot) => {
-     setData( snapshot.val() );
-    }, (error) => {
-      setError(error);
-    })
-  ), [ groupsRef ]);
+  useEffect(() => {
+    const unsubscribe = onValue(
+      groupsRef,
+      (snapshot) => {
+        setData(snapshot.val());
+      },
+      (error) => {
+        setError(error);
+      }
+    );
 
-  return [ data, error ];
+    // Cleanup function to unsubscribe from the listener when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, [groupsRef]);
+
+  return [data, error];
 };
 
 
