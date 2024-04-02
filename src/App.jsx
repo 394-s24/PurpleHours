@@ -3,7 +3,7 @@ import Student from './components/Student.jsx';
 import TA from './components/TA.jsx';
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { retrieveGroupData, useDbData } from './DatabaseFuncs.mjs';
+import { useDbData } from './DatabaseFuncs.mjs';
 
 import 'firebase/database';
 import { initializeApp } from 'firebase/app';
@@ -19,23 +19,13 @@ const App = () => {
 
   const [data, error] = useDbData("cs211", "favouroh1");
   
-  const [queue, setQueue] = useState(data);
+  if (data === undefined) {
+    return <div>Loading data...</div>;
+  }
 
-  // Update the queue state when the data is fetched successfully
-  useEffect(() => {
-    if (data) {
-      setQueue(data);
-      }
-    }, [data]);
-  
-  // Conditional rendering for loading and error states
-    if (data === undefined) {
-      return <div>Loading data...</div>;
-    }
-  
-    if (error) {
-      return <div>Error loading data: {error.toString()}</div>;
-    }
+  if (error) {
+    return <div>Error loading data: {error.toString()}</div>;
+  }
 
   // console.log(queue)
 
@@ -91,7 +81,7 @@ const App = () => {
             </div>
           }/>
           <Route path="/student" element={<Student queue={data}/>} />
-          <Route path="/ta" element={<TA />} />
+          <Route path="/ta" element={<TA queue={data}/>} />
           
         </Routes>
       </BrowserRouter>

@@ -45,32 +45,32 @@ async function writeGroupData(course, session, groupsData) {
   }
 }
 
-async function retrieveGroupData(course, session) {
-  return new Promise((resolve, reject) => {
-    // Reference to the location where you want to retrieve the data
-    const groupsRef = ref(db, `${course}/${session}/groups/`);
+// async function retrieveGroupData(course, session) {
+//   return new Promise((resolve, reject) => {
+//     // Reference to the location where you want to retrieve the data
+//     const groupsRef = ref(db, `${course}/${session}/groups/`);
 
-    onValue(groupsRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        let res = [];
+//     onValue(groupsRef, (snapshot) => {
+//       if (snapshot.exists()) {
+//         const data = snapshot.val();
+//         let res = [];
         
-        for (const [key, value] of Object.entries(data)) {
-          console.log(`${key}: ${value}`);
-          res.push(value);
-        }
-        console.log(res);
-        resolve(res);
+//         for (const [key, value] of Object.entries(data)) {
+//           console.log(`${key}: ${value}`);
+//           res.push(value);
+//         }
+//         console.log(res);
+//         resolve(res);
 
-      } else {
-        console.log("No data available");
-        reject(null);
-      }
-    }, {
-      onlyOnce: false
-    });
-  });
-}
+//       } else {
+//         console.log("No data available");
+//         reject(null);
+//       }
+//     }, {
+//       onlyOnce: false
+//     });
+//   });
+// }
 
 async function addToGroup(course, session, name, id) {
   try {
@@ -102,7 +102,7 @@ const useDbData = (course, session) => {
 };
 
 
-export { writeGroupData, retrieveGroupData, addToGroup, useDbData};
+export { writeGroupData, addToGroup, useDbData};
 
 // addToGroup("cs211", "favouroh1", "Dave", "1");
 
