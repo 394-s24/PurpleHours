@@ -1,4 +1,4 @@
-import Queue from './TAQueue.jsx';
+import TAQueue from './TAQueue.jsx';
 
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -53,7 +53,7 @@ const handleQueue = () => {
     setQueue(currentQueue => currentQueue.slice(1));
 };
 
-return <Queue queue={queue} handleQueue={handleQueue} />;
+return <TAQueue queue={queue} handleQueue={handleQueue} />;
 };
 
 export default TA;

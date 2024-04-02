@@ -3,7 +3,7 @@ import './Queue.css';
 import { ListGroup, Card, Button } from 'react-bootstrap';
 
 // The Queue component
-const Queue = ({ queue , handleQueue}) => {
+const TAQueue = ({ queue , handleQueue}) => {
   const first = queue ? queue[0] : null;
   const rest = queue.slice(1);
   return (
@@ -36,4 +36,4 @@ const Queue = ({ queue , handleQueue}) => {
   );
 };
 
-export default Queue;
+export default TAQueue;
