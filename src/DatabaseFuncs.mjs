@@ -1,6 +1,6 @@
 import 'firebase/database';
 import { getDatabase, ref, set, push, onValue} from 'firebase/database';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
 
@@ -45,33 +45,6 @@ async function writeGroupData(course, session, groupsData) {
   }
 }
 
-// async function retrieveGroupData(course, session) {
-//   return new Promise((resolve, reject) => {
-//     // Reference to the location where you want to retrieve the data
-//     const groupsRef = ref(db, `${course}/${session}/groups/`);
-
-//     onValue(groupsRef, (snapshot) => {
-//       if (snapshot.exists()) {
-//         const data = snapshot.val();
-//         let res = [];
-        
-//         for (const [key, value] of Object.entries(data)) {
-//           console.log(`${key}: ${value}`);
-//           res.push(value);
-//         }
-//         console.log(res);
-//         resolve(res);
-
-//       } else {
-//         console.log("No data available");
-//         reject(null);
-//       }
-//     }, {
-//       onlyOnce: false
-//     });
-//   });
-// }
-
 async function addToGroup(course, session, name, id) {
   try {
     push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
@@ -89,31 +62,41 @@ const useDbData = (course, session) => {
   const [error, setError] = useState(null);
 
   const groupsRef = ref(db, `${course}/${session}/groups/`);
-
   useEffect(() => (
     onValue(groupsRef, (snapshot) => {
      setData( snapshot.val() );
     }, (error) => {
       setError(error);
     })
-  ), [ groupsRef ]);
+  ), [ course, session ]);
 
   return [ data, error ];
 };
 
+// alternative way
+
+// const useDbData = (course, session) => {
+//   const [data, setData] = useState();
+//   const [error, setError] = useState(null);
+
+//   const prevDataRef = useRef();
+//   const groupsRef = ref(db, `${course}/${session}/groups/`);
+//   useEffect(() => {
+    
+//     onValue(groupsRef, (snapshot) => {
+//       const newData = snapshot.val();
+//       if (prevDataRef.current !== newData) {
+//         setData(newData);
+//         prevDataRef.current = newData;
+//       }
+//     }, (error) => {
+//       setError(error);
+//     });
+//      return () => unsubscribe();
+//   }, [ course, session ]);
+
+//   return [ data, error ];
+// };
+
 
 export { writeGroupData, addToGroup, useDbData};
-
-// addToGroup("cs211", "favouroh1", "Dave", "1");
-
-// (async () => {
-//   try {
-//     const data = await retrieveGroupData("cs211", "favouroh1");
-//     console.log("Data retrieved from the database:", data);
-//     // Do something with the data
-//   } catch (error) {
-//     // Handle errors here
-//     console.log("Error retrieving data", error);
-//   }
-// })();
-
