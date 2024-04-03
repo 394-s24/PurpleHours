@@ -1,22 +1,24 @@
 import 'firebase/database';
 import { getDatabase, ref, set, push, onValue} from 'firebase/database';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCHMX3LqauP2z1mdng1xgaeHRf5qjAA9bY",
-  authDomain: "purple-hours.firebaseapp.com",
-  databaseURL: "https://purple-hours-default-rtdb.firebaseio.com",
-  projectId: "purple-hours",
-  storageBucket: "purple-hours.appspot.com",
-  messagingSenderId: "289069179177",
-  appId: "1:289069179177:web:91b16f6e4da77b7f611738"
+  apiKey: "AIzaSyCX11UIGxTsIeu_so42xYeXT0RA9nhTWLg",
+  authDomain: "purple-hours-v2.firebaseapp.com",
+  projectId: "purple-hours-v2",
+  storageBucket: "purple-hours-v2.appspot.com",
+  messagingSenderId: "365596552992",
+  appId: "1:365596552992:web:c5c5597f110b1b6d33b145",
+  measurementId: "G-46J1N3000X"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Create a reference to the database
 const db = getDatabase(app);
@@ -45,33 +47,6 @@ async function writeGroupData(course, session, groupsData) {
   }
 }
 
-// async function retrieveGroupData(course, session) {
-//   return new Promise((resolve, reject) => {
-//     // Reference to the location where you want to retrieve the data
-//     const groupsRef = ref(db, `${course}/${session}/groups/`);
-
-//     onValue(groupsRef, (snapshot) => {
-//       if (snapshot.exists()) {
-//         const data = snapshot.val();
-//         let res = [];
-        
-//         for (const [key, value] of Object.entries(data)) {
-//           console.log(`${key}: ${value}`);
-//           res.push(value);
-//         }
-//         console.log(res);
-//         resolve(res);
-
-//       } else {
-//         console.log("No data available");
-//         reject(null);
-//       }
-//     }, {
-//       onlyOnce: false
-//     });
-//   });
-// }
-
 async function addToGroup(course, session, name, id) {
   try {
     push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
@@ -89,39 +64,41 @@ const useDbData = (course, session) => {
   const [error, setError] = useState(null);
   const groupsRef = ref(db, `${course}/${session}/groups/`);
 
-  useEffect(() => {
-    const unsubscribe = onValue(
-      groupsRef,
-      (snapshot) => {
-        setData(snapshot.val());
-      },
-      (error) => {
-        setError(error);
-      }
-    );
-
-    // Cleanup function to unsubscribe from the listener when the component unmounts
-    return () => {
-      unsubscribe();
-    };
-  }, [groupsRef]);
+  useEffect(() => (
+    onValue(groupsRef, (snapshot) => {
+     setData( snapshot.val() );
+    }, (error) => {
+      setError(error);
+    })
+  ), [ course, session ]);
 
   return [data, error];
 };
 
+// alternative way
+
+// const useDbData = (course, session) => {
+//   const [data, setData] = useState();
+//   const [error, setError] = useState(null);
+
+//   const prevDataRef = useRef();
+//   const groupsRef = ref(db, `${course}/${session}/groups/`);
+//   useEffect(() => {
+    
+//     onValue(groupsRef, (snapshot) => {
+//       const newData = snapshot.val();
+//       if (prevDataRef.current !== newData) {
+//         setData(newData);
+//         prevDataRef.current = newData;
+//       }
+//     }, (error) => {
+//       setError(error);
+//     });
+//      return () => unsubscribe();
+//   }, [ course, session ]);
+
+//   return [ data, error ];
+// };
+
 
 export { writeGroupData, addToGroup, useDbData};
-
-// addToGroup("cs211", "favouroh1", "Dave", "1");
-
-// (async () => {
-//   try {
-//     const data = await retrieveGroupData("cs211", "favouroh1");
-//     console.log("Data retrieved from the database:", data);
-//     // Do something with the data
-//   } catch (error) {
-//     // Handle errors here
-//     console.log("Error retrieving data", error);
-//   }
-// })();
-

@@ -9,47 +9,6 @@ import { set } from 'firebase/database';
 import { Button } from 'react-bootstrap';
 
 const Student = ({queue}) => {
-  
-  // setQueue(data);
-  // console.log(data);
-
-  // const fetchQueueData = async () => {
-  //   try {
-  //     let fetchedQueueData = await retrieveGroupData("cs211", "favouroh1");
-  //     // console.log(data);
-  //     // console.log(fetchedQueueData)
-  //     for (let i = 0; i < fetchedQueueData.length; i++) {
-        
-  //       let value = fetchedQueueData[i];
-  //       // let id = value["id"]
-        
-  //       // Convert unix time to readable time
-  //       let unix_timestamp = value["time"];
-  //       let date = new Date(unix_timestamp * 1000);
-  //       let hours = date.getHours();
-  //       let minutes = "0" + date.getMinutes();
-
-  //       let formattedTime = hours + ':' + minutes.substr(-2);
-  //       fetchedQueueData[i]["time"] = formattedTime;
-        
-  //       // Convert list of names to string
-  //       let namesObjects = value["names"];
-  //       let namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
-  //       let namesString = namesArray.join(", ");
-  //       fetchedQueueData[i]["names"] = namesString;
-  //     }
-
-  //     setQueue(fetchedQueueData);
-
-  //     // console.log(fetchedQueueData);
-  //   } catch (error) {
-  //     console.log("Error retrieving data", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchQueueData();
-  // }, []);
 
   const [refinedQueue, setRefinedQueue] = useState([]);
 
