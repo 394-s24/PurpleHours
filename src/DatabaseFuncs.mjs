@@ -3,20 +3,22 @@ import { getDatabase, ref, set, push, onValue} from 'firebase/database';
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCHMX3LqauP2z1mdng1xgaeHRf5qjAA9bY",
-  authDomain: "purple-hours.firebaseapp.com",
-  databaseURL: "https://purple-hours-default-rtdb.firebaseio.com",
-  projectId: "purple-hours",
-  storageBucket: "purple-hours.appspot.com",
-  messagingSenderId: "289069179177",
-  appId: "1:289069179177:web:91b16f6e4da77b7f611738"
+  apiKey: "AIzaSyCX11UIGxTsIeu_so42xYeXT0RA9nhTWLg",
+  authDomain: "purple-hours-v2.firebaseapp.com",
+  projectId: "purple-hours-v2",
+  storageBucket: "purple-hours-v2.appspot.com",
+  messagingSenderId: "365596552992",
+  appId: "1:365596552992:web:c5c5597f110b1b6d33b145",
+  measurementId: "G-46J1N3000X"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Create a reference to the database
 const db = getDatabase(app);
