@@ -60,17 +60,17 @@ async function addToGroup(course, session, name, id) {
 const useDbData = (course, session) => {
   const [data, setData] = useState();
   const [error, setError] = useState(null);
-
   const groupsRef = ref(db, `${course}/${session}/groups/`);
+
   useEffect(() => (
     onValue(groupsRef, (snapshot) => {
      setData( snapshot.val() );
     }, (error) => {
       setError(error);
     })
-  ), [ course, session ]);
+  ), [ groupsRef ]);
 
-  return [ data, error ];
+  return [data, error];
 };
 
 // alternative way
