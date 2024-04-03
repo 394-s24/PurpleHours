@@ -68,7 +68,7 @@ const useDbData = (course, session) => {
     }, (error) => {
       setError(error);
     })
-  ), [ groupsRef ]);
+  ), [ course, session ]);
 
   return [data, error];
 };

@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
 
   const [data, error] = useDbData("cs211", "favouroh1");
-  // console.log(data);
+  console.log(data);
   if (data === undefined) {
     return <div>Loading data...</div>;
   }
