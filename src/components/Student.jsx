@@ -18,9 +18,10 @@ const Student = ({queue, studentData}) => {
 
   useEffect(() => {
     // Checks if queue is defined
+    console.log(queue);
     if (queue) {
       // Format queue data
-      const formattedQueue = queue.map((item) => {
+      const formattedQueue = Object.values(queue).map((item) => {
         // Convert unix time to readable time
         const unixTimestamp = item.time;
         const date = new Date(unixTimestamp * 1000);
@@ -30,7 +31,10 @@ const Student = ({queue, studentData}) => {
 
         // Convert list of names to string
         const namesObjects = item["names"];
-        const namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        let namesArray = [];
+        if (namesObjects) {
+          namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        }
         const namesString = namesArray.join(", "); 
 
         // Add a joined field to each object
@@ -63,6 +67,15 @@ const Student = ({queue, studentData}) => {
     removeFromGroup(studentData.course, studentData.session, nameID, groupID);
   };
 
+  const onFormSubmit = (groupID, nameID) => {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    setClientJoined(true);
+    console.log(groupID, nameID);
+    setJoinedGroupId(groupID);
+    setNameID(nameID);
+    console.log(joinedGroupId);
+  }
+
   return (
     <div className="student_view">
       <div className="queue">
@@ -79,6 +92,7 @@ const Student = ({queue, studentData}) => {
         <NewGroup
           studentData={studentData}
           show={modalShow}
+          onFormSubmit={onFormSubmit}
           onHide={() => setModalShow(false)}
         />
       </div>

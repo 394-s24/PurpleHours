@@ -1,11 +1,11 @@
-import React from 'react';
+import {useState} from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 import { addToGroup, createNewGroup } from '../DatabaseFuncs.mjs';
 
-const NewGroup = (props, studentData) => {
-  const [helpType, setHelpType] = '';
-  const [helpDescription, setHelpDescription] = '';
+const NewGroup = ({ onFormSubmit, studentData, ...props }) => {
+  const [helpType, setHelpType] = useState('');
+  const [helpDescription, setHelpDescription] = useState('');
 
   const handleHelpTypeChange = (e) => {
     setHelpType(e.target.id);
@@ -25,8 +25,11 @@ const NewGroup = (props, studentData) => {
     };
 
     // Pass the data to an external function
-    let groupKey = await createNewGroup(studentData.course, studentData.session, groupsData);
-    return await addToGroup(studentData.course, studentData.session, studentData.name, groupKey);
+    let groupID = await createNewGroup(studentData.course, studentData.session, groupsData);
+    let nameID = await addToGroup(studentData.course, studentData.session, studentData.name, groupID);
+    props.onHide();
+    // console.log(groupID, nameID);
+    onFormSubmit(groupID, nameID);
   };
 
   return (
@@ -81,8 +84,7 @@ const NewGroup = (props, studentData) => {
                 as="textarea"
                 rows={3}
                 name="helpDescription"
-                value={helpDescription}
-                onChange={setHelpDescription}
+                onChange={handleHelpDescriptionChange}
               />
             </Form.Group>
           </Form>
