@@ -16,7 +16,7 @@ const Student = ({queue, studentData}) => {
   const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
   const [joinedGroupId, setJoinedGroupId] = useState(null); // State to track the group id of a group the client joined
 
-  useEffect(() => {
+  const renderQueue = () => {
     // Checks if queue is defined
     console.log(queue);
     if (queue) {
@@ -52,7 +52,9 @@ const Student = ({queue, studentData}) => {
       // Update state
       setRefinedQueue(formattedQueue);
     }
-  }, [queue]);
+  };
+
+  useEffect(renderQueue, [queue]);
 
   const handleJoinQueue = async (studentData, groupID) => {
     setClientJoined(true);
@@ -68,12 +70,10 @@ const Student = ({queue, studentData}) => {
   };
 
   const onFormSubmit = (groupID, nameID) => {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
     setClientJoined(true);
-    console.log(groupID, nameID);
     setJoinedGroupId(groupID);
     setNameID(nameID);
-    console.log(joinedGroupId);
+    useEffect(renderQueue, [queue]);
   }
 
   return (
