@@ -26,15 +26,15 @@ const db = getDatabase(app);
 async function createNewGroup(course, session, groupsData) {
   
   // const groupsData = {
-  // id: groupID,
   // names: names,
   // issue: issue,
   // time : Math.floor(Date.now() / 1000),
   // done : false,
+  // public : false
   // };
   
   // Reference to the location where you want to save the data
-  const groupRef = ref(db, `${course}/${session}/groups/` + groupsData["id"]);
+  const groupRef = ref(db, `${course}/${session}/groups/`);
 
   try {
     await push(groupRef, groupsData);
@@ -51,11 +51,11 @@ async function addToGroup(course, session, name, id) {
       name
     });
     console.log("Data updated successfully!");
-    return newEntryRef.key; // Return the unique ID of the new entry
+    // return newEntryRef.key; // Return the unique ID of the new entry
   }
   catch (error) {
     console.error("The update failed...", error);
-    return null;
+    // return null;
   }
 }
 
@@ -125,4 +125,4 @@ const useDbData = (course, session) => {
 // };
 
 
-export { writeGroupData, addToGroup, useDbData};
+export { createNewGroup, addToGroup, removeFromGroup, setGroupDone, useDbData};

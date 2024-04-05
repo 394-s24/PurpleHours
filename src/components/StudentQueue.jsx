@@ -3,7 +3,7 @@ import './Queue.css';
 import { ListGroup, Card, Button } from 'react-bootstrap';
 
 // The Queue component
-const StudentQueue = ({ queue , clientJoined, joinQueue}) => {
+const StudentQueue = ({ queue , studentData, clientJoined, joinQueue}) => {
   const first = queue ? queue[0] : null;
   const rest = queue.slice(1);
   return (
@@ -28,7 +28,7 @@ const StudentQueue = ({ queue , clientJoined, joinQueue}) => {
                 time={group.time}
                 joined={group.joined}
               />
-              {!clientJoined && <Button className="join-btn" key={group.id} onClick={() => joinQueue(group.id)} variant="success" >Join</Button>}
+              {!clientJoined && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>}
               {group.joined && <Button className="leave-btn" key={group.id} variant="danger">Leave</Button>}
             </ListGroup.Item>
           ))}
