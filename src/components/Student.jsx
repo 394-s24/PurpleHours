@@ -36,16 +36,12 @@ const Student = ({queue, studentData}) => {
           namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
         }
         const namesString = namesArray.join(", "); 
-
-        // Add a joined field to each object
-        const joined = item.id === joinedGroupId; // If joinedGroupId matches the item id, the client joined this group
         
         // Return a new object with formatted time and names
         return {
           ...item,
           time: formattedTime,
           names: namesString,
-          joined: joined,
         };
       });
 
@@ -73,7 +69,6 @@ const Student = ({queue, studentData}) => {
     setClientJoined(true);
     setJoinedGroupId(groupID);
     setNameID(nameID);
-    useEffect(renderQueue, [queue]);
   }
 
   return (
@@ -83,6 +78,7 @@ const Student = ({queue, studentData}) => {
           queue={refinedQueue}
           studentData={studentData}
           clientJoined={clientJoined}
+          joinedID = {joinedGroupId}
           joinQueue={handleJoinQueue}
           leaveQueue={handleLeaveQueue} />
       </div>

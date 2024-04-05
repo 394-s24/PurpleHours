@@ -1,5 +1,5 @@
 import 'firebase/database';
-import { getDatabase, ref, set, push, remove, onValue} from 'firebase/database';
+import { getDatabase, ref, set, push, remove, onValue, update} from 'firebase/database';
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
@@ -36,8 +36,14 @@ async function createNewGroup(course, session, groupsData) {
 
   try {
     let groupID = await push(groupRef, groupsData);
+    let key = groupID.key;
+
+    await update(ref(db, `${course}/${session}/groups/${key}`), {
+      id: key // Assuming you want to save the key as an `id` field inside the pushed object
+    });
+
     console.log("Data saved successfully!");
-    return groupID.key;
+    return key;
   } catch (error) {
     console.error("The write failed...", error);
     return null;
