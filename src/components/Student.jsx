@@ -31,7 +31,7 @@ const Student = ({queue, studentData}) => {
 
         // Convert list of names to string
         const namesObjects = item["names"];
-        let namesArray = [];
+        let namesArray = ["No members"];
         if (namesObjects) {
           namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
         }
