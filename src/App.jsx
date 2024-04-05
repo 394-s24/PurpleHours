@@ -19,7 +19,7 @@ const App = () => {
       {
         name: "Jack",
         course: "cs211",
-        section: "favouroh1",
+        session: "favouroh1",
       },
     );
   }, []);

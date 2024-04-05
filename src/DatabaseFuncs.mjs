@@ -1,9 +1,8 @@
 import 'firebase/database';
-import { getDatabase, ref, set, push, onValue} from 'firebase/database';
+import { getDatabase, ref, set, push, remove, onValue} from 'firebase/database';
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,7 +17,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // Create a reference to the database
 const db = getDatabase(app);
@@ -37,31 +35,33 @@ async function createNewGroup(course, session, groupsData) {
   const groupRef = ref(db, `${course}/${session}/groups/`);
 
   try {
-    await push(groupRef, groupsData);
-    
+    let groupID = await push(groupRef, groupsData);
     console.log("Data saved successfully!");
+    return groupID.key;
   } catch (error) {
     console.error("The write failed...", error);
+    return null;
   }
 }
 
 async function addToGroup(course, session, name, id) {
   try {
-    push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
+    let newEntryRef = await push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
       name
     });
     console.log("Data updated successfully!");
-    // return newEntryRef.key; // Return the unique ID of the new entry
+    return newEntryRef.key; // Return the unique ID of the new entry
   }
   catch (error) {
     console.error("The update failed...", error);
-    // return null;
+    return null;
   }
 }
 
 async function removeFromGroup(course, session, uniqueId, groupId) {
   try {
-    nameRef = ref(db, `${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    let nameRef = ref(db, `${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    console.log(`${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
     await remove(nameRef);
     console.log("Data removed successfully!");
   } catch (error) {

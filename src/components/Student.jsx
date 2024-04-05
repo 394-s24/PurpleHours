@@ -11,6 +11,7 @@ import { Button } from 'react-bootstrap';
 
 const Student = ({queue, studentData}) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
+  const [nameID, setNameID] = useState(null);
   const [modalShow, setModalShow] = useState(false); // State to track modal
   const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
   const [joinedGroupId, setJoinedGroupId] = useState(null); // State to track the group id of a group the client joined
@@ -49,21 +50,34 @@ const Student = ({queue, studentData}) => {
     }
   }, [queue]);
 
-  const handleJoinQueue = (studentData, groupID) => {
-    addToGroup(studentData.course, studentData.section, studentData.name, groupID);
+  const handleJoinQueue = async (studentData, groupID) => {
     setClientJoined(true);
     setJoinedGroupId(groupID);
+    setNameID(await addToGroup(studentData.course, studentData.session, studentData.name, groupID));
+  };
+
+  const handleLeaveQueue = (studentData, groupID) => {
+    setClientJoined(false);
+    setJoinedGroupId(null);
+    setNameID(null);
+    removeFromGroup(studentData.course, studentData.session, nameID, groupID);
   };
 
   return (
     <div className="student_view">
       <div className="queue">
-        <StudentQueue queue={refinedQueue} studentData={studentData} clientJoined={clientJoined} joinQueue={handleJoinQueue} />
+        <StudentQueue
+          queue={refinedQueue}
+          studentData={studentData}
+          clientJoined={clientJoined}
+          joinQueue={handleJoinQueue}
+          leaveQueue={handleLeaveQueue} />
       </div>
       <div className="new">
         <Button variant="dark" onClick={() => setModalShow(true)}>New Group</Button>
         {/* Bootstrap modal */}
         <NewGroup
+          studentData={studentData}
           show={modalShow}
           onHide={() => setModalShow(false)}
         />
