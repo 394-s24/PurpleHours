@@ -11,7 +11,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
 
   const [data, error] = useDbData("cs211", "favouroh1");
-  console.log(data);
+  const [studentData, setStudentData] = useState([]);
+
+  // Placeholder student data
+  useEffect(() => {
+    setStudentData(
+      {
+        name: "Jack",
+        course: "cs211",
+        session: "favouroh1",
+      },
+    );
+  }, []);
+
   if (data === undefined) {
     return <div>Loading data...</div>;
   }
@@ -31,7 +43,7 @@ const App = () => {
               <Link to="/ta">TA</Link>
             </div>
           }/>
-          <Route path="/student" element={<Student queue={data}/>} />
+          <Route path="/student" element={<Student queue={data} studentData={studentData}/>} />
           <Route path="/ta" element={<TA queue={data}/>} />
           
         </Routes>

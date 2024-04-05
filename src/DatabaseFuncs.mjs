@@ -1,9 +1,8 @@
 import 'firebase/database';
-import { getDatabase, ref, set, push, onValue} from 'firebase/database';
+import { getDatabase, ref, set, push, remove, onValue, update} from 'firebase/database';
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,40 +17,71 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // Create a reference to the database
 const db = getDatabase(app);
 
-async function writeGroupData(course, session, groupsData) {
+async function createNewGroup(course, session, groupsData) {
   
   // const groupsData = {
-  // id: groupID,
   // names: names,
   // issue: issue,
   // time : Math.floor(Date.now() / 1000),
   // done : false,
+  // public : false
   // };
   
   // Reference to the location where you want to save the data
-  const groupsRef = ref(db, `${course}/${session}/groups/` + groupsData["id"]);
+  const groupRef = ref(db, `${course}/${session}/groups/`);
 
   try {
-    await set(groupsRef, groupsData)
-    
+    let groupID = await push(groupRef, groupsData);
+    let key = groupID.key;
+
+    await update(ref(db, `${course}/${session}/groups/${key}`), {
+      id: key // Assuming you want to save the key as an `id` field inside the pushed object
+    });
+
     console.log("Data saved successfully!");
-    return 200; 
+    return key;
   } catch (error) {
     console.error("The write failed...", error);
-    return 500; 
+    return null;
   }
 }
 
 async function addToGroup(course, session, name, id) {
   try {
-    push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
+    let newEntryRef = await push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
       name
     });
+    console.log("Data updated successfully!");
+    return newEntryRef.key; // Return the unique ID of the new entry
+  }
+  catch (error) {
+    console.error("The update failed...", error);
+    return null;
+  }
+}
+
+async function removeFromGroup(course, session, uniqueId, groupId) {
+  try {
+    let nameRef = ref(db, `${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    console.log(`${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    await remove(nameRef);
+    console.log("Data removed successfully!");
+  } catch (error) {
+    console.error("The removal failed...", error);
+  }
+}
+
+async function setGroupDone(course, session, id) {
+
+  const groupRef = ref(db, `${course}/${session}/groups/` + id);
+  try {
+    await set(groupRef, {
+      done: true
+    }, { merge: true });
     console.log("Data updated successfully!");
   }
   catch (error) {
@@ -101,4 +131,4 @@ const useDbData = (course, session) => {
 // };
 
 
-export { writeGroupData, addToGroup, useDbData};
+export { createNewGroup, addToGroup, removeFromGroup, setGroupDone, useDbData};

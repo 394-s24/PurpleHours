@@ -1,22 +1,27 @@
 import StudentQueue from './StudentQueue.jsx';
+import NewGroup from './NewGroup.jsx';
 import './Student.css';
 
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { addToGroup} from '../DatabaseFuncs.mjs';
+import { createNewGroup, addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
 import { set } from 'firebase/database';
 import { Button } from 'react-bootstrap';
 
-const Student = ({queue}) => {
-
+const Student = ({queue, studentData}) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
+  const [nameID, setNameID] = useState(null);
+  const [modalShow, setModalShow] = useState(false); // State to track modal
+  const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
+  const [joinedGroupId, setJoinedGroupId] = useState(null); // State to track the group id of a group the client joined
 
-  useEffect(() => {
+  const renderQueue = () => {
     // Checks if queue is defined
+    console.log(queue);
     if (queue) {
       // Format queue data
-      const formattedQueue = queue.map((item) => {
+      const formattedQueue = Object.values(queue).map((item) => {
         // Convert unix time to readable time
         const unixTimestamp = item.time;
         const date = new Date(unixTimestamp * 1000);
@@ -26,9 +31,12 @@ const Student = ({queue}) => {
 
         // Convert list of names to string
         const namesObjects = item["names"];
-        const namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        let namesArray = ["No members"];
+        if (namesObjects) {
+          namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+        }
         const namesString = namesArray.join(", "); 
-
+        
         // Return a new object with formatted time and names
         return {
           ...item,
@@ -40,19 +48,49 @@ const Student = ({queue}) => {
       // Update state
       setRefinedQueue(formattedQueue);
     }
-  }, [queue]);
-
-  const handleQueue = (id) => {
-    addToGroup("cs211", "favouroh1", "Jack", id);
   };
+
+  useEffect(renderQueue, [queue]);
+
+  const handleJoinQueue = async (studentData, groupID) => {
+    setClientJoined(true);
+    setJoinedGroupId(groupID);
+    setNameID(await addToGroup(studentData.course, studentData.session, studentData.name, groupID));
+  };
+
+  const handleLeaveQueue = (studentData, groupID) => {
+    setClientJoined(false);
+    setJoinedGroupId(null);
+    setNameID(null);
+    removeFromGroup(studentData.course, studentData.session, nameID, groupID);
+  };
+
+  const onFormSubmit = (groupID, nameID) => {
+    setClientJoined(true);
+    setJoinedGroupId(groupID);
+    setNameID(nameID);
+  }
 
   return (
     <div className="student_view">
       <div className="queue">
-        <StudentQueue queue={refinedQueue} handleQueue={handleQueue} />
+        <StudentQueue
+          queue={refinedQueue}
+          studentData={studentData}
+          clientJoined={clientJoined}
+          joinedID = {joinedGroupId}
+          joinQueue={handleJoinQueue}
+          leaveQueue={handleLeaveQueue} />
       </div>
       <div className="new">
-        <Button variant="primary">I Need Help</Button>
+        <Button variant="dark" onClick={() => setModalShow(true)}>New Group</Button>
+        {/* Bootstrap modal */}
+        <NewGroup
+          studentData={studentData}
+          show={modalShow}
+          onFormSubmit={onFormSubmit}
+          onHide={() => setModalShow(false)}
+        />
       </div>
     </div>
 
