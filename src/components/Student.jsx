@@ -1,4 +1,5 @@
 import StudentQueue from './StudentQueue.jsx';
+import NewGroup from './NewGroup.jsx';
 import './Student.css';
 
 import 'firebase/database';
@@ -11,6 +12,9 @@ import { Button } from 'react-bootstrap';
 const Student = ({queue}) => {
 
   const [refinedQueue, setRefinedQueue] = useState([]);
+  const [modalShow, setModalShow] = useState(false); // State to track modal
+  const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
+  const [joinedGroupId, setJoinedGroupId] = useState(null); // State to track the group id of a group the client joined
 
   useEffect(() => {
     // Checks if queue is defined
@@ -29,11 +33,15 @@ const Student = ({queue}) => {
         const namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
         const namesString = namesArray.join(", "); 
 
+        // Add a joined field to each object
+        const joined = item.id === joinedGroupId; // If joinedGroupId matches the item id, the client joined this group
+        
         // Return a new object with formatted time and names
         return {
           ...item,
           time: formattedTime,
           names: namesString,
+          joined: joined,
         };
       });
 
@@ -42,17 +50,24 @@ const Student = ({queue}) => {
     }
   }, [queue]);
 
-  const handleQueue = (id) => {
+  const handleJoinQueue = (id) => {
     addToGroup("cs211", "favouroh1", "Jack", id);
+    setClientJoined(true);
+    setJoinedGroupId(id);
   };
 
   return (
     <div className="student_view">
       <div className="queue">
-        <StudentQueue queue={refinedQueue} handleQueue={handleQueue} />
+        <StudentQueue queue={refinedQueue} clientJoined={clientJoined} joinQueue={handleJoinQueue} />
       </div>
       <div className="new">
-        <Button variant="primary">I Need Help</Button>
+        <Button variant="dark" onClick={() => setModalShow(true)}>New Group</Button>
+        {/* Bootstrap modal */}
+        <NewGroup
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
       </div>
     </div>
 

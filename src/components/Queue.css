@@ -4,13 +4,30 @@
 }
 
 .helping {
-  margin: 0 40px;
-}
-  
-.upcoming {
-  margin: 0 40px;
+  margin: 20px 40px;
 }
 
-.queue Button {
-  margin-left: auto;
+.upcoming {
+  margin: 20px 40px;
+}
+
+.queue .join-btn {
+  position: absolute;
+  top: 26px;
+  right: 24px;
+  padding: 5px 20px 5px 20px;
+}
+
+.queue .leave-btn {
+  position: absolute;
+  top: 26px;
+  right: 24px;
+  padding: 5px 20px 5px 20px;
+}
+
+.queue .done-btn {
+  position: absolute;
+  top: 32px;
+  right: 24px;
+  padding: 5px 20px 5px 20px;
 }
