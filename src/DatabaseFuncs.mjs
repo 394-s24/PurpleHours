@@ -23,7 +23,7 @@ const analytics = getAnalytics(app);
 // Create a reference to the database
 const db = getDatabase(app);
 
-async function writeGroupData(course, session, groupsData) {
+async function createNewGroup(course, session, groupsData) {
   
   // const groupsData = {
   // id: groupID,
@@ -34,16 +34,14 @@ async function writeGroupData(course, session, groupsData) {
   // };
   
   // Reference to the location where you want to save the data
-  const groupsRef = ref(db, `${course}/${session}/groups/` + groupsData["id"]);
+  const groupRef = ref(db, `${course}/${session}/groups/` + groupsData["id"]);
 
   try {
-    await set(groupsRef, groupsData)
+    await push(groupRef, groupsData);
     
     console.log("Data saved successfully!");
-    return 200; 
   } catch (error) {
     console.error("The write failed...", error);
-    return 500; 
   }
 }
 
@@ -52,6 +50,32 @@ async function addToGroup(course, session, name, id) {
     push(ref(db, `${course}/${session}/groups/` + id + "/names"), {
       name
     });
+    console.log("Data updated successfully!");
+    return newEntryRef.key; // Return the unique ID of the new entry
+  }
+  catch (error) {
+    console.error("The update failed...", error);
+    return null;
+  }
+}
+
+async function removeFromGroup(course, session, uniqueId, groupId) {
+  try {
+    nameRef = ref(db, `${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    await remove(nameRef);
+    console.log("Data removed successfully!");
+  } catch (error) {
+    console.error("The removal failed...", error);
+  }
+}
+
+async function setGroupDone(course, session, id) {
+
+  const groupRef = ref(db, `${course}/${session}/groups/` + id);
+  try {
+    await set(groupRef, {
+      done: true
+    }, { merge: true });
     console.log("Data updated successfully!");
   }
   catch (error) {
