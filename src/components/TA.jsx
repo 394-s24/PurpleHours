@@ -1,14 +1,11 @@
 import TAQueue from './TAQueue.jsx';
-
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 
-const TA = ({queue}) => {
+const TA = ({queue, dbArgs}) => {
 
     const [refinedQueue, setRefinedQueue] = useState([]);
-
-    // console.log(queue);
 
     useEffect(() => {
       // Checks if queue is defined
@@ -43,11 +40,11 @@ const TA = ({queue}) => {
       }
     }, [queue]);
 
-const handleQueue = () => {
-    // Logic for removing a group from database
+const handleDone = () => {
+  // Logic for removing the first group from the database
 };
 
-return <TAQueue queue={refinedQueue} handleQueue={handleQueue} />;
+return <TAQueue queue={refinedQueue} handleDone={handleDone} />;
 };
 
 export default TA;

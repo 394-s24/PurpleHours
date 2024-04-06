@@ -51,7 +51,7 @@ const App = () => {
           }
           />
           <Route path="/student" element={<Student queue={data} studentData={studentData}/>} />
-          <Route path="/ta" element={<TA queue={data}/>} />
+          <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs}/>} />
         </Routes>
       </BrowserRouter>
     </div>
