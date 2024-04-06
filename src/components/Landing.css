@@ -1,0 +1,19 @@
+.landing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+  
+.title {
+    font-size: 10em;
+    color: #800080;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+  
+.btns {
+    display: flex;
+    gap: 10px;
+}

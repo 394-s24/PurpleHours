@@ -3,17 +3,18 @@ import TAQueue from './TAQueue.jsx';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-// import { retrieveGroupData } from '../DatabaseFuncs.mjs';
 
 const TA = ({queue}) => {
 
     const [refinedQueue, setRefinedQueue] = useState([]);
 
+    // console.log(queue);
+
     useEffect(() => {
       // Checks if queue is defined
       if (queue) {
         // Format queue data
-        const formattedQueue = queue.map((item) => {
+        const formattedQueue = Object.values(queue).map((item) => {
           // Convert unix time to readable time
           const unixTimestamp = item.time;
           const date = new Date(unixTimestamp * 1000);
@@ -23,9 +24,12 @@ const TA = ({queue}) => {
   
           // Convert list of names to string
           const namesObjects = item["names"];
-          const namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+          let namesArray = ["No members"];
+          if (namesObjects) {
+            namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+          }
           const namesString = namesArray.join(", "); 
-  
+          
           // Return a new object with formatted time and names
           return {
             ...item,

@@ -1,8 +1,9 @@
 import './App.css';
 import Student from './components/Student.jsx';
 import TA from './components/TA.jsx';
+import Landing from './components/Landing.jsx'
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { useDbData } from './DatabaseFuncs.mjs';
 
 import 'firebase/database';
@@ -10,8 +11,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
 
-  const [data, error] = useDbData("cs211", "favouroh1");
-  const [studentData, setStudentData] = useState([]);
+  const [dbArgs, setDbArgs] = useState([]);
+  const [studentData, setStudentData] = useState(null);
+  const [data, error] = useDbData(dbArgs[0], dbArgs[1]);
 
   // Placeholder student data
   useEffect(() => {
@@ -22,6 +24,11 @@ const App = () => {
         session: "favouroh1",
       },
     );
+  }, []);
+
+  // Placeholder db args
+  useEffect(() => {
+    setDbArgs(["cs211", "favouroh1"]);
   }, []);
 
   if (data === undefined) {
@@ -36,16 +43,15 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={ 
-            <div>
-              <Link to="/student">Student</Link>
-              <br />
-              <Link to="/ta">TA</Link>
-            </div>
-          }/>
+          <Route path="/" element={
+            <Landing 
+              setStudentData={setStudentData}
+              setDbArgs={setDbArgs}
+            />
+          }
+          />
           <Route path="/student" element={<Student queue={data} studentData={studentData}/>} />
           <Route path="/ta" element={<TA queue={data}/>} />
-          
         </Routes>
       </BrowserRouter>
     </div>
