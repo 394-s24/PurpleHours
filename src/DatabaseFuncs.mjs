@@ -1,5 +1,5 @@
 import 'firebase/database';
-import { getDatabase, ref, set, push, remove, onValue, update} from 'firebase/database';
+import { getDatabase, ref, set, get, push, remove, onValue, update} from 'firebase/database';
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
@@ -67,9 +67,20 @@ async function addToGroup(course, session, name, id) {
 async function removeFromGroup(course, session, uniqueId, groupId) {
   try {
     let nameRef = ref(db, `${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
+    let groupRef = ref(db, `${course}/${session}/groups/` + groupId);
     console.log(`${course}/${session}/groups/` + groupId + "/names/" + uniqueId);
     await remove(nameRef);
     console.log("Data removed successfully!");
+
+    // Check if the group is empty, remove the group if it is
+    const snapshot = await get(groupRef);
+
+    console.log()
+
+    // Group is empty when the name field is empty or doesn't exist
+    if (!snapshot.exists() || !snapshot.val().names || Object.keys(snapshot.val().names).length === 0) {
+      await removeGroup(course, session, groupId);
+    }
   } catch (error) {
     console.error("The removal failed...", error);
   }
@@ -77,15 +88,29 @@ async function removeFromGroup(course, session, uniqueId, groupId) {
 
 async function setGroupDone(course, session, id) {
 
-  const groupRef = ref(db, `${course}/${session}/groups/` + id);
+  let groupRef = ref(db, `${course}/${session}/groups/` + id);
   try {
     await set(groupRef, {
       done: true
     }, { merge: true });
     console.log("Data updated successfully!");
+
+    // Remove the group
+    await removeGroup(course, session, id);
   }
   catch (error) {
     console.error("The update failed...", error);
+  }
+}
+
+async function removeGroup(course, session, id) {
+  try {
+    let groupRef = ref(db, `${course}/${session}/groups/` + id);
+    console.log(`${course}/${session}/groups/` + id);
+    await remove(groupRef);
+    console.log("Group removed successfully!");
+  } catch (error) {
+    console.error("The removal failed...", error);
   }
 }
 

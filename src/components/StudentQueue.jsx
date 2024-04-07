@@ -8,6 +8,9 @@ const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, 
   const rest = queue.slice(1);
   return (
     <div className="queue">
+      <div className="title">
+        <h1>We are here to help, {studentData.name}</h1>
+      </div>
       <div>
         <h2>Currently helping</h2>
         <Card body className="helping">

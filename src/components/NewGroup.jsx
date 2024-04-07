@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
 import { addToGroup, createNewGroup } from '../DatabaseFuncs.mjs';
