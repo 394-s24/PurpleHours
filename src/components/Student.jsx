@@ -11,14 +11,14 @@ import { Button } from 'react-bootstrap';
 
 const Student = ({queue, studentData}) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
-  const [nameID, setNameID] = useState(null);
+  const [nameID, setNameID] = useState([]);
   const [modalShow, setModalShow] = useState(false); // State to track modal
   const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
-  const [joinedGroupId, setJoinedGroupId] = useState(null); // State to track the group id of a group the client joined
+  const [joinedGroupId, setJoinedGroupId] = useState([]); // State to track the group id of a group the client joined
 
   const renderQueue = () => {
     // Checks if queue is defined
-    console.log(queue);
+    // console.log(queue);
     if (queue) {
       // Format queue data
       const formattedQueue = Object.values(queue).map((item) => {
@@ -54,21 +54,26 @@ const Student = ({queue, studentData}) => {
 
   const handleJoinQueue = async (studentData, groupID) => {
     setClientJoined(true);
-    setJoinedGroupId(groupID);
-    setNameID(await addToGroup(studentData.course, studentData.session, studentData.name, groupID));
+    // setJoinedGroupId(joinedGroupId.concat([groupID]));
+    setJoinedGroupId([...joinedGroupId, groupID]);
+    let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID)
+    setNameID([...nameID, id]);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
     setClientJoined(false);
-    setJoinedGroupId(null);
-    setNameID(null);
-    removeFromGroup(studentData.course, studentData.session, nameID, groupID);
+    setJoinedGroupId(joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1));
+    removeFromGroup(studentData.course, studentData.session, nameID[joinedGroupId.indexOf(groupID)], groupID);
+    setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
-  const onFormSubmit = (groupID, nameID) => {
-    setClientJoined(true);
-    setJoinedGroupId(groupID);
-    setNameID(nameID);
+  const onFormSubmit = async (groupID, nameID) => {
+    // setClientJoined(true);
+    // // setJoinedGroupId(joinedGroupId.concat([groupID]));
+    // setJoinedGroupId([...joinedGroupId, groupID]);
+    // let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID)
+    // setNameID([...nameID, id]);
+    console.log("hello");
   }
 
   return (
@@ -88,6 +93,10 @@ const Student = ({queue, studentData}) => {
         <NewGroup
           studentData={studentData}
           show={modalShow}
+          nameID={nameID}
+          setNameID={setNameID}
+          joinedGroupId={joinedGroupId}
+          setJoinedGroupId={setJoinedGroupId}
           onFormSubmit={onFormSubmit}
           onHide={() => setModalShow(false)}
         />

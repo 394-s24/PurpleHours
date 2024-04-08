@@ -14,7 +14,7 @@ const TAQueue = ({ queue , handleDone}) => {
           {first && (
             <Group names={first.names} issue={first.issue} time={first.time} />
           )}
-          <Button className="done-btn" onClick={handleDone} variant="success" >Done</Button>
+          {/* <Button className="done-btn" onClick={handleDone} variant="success" >Done</Button> */}
         </Card>
       </div>
       <div>
