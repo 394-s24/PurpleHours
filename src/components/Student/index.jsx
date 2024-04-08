@@ -1,19 +1,23 @@
 import StudentQueue from './StudentQueue.jsx';
 import NewGroup from './NewGroup.jsx';
-import './Student.css';
+import './index.css';
 
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { createNewGroup, addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
+import {
+  createNewGroup,
+  addToGroup,
+  removeFromGroup,
+} from '../../DatabaseFuncs.mjs';
 import { set } from 'firebase/database';
 import { Button } from 'react-bootstrap';
 
-const Student = ({queue, studentData}) => {
+const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
   const [nameID, setNameID] = useState([]);
   const [modalShow, setModalShow] = useState(false); // State to track modal
-  const [clientJoined, setClientJoined] = useState(false) // State to track if client clicked a join button
+  const [clientJoined, setClientJoined] = useState(false); // State to track if client clicked a join button
   const [joinedGroupId, setJoinedGroupId] = useState([]); // State to track the group id of a group the client joined
 
   const renderQueue = () => {
@@ -26,17 +30,21 @@ const Student = ({queue, studentData}) => {
         const unixTimestamp = item.time;
         const date = new Date(unixTimestamp * 1000);
         const hours = date.getHours();
-        const minutes = "0" + date.getMinutes();
-        const formattedTime = isNaN(date.getTime()) ? "Invalid Time" : `${hours}:${minutes.substr(-2)}`;
+        const minutes = '0' + date.getMinutes();
+        const formattedTime = isNaN(date.getTime())
+          ? 'Invalid Time'
+          : `${hours}:${minutes.substr(-2)}`;
 
         // Convert list of names to string
-        const namesObjects = item["names"];
-        let namesArray = ["No members"];
+        const namesObjects = item['names'];
+        let namesArray = ['No members'];
         if (namesObjects) {
-          namesArray = Object.values(namesObjects).map((obj) => {return obj["name"]});
+          namesArray = Object.values(namesObjects).map((obj) => {
+            return obj['name'];
+          });
         }
-        const namesString = namesArray.join(", "); 
-        
+        const namesString = namesArray.join(', ');
+
         // Return a new object with formatted time and names
         return {
           ...item,
@@ -56,14 +64,26 @@ const Student = ({queue, studentData}) => {
     setClientJoined(true);
     // setJoinedGroupId(joinedGroupId.concat([groupID]));
     setJoinedGroupId([...joinedGroupId, groupID]);
-    let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID)
+    let id = await addToGroup(
+      studentData.course,
+      studentData.session,
+      studentData.name,
+      groupID
+    );
     setNameID([...nameID, id]);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
     setClientJoined(false);
-    setJoinedGroupId(joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1));
-    removeFromGroup(studentData.course, studentData.session, nameID[joinedGroupId.indexOf(groupID)], groupID);
+    setJoinedGroupId(
+      joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1)
+    );
+    removeFromGroup(
+      studentData.course,
+      studentData.session,
+      nameID[joinedGroupId.indexOf(groupID)],
+      groupID
+    );
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
@@ -73,8 +93,8 @@ const Student = ({queue, studentData}) => {
     // setJoinedGroupId([...joinedGroupId, groupID]);
     // let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID)
     // setNameID([...nameID, id]);
-    console.log("hello");
-  }
+    console.log('hello');
+  };
 
   return (
     <div className="student_view">
@@ -83,12 +103,15 @@ const Student = ({queue, studentData}) => {
           queue={refinedQueue}
           studentData={studentData}
           clientJoined={clientJoined}
-          joinedID = {joinedGroupId}
+          joinedID={joinedGroupId}
           joinQueue={handleJoinQueue}
-          leaveQueue={handleLeaveQueue} />
+          leaveQueue={handleLeaveQueue}
+        />
       </div>
       <div className="new">
-        <Button variant="dark" onClick={() => setModalShow(true)}>New Group</Button>
+        <Button variant="dark" onClick={() => setModalShow(true)}>
+          New Group
+        </Button>
         {/* Bootstrap modal */}
         <NewGroup
           studentData={studentData}
@@ -102,7 +125,6 @@ const Student = ({queue, studentData}) => {
         />
       </div>
     </div>
-
   );
 };
 

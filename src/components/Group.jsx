@@ -1,7 +1,7 @@
 import React from 'react';
 
 // The Group component
-const Group = ({ names, issue, time}) => {
+const Group = ({ names, issue, time }) => {
   return (
     <div className="Group">
       <div className="name">{names}</div>

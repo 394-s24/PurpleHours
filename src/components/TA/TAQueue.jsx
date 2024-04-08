@@ -1,9 +1,9 @@
-import Group from './Group';
-import './Queue.css';
+import Group from '../Group';
+import '../Queue.css';
 import { ListGroup, Card, Button } from 'react-bootstrap';
 
 // The Queue component
-const TAQueue = ({ queue , handleDone}) => {
+const TAQueue = ({ queue, handleDone }) => {
   const first = queue ? queue[0] : null;
   const rest = queue.slice(1);
   return (
