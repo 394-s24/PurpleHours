@@ -1,5 +1,5 @@
-import StudentQueue from './StudentQueue.jsx';
-import NewGroup from './NewGroup.jsx';
+import StudentQueue from './StudentQueue';
+import NewGroup from './NewGroup';
 import './index.css';
 
 import 'firebase/database';

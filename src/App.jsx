@@ -1,7 +1,7 @@
 import './App.css';
 import Student from './components/Student';
 import TA from './components/TA';
-import Landing from './components/Landing.jsx';
+import Landing from './components/Landing';
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDbData } from './DatabaseFuncs.mjs';

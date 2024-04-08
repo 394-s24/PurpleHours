@@ -1,4 +1,4 @@
-import TAQueue from './TAQueue.jsx';
+import TAQueue from './TAQueue';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';

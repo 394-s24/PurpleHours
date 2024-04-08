@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import StudentModal from './StudentModal.jsx';
-import TAModal from './TAModal.jsx';
-import './Landing.css';
+import StudentModal from './StudentModal';
+import TAModal from './TAModal';
+import './index.css';
 
 const Landing = (props) => {
   const [studentModalShow, setStudentModalShow] = useState(false);
