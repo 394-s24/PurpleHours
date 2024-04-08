@@ -3,7 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 
 import { addToGroup, createNewGroup } from '../DatabaseFuncs.mjs';
 
-const NewGroup = ({ onFormSubmit, studentData, ...props }) => {
+const NewGroup = ({ joinedGroupId, nameID, setJoinedGroupId, setNameID, onFormSubmit, studentData, ...props }) => {
   const [helpType, setHelpType] = useState('');
   const [helpDescription, setHelpDescription] = useState('');
 
@@ -26,10 +26,12 @@ const NewGroup = ({ onFormSubmit, studentData, ...props }) => {
 
     // Pass the data to an external function
     let groupID = await createNewGroup(studentData.course, studentData.session, groupsData);
-    let nameID = await addToGroup(studentData.course, studentData.session, studentData.name, groupID);
+    let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID);
     props.onHide();
     // console.log(groupID, nameID);
-    onFormSubmit(groupID, nameID);
+    // onFormSubmit(groupID, nameID);
+    setJoinedGroupId([...joinedGroupId, groupID]);
+    setNameID([...nameID, id]);
   };
 
   return (

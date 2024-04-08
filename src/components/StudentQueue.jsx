@@ -31,8 +31,8 @@ const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, 
                 time={group.time}
                 joined={group.joined}
               />
-              {!clientJoined && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>}
-              {group.id == joinedID && <Button className="leave-btn" key={group.id} onClick={() => leaveQueue(studentData, group.id)} variant="danger">Leave</Button>}
+              {!(joinedID.includes(group.id)) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>}
+              {joinedID.includes(group.id) && <Button className="leave-btn" key={group.id} onClick={() => leaveQueue(studentData, group.id)} variant="danger">Leave</Button>}
             </ListGroup.Item>
           ))}
         </ListGroup>
