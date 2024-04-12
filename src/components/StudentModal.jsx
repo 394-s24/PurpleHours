@@ -6,6 +6,7 @@ const StudentModal = (props) => {
 
     const [name, setName] = useState('');
     const [course, setCourse] = useState('');
+    const [validated, setValidated] = useState(false);
 
     const navigate = useNavigate();
   
@@ -18,16 +19,24 @@ const StudentModal = (props) => {
     }
         
     // Set student data and db args and navigate to student page
-    const handleSubmit = () => {
-        props.setStudentData({
-            name: name,
-            course: course,
-            session: "favouroh1" // Hardocded session for now
-        });
-        props.setDbArgs([course, "favouroh1"]);
-        props.onHide();
+    const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            props.setStudentData({
+                name: name,
+                course: course,
+                session: "favouroh1" // Hardocded session for now
+            });
+            props.setDbArgs([course, "favouroh1"]);
+            props.onHide();
 
-        navigate('/student')
+            navigate('/student')
+        }
+
+        setValidated(true);
     };
     
     return (
@@ -44,27 +53,29 @@ const StudentModal = (props) => {
                 </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Form>
+                <Form validated={validated}  onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
-                        type="string"
+                        type="text"
                         placeholder="John Doe"
                         autoFocus
+                        required
                         onChange={handleNameChange}
                     />
                     </Form.Group>
                     <Form.Label>Course</Form.Label>
-                    <Form.Select aria-label="Default select example" onChange={handleCourseChange}>
+                    <Form.Select aria-label="Default select example" required onChange={handleCourseChange}>
                         <option>Select a course</option>
                         <option value="cs211">CS 211</option>
                         {/* <option value="213">CS 213</option>
                         <option value="214">CS 214</option> */}
                     </Form.Select>
+                    <Button variant="dark" type="submit">Submit</Button>
                 </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="dark" onClick={handleSubmit}>Submit</Button>
+                
                 </Modal.Footer>
             </Modal>
         </div>
