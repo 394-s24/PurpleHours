@@ -6,6 +6,7 @@ import { addToGroup, createNewGroup } from '../DatabaseFuncs.mjs';
 const NewGroup = ({ joinedGroupId, nameID, setJoinedGroupId, setNameID, onFormSubmit, studentData, ...props }) => {
   const [helpType, setHelpType] = useState('');
   const [helpDescription, setHelpDescription] = useState('');
+  const [validated, setValidated] = useState(false);
 
   const handleHelpTypeChange = (e) => {
     setHelpType(e.target.id);
@@ -15,24 +16,32 @@ const NewGroup = ({ joinedGroupId, nameID, setJoinedGroupId, setNameID, onFormSu
     setHelpDescription(e.target.value);
   };
   
-  const handleSubmit = async () => {
-    // Construct the JSON object from the state
-    const groupsData = {
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (form.checkValidity()){
+      const groupsData = {
       issue: `${helpType}: ${helpDescription}`,
       time : Math.floor(Date.now() / 1000),
       done : false,
       public : true
     };
-
-    // Pass the data to an external function
-    let groupID = await createNewGroup(studentData.course, studentData.session, groupsData);
-    let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID);
-    props.onHide();
-    // console.log(groupID, nameID);
-    // onFormSubmit(groupID, nameID);
-    setJoinedGroupId([...joinedGroupId, groupID]);
-    setNameID([...nameID, id]);
-  };
+     // Pass the data to an external function
+     let groupID = await createNewGroup(studentData.course, studentData.session, groupsData);
+     console.log(groupID)
+     let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID);
+     props.onHide();
+     // console.log(groupID, nameID);
+     // onFormSubmit(groupID, nameID);
+     setJoinedGroupId([...joinedGroupId, groupID]);
+     setNameID([...nameID, id]);
+  }
+  
+    setValidated(true);
+  }
 
   return (
     <Modal
@@ -47,7 +56,7 @@ const NewGroup = ({ joinedGroupId, nameID, setJoinedGroupId, setNameID, onFormSu
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated}  onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="helpType">
               <Form.Label>What type of help do you need?</Form.Label>
               <div key={`inline-radio`} className="mb-3">
@@ -82,21 +91,22 @@ const NewGroup = ({ joinedGroupId, nameID, setJoinedGroupId, setNameID, onFormSu
               controlId="helpDescription"
             >
               <Form.Label>What do you need help with?</Form.Label>
-              <Form.Control 
+              <Form.Control required
                 as="textarea"
                 rows={3}
                 name="helpDescription"
                 onChange={handleHelpDescriptionChange}
               />
+               <Form.Control.Feedback type="invalid">
+                 Please enter a detailed description of the problem
+                </Form.Control.Feedback>
             </Form.Group>
+            <Button type = "submit" variant="dark" >
+            Submit
+          </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="dark"
-            onClick={handleSubmit}>
-            Submit
-          </Button>
         </Modal.Footer>
     </Modal>
   );
