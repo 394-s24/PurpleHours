@@ -53,7 +53,7 @@ const StudentModal = (props) => {
                 </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Form validated={validated}  onSubmit={handleSubmit}>
+                <Form noValidate validated={validated}  onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
@@ -63,14 +63,20 @@ const StudentModal = (props) => {
                         required
                         onChange={handleNameChange}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        Please choose a name.
+                    </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Label>Course</Form.Label>
                     <Form.Select aria-label="Default select example" required onChange={handleCourseChange}>
-                        <option>Select a course</option>
+                        <option value="" disabled selected>Select a course</option>
                         <option value="cs211">CS 211</option>
                         {/* <option value="213">CS 213</option>
                         <option value="214">CS 214</option> */}
                     </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                        Please select a class.
+                    </Form.Control.Feedback>
+                    <br />
                     <Button variant="dark" type="submit">Submit</Button>
                 </Form>
                 </Modal.Body>
