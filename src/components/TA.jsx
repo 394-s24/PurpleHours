@@ -2,6 +2,8 @@ import TAQueue from './TAQueue.jsx';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 const TA = ({queue, dbArgs}) => {
 
@@ -44,7 +46,16 @@ const handleDone = () => {
   // Logic for removing the first group from the database
 };
 
-return <TAQueue queue={refinedQueue} handleDone={handleDone} />;
+const navigate = useNavigate();
+const handleBack = () => {
+  navigate('/')
+};
+
+return (
+  <div>
+    <Button variant="dark" onClick={() => handleBack()}>Go Back</Button>
+    <TAQueue queue={refinedQueue} handleDone={handleDone} />
+  </div>);
 };
 
 export default TA;

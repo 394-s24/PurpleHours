@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { createNewGroup, addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
 import { set } from 'firebase/database';
 import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Student = ({queue, studentData}) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
@@ -76,8 +77,13 @@ const Student = ({queue, studentData}) => {
     console.log("hello");
   }
 
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate('/')
+  };
   return (
     <div className="student_view">
+      <Button variant="dark" onClick={() => handleBack()}>Go Back</Button>
       <div className="queue">
         <StudentQueue
           queue={refinedQueue}
