@@ -86,22 +86,6 @@ async function removeFromGroup(course, session, uniqueId, groupId) {
   }
 }
 
-async function setGroupDone(course, session, id) {
-
-  let groupRef = ref(db, `${course}/${session}/groups/` + id);
-  try {
-    await update(groupRef, {
-      done: true
-    });
-    console.log("Data updated successfully!");
-
-  }
-  catch (error) {
-    console.error("The update failed...", error);
-  }
-
-}
-
 async function removeGroup(course, session, id) {
   try {
     let groupRef = ref(db, `${course}/${session}/groups/` + id);
@@ -154,4 +138,4 @@ const useDbData = (course, session) => {
 //   return [ data, error ];
 // };
 
-export { createNewGroup, addToGroup, removeFromGroup, setGroupDone, useDbData};
+export { createNewGroup, addToGroup, removeFromGroup, useDbData, removeGroup};

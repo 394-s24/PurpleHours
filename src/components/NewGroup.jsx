@@ -34,7 +34,7 @@ const NewGroup = ({
       const groupsData = {
         issue: `${helpType}: ${helpDescription}`,
         time: Math.floor(Date.now() / 1000),
-        done: false,
+        currentlyHelping: false,
         public: true,
       };
       // Pass the data to an external function

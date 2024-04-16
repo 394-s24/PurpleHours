@@ -20,7 +20,8 @@ const TAQueue = ({ queue , handleDone}) => {
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-          {Object.values(rest).map((group, index) => (
+
+          {Object.values(rest).filter(group => !group.currentlyHelping && !group.done).map((group, index) => (
             <ListGroup.Item>
               <Group
                 key={group.id}
