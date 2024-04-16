@@ -3,25 +3,24 @@ import './Queue.css';
 import { ListGroup, Card, Button } from 'react-bootstrap';
 
 // The Queue component
-const TAQueue = ({ queue , handleDone}) => {
-  const first = queue ? queue[0] : null;
-  const rest = queue.slice(1);
+const TAQueue = ({ queue, handleDone }) => {
   return (
     <div className="queue">
       <div>
         <h2>Currently helping</h2>
-        <Card body className="helping">
-          {first && (
-            <Group names={first.names} issue={first.issue} time={first.time} />
-          )}
-          <Button className="done-btn" onClick={() => handleDone(first.id)} variant="success" >Done</Button>
-        </Card>
+        <ListGroup className="helping">
+          {Object.values(queue).filter(group => group.currentlyHelping).map(group => (
+            <ListGroup.Item>
+              <Group key={group.id} names={group.names} issue={group.issue} time={group.time} />
+              <Button className="done-btn" onClick={() => handleDone(group.id)} variant="success" >Done</Button>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
       </div>
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-
-          {Object.values(rest).filter(group => !group.currentlyHelping && !group.done).map((group, index) => (
+          {Object.values(queue).filter(group => !group.currentlyHelping && !group.done).map((group, index) => (
             <ListGroup.Item>
               <Group
                 key={group.id}
@@ -29,6 +28,7 @@ const TAQueue = ({ queue , handleDone}) => {
                 issue={group.issue}
                 time={group.time}
               />
+              <Button className="help-btn" /* onClick={() => handleHelp(group.id)} */ variant="success">Help</Button>
             </ListGroup.Item>
           ))}
         </ListGroup>
