@@ -4,8 +4,7 @@ import { ListGroup, Card, Button } from 'react-bootstrap';
 
 // The Queue component
 const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, leaveQueue}) => {
-  const first = queue ? queue[0] : null;
-  const rest = queue.slice(1);
+
   return (
     <div className="queue">
       <div className="title">
@@ -13,19 +12,20 @@ const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, 
       </div>
       <div>
         <h2>Currently helping</h2>
-        <Card body className="helping">
-          {first && (
-            <Group names={first.names} issue={first.issue} time={first.time} />
-          )}
-        </Card>
+        <ListGroup className="helping">
+          {Object.values(queue).filter(group => group.currentlyHelping).map(group => (
+            <ListGroup.Item key={group.id}>
+              <Group names={group.names} issue={group.issue} time={group.time} />
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
       </div>
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-          {Object.values(rest).map((group, index) => (
-            <ListGroup.Item key={index}>
+          {Object.values(queue).filter(group => !group.currentlyHelping).map((group) => (
+            <ListGroup.Item key={group.id}>
               <Group
-                key={index}
                 names={group.names}
                 issue={group.issue}
                 time={group.time}

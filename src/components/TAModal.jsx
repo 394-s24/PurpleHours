@@ -24,7 +24,7 @@ const TAModal = (props) => {
   // Check if TA code is correct and navigate to TA page
   const handleSubmit = () => {
     if (code === '1234') {
-      props.setDbArgs([course, 'favouroh1']);
+      props.setDbArgs(course);
       props.onHide();
 
       navigate('/ta');

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
-import { addToGroup, createNewGroup } from '../DatabaseFuncs.mjs';
+import { addToGroup, createNewGroup} from '../DatabaseFuncs.mjs';
 
 const NewGroup = ({
   joinedGroupId,
   nameID,
   setJoinedGroupId,
   setNameID,
-  onFormSubmit,
   studentData,
   ...props
 }) => {
@@ -34,30 +33,29 @@ const NewGroup = ({
       const groupsData = {
         issue: `${helpType}: ${helpDescription}`,
         time: Math.floor(Date.now() / 1000),
-        done: false,
+        currentlyHelping: false,
         public: true,
       };
       // Pass the data to an external function
       let groupID = await createNewGroup(
         studentData.course,
-        studentData.session,
         groupsData
       );
-      console.log(groupID);
       let id = await addToGroup(
         studentData.course,
-        studentData.session,
         studentData.name,
         groupID
       );
       props.onHide();
-      // console.log(groupID, nameID);
-      // onFormSubmit(groupID, nameID);
+      // setupUserPresence(studentData.course, id, groupID);
       setJoinedGroupId([...joinedGroupId, groupID]);
       setNameID([...nameID, id]);
-    }
 
-    setValidated(true);
+      setValidated(false);
+    }
+    else {
+      setValidated(true);
+    }
   };
 
   return (

@@ -11,9 +11,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
 
-  const [dbArgs, setDbArgs] = useState([]);
+  const [dbArgs, setDbArgs] = useState("");
   const [studentData, setStudentData] = useState(null);
-  const [data, error] = useDbData(dbArgs[0], dbArgs[1]);
+  const [data, error] = useDbData(dbArgs);
 
   // Placeholder student data
   useEffect(() => {
@@ -21,14 +21,13 @@ const App = () => {
       {
         name: "Jack",
         course: "cs211",
-        session: "favouroh1",
       },
     );
   }, []);
 
   // Placeholder db args
   useEffect(() => {
-    setDbArgs(["cs211", "favouroh1"]);
+    setDbArgs("cs211");
   }, []);
 
   if (data === undefined) {

@@ -5,12 +5,7 @@ import './Student.css';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import {
-  createNewGroup,
-  addToGroup,
-  removeFromGroup,
-} from '../DatabaseFuncs.mjs';
-import { set } from 'firebase/database';
+import { addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +18,6 @@ const Student = ({ queue, studentData }) => {
 
   const renderQueue = () => {
     // Checks if queue is defined
-    // console.log(queue);
     if (queue) {
       // Format queue data
       const formattedQueue = Object.values(queue).map((item) => {
@@ -66,17 +60,16 @@ const Student = ({ queue, studentData }) => {
 
   useEffect(renderQueue, [queue]);
 
-  const handleJoinQueue = async (studentData, groupID) => {
+  const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
-    // setJoinedGroupId(joinedGroupId.concat([groupID]));
-    setJoinedGroupId([...joinedGroupId, groupID]);
+    setJoinedGroupId([...joinedGroupId, groupId]);
     let id = await addToGroup(
       studentData.course,
-      studentData.session,
       studentData.name,
-      groupID
+      groupId
     );
     setNameID([...nameID, id]);
+    // setupUserPresence(studentData.course, id, groupId);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
@@ -86,20 +79,10 @@ const Student = ({ queue, studentData }) => {
     );
     removeFromGroup(
       studentData.course,
-      studentData.session,
       nameID[joinedGroupId.indexOf(groupID)],
       groupID
     );
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
-  };
-
-  const onFormSubmit = async (groupID, nameID) => {
-    // setClientJoined(true);
-    // // setJoinedGroupId(joinedGroupId.concat([groupID]));
-    // setJoinedGroupId([...joinedGroupId, groupID]);
-    // let id = await addToGroup(studentData.course, studentData.session, studentData.name, groupID)
-    // setNameID([...nameID, id]);
-    console.log('hello');
   };
 
   const navigate = useNavigate();
@@ -133,7 +116,6 @@ const Student = ({ queue, studentData }) => {
           setNameID={setNameID}
           joinedGroupId={joinedGroupId}
           setJoinedGroupId={setJoinedGroupId}
-          onFormSubmit={onFormSubmit}
           onHide={() => setModalShow(false)}
         />
       </div>
