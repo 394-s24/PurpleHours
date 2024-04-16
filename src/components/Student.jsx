@@ -5,7 +5,7 @@ import './Student.css';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { addToGroup, removeFromGroup } from '../DatabaseFuncs.mjs';
+import { addToGroup, removeFromGroup, setupUserPresence} from '../DatabaseFuncs.mjs';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ const Student = ({ queue, studentData }) => {
 
   const renderQueue = () => {
     // Checks if queue is defined
-    // console.log(queue);
     if (queue) {
       // Format queue data
       const formattedQueue = Object.values(queue).map((item) => {
@@ -61,16 +60,16 @@ const Student = ({ queue, studentData }) => {
 
   useEffect(renderQueue, [queue]);
 
-  const handleJoinQueue = async (studentData, groupID) => {
+  const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
-    // setJoinedGroupId(joinedGroupId.concat([groupID]));
-    setJoinedGroupId([...joinedGroupId, groupID]);
+    setJoinedGroupId([...joinedGroupId, groupId]);
     let id = await addToGroup(
       studentData.course,
       studentData.name,
-      groupID
+      groupId
     );
     setNameID([...nameID, id]);
+    setupUserPresence(studentData.course, id, groupId);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {

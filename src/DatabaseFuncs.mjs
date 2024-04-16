@@ -23,14 +23,6 @@ const db = getDatabase(app);
 
 async function createNewGroup(course, groupsData) {
   
-  // const groupsData = {
-  // names: names,
-  // issue: issue,
-  // time : Math.floor(Date.now() / 1000),
-  // done : false,
-  // public : false
-  // };
-  
   // Reference to the location where you want to save the data
   const groupRef = ref(db, `${course}/groups/`);
 
@@ -48,6 +40,21 @@ async function createNewGroup(course, groupsData) {
     console.error("The write failed...", error);
     return null;
   }
+}
+
+async function setupUserPresence(course, userId, groupId) {
+  const user = ref(db, `users/${userId}`);
+  const userRef = ref(db, `users/${userId}/status`);
+  
+  set(userRef, {
+    online: true,
+    lastOnline: serverTimestamp()
+  });
+
+  onDisconnect(userRef).set({
+    online: false,
+    lastOnline: serverTimestamp()
+  });
 }
 
 async function addToGroup(course, name, id) {
@@ -129,4 +136,4 @@ const useDbData = (course) => {
   return [data, error];
 };
 
-export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup};
+export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup, setupUserPresence};

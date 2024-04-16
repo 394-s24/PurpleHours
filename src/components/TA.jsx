@@ -45,12 +45,12 @@ const TA = ({queue, dbArgs}) => {
 
     const handleDone = (groupId) => {
       // Logic for removing the done group from the database
-      removeGroup(dbArgs[0], groupId);
+      removeGroup(dbArgs, groupId);
     };
 
     const handleHelping = (groupId) => {
       // Logic for setting a gorup to be currently helping in the database
-      setGroupHelping(dbArgs[0], groupId);
+      setGroupHelping(dbArgs, groupId);
     };
 
     const navigate = useNavigate();

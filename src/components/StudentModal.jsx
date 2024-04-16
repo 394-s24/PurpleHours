@@ -27,9 +27,8 @@ const StudentModal = (props) => {
       props.setStudentData({
         name: name,
         course: course,
-        session: 'favouroh1', // Hardocded session for now
       });
-      props.setDbArgs([course, 'favouroh1']);
+      props.setDbArgs(course);
       props.onHide();
 
       navigate('/student');

@@ -27,14 +27,14 @@
 
 .queue .done-btn {
   position: absolute;
-  top: 32px;
+  top: 26px;
   right: 24px;
   padding: 5px 20px 5px 20px;
 }
 
 .queue .help-btn {
   position: absolute;
-  top: 32px;
+  top: 26px;
   right: 24px;
   padding: 5px 20px 5px 20px;
 }

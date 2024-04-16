@@ -13,7 +13,7 @@ const App = () => {
 
   const [dbArgs, setDbArgs] = useState("");
   const [studentData, setStudentData] = useState(null);
-  const [data, error] = useDbData(dbArgs[0]);
+  const [data, error] = useDbData(dbArgs);
 
   // Placeholder student data
   useEffect(() => {
