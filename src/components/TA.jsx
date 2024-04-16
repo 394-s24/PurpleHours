@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { setGroupDone } from '../DatabaseFuncs.mjs'
 
 const TA = ({queue, dbArgs}) => {
 
@@ -42,14 +43,15 @@ const TA = ({queue, dbArgs}) => {
       }
     }, [queue]);
 
-const handleDone = () => {
-  // Logic for removing the first group from the database
-};
+    const handleDone = (groupId) => {
+      // Logic for removing the first group from the database
+      setGroupDone(dbArgs[0], dbArgs[1], groupId);
+    };
 
-const navigate = useNavigate();
-const handleBack = () => {
-  navigate('/')
-};
+    const navigate = useNavigate();
+    const handleBack = () => {
+      navigate('/')
+    };
 
 return (
   <div>

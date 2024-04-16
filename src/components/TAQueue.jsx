@@ -14,7 +14,7 @@ const TAQueue = ({ queue , handleDone}) => {
           {first && (
             <Group names={first.names} issue={first.issue} time={first.time} />
           )}
-          {/* <Button className="done-btn" onClick={handleDone} variant="success" >Done</Button> */}
+          <Button className="done-btn" onClick={() => handleDone(first.id)} variant="success" >Done</Button>
         </Card>
       </div>
       <div>
@@ -23,7 +23,7 @@ const TAQueue = ({ queue , handleDone}) => {
           {Object.values(rest).map((group, index) => (
             <ListGroup.Item>
               <Group
-                key={index}
+                key={group.id}
                 names={group.names}
                 issue={group.issue}
                 time={group.time}
