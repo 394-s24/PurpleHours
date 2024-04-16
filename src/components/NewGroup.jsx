@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
-import { addToGroup, createNewGroup, setupUserPresence } from '../DatabaseFuncs.mjs';
+import { addToGroup, createNewGroup} from '../DatabaseFuncs.mjs';
 
 const NewGroup = ({
   joinedGroupId,
@@ -47,7 +47,7 @@ const NewGroup = ({
         groupID
       );
       props.onHide();
-      setupUserPresence(studentData.course, id, groupID);
+      // setupUserPresence(studentData.course, id, groupID);
       setJoinedGroupId([...joinedGroupId, groupID]);
       setNameID([...nameID, id]);
 

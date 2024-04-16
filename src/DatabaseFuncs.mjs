@@ -42,20 +42,20 @@ async function createNewGroup(course, groupsData) {
   }
 }
 
-async function setupUserPresence(course, userId, groupId) {
-  const user = ref(db, `users/${userId}`);
-  const userRef = ref(db, `users/${userId}/status`);
-  
-  set(userRef, {
-    online: true,
-    lastOnline: serverTimestamp()
-  });
+// async function setupUserPresence(course, userId, groupId) {
+//   const user = ref(db, `users/${userId}`);
+//   const userRef = ref(db, `users/${userId}/status`);
 
-  onDisconnect(userRef).set({
-    online: false,
-    lastOnline: serverTimestamp()
-  });
-}
+//   set(userRef, {
+//     online: true,
+//     lastOnline: serverTimestamp()
+//   });
+
+//   onDisconnect(userRef).set({
+//     online: false,
+//     lastOnline: serverTimestamp()
+//   });
+// }
 
 async function addToGroup(course, name, id) {
   try {
@@ -136,4 +136,4 @@ const useDbData = (course) => {
   return [data, error];
 };
 
-export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup, setupUserPresence};
+export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup};

@@ -5,7 +5,7 @@ import './Student.css';
 import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
-import { addToGroup, removeFromGroup, setupUserPresence} from '../DatabaseFuncs.mjs';
+import { addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,7 +69,7 @@ const Student = ({ queue, studentData }) => {
       groupId
     );
     setNameID([...nameID, id]);
-    setupUserPresence(studentData.course, id, groupId);
+    // setupUserPresence(studentData.course, id, groupId);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
