@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { removeGroup } from '../DatabaseFuncs.mjs'
+import { removeGroup, setGroupHelping } from '../DatabaseFuncs.mjs'
 
 const TA = ({queue, dbArgs}) => {
 
@@ -44,8 +44,13 @@ const TA = ({queue, dbArgs}) => {
     }, [queue]);
 
     const handleDone = (groupId) => {
-      // Logic for removing the first group from the database
-      removeGroup(dbArgs[0], dbArgs[1], groupId);
+      // Logic for removing the done group from the database
+      removeGroup(dbArgs[0], groupId);
+    };
+
+    const handleHelping = (groupId) => {
+      // Logic for setting a gorup to be currently helping in the database
+      setGroupHelping(dbArgs[0], groupId);
     };
 
     const navigate = useNavigate();
@@ -56,7 +61,7 @@ const TA = ({queue, dbArgs}) => {
 return (
   <div>
     <Button variant="dark" onClick={() => handleBack()}>Go Back</Button>
-    <TAQueue queue={refinedQueue} handleDone={handleDone} />
+    <TAQueue queue={refinedQueue} handleDone={handleDone} handleHelping={handleHelping}/>
   </div>);
 };
 

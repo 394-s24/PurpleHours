@@ -8,7 +8,6 @@ const NewGroup = ({
   nameID,
   setJoinedGroupId,
   setNameID,
-  onFormSubmit,
   studentData,
   ...props
 }) => {
@@ -40,21 +39,20 @@ const NewGroup = ({
       // Pass the data to an external function
       let groupID = await createNewGroup(
         studentData.course,
-        studentData.session,
         groupsData
       );
       console.log(groupID);
       let id = await addToGroup(
         studentData.course,
-        studentData.session,
         studentData.name,
         groupID
       );
       props.onHide();
       // console.log(groupID, nameID);
-      // onFormSubmit(groupID, nameID);
       setJoinedGroupId([...joinedGroupId, groupID]);
       setNameID([...nameID, id]);
+
+      setValidated(false);
     }
 
     setValidated(true);

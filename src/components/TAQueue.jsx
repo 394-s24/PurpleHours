@@ -1,9 +1,9 @@
 import Group from './Group';
 import './Queue.css';
-import { ListGroup, Card, Button } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 
 // The Queue component
-const TAQueue = ({ queue, handleDone }) => {
+const TAQueue = ({ queue, handleDone, handleHelping }) => {
   return (
     <div className="queue">
       <div>
@@ -28,7 +28,7 @@ const TAQueue = ({ queue, handleDone }) => {
                 issue={group.issue}
                 time={group.time}
               />
-              <Button className="help-btn" /* onClick={() => handleHelp(group.id)} */ variant="success">Help</Button>
+              <Button className="help-btn" onClick={() => handleHelping(group.id)} variant="success">Help</Button>
             </ListGroup.Item>
           ))}
         </ListGroup>
