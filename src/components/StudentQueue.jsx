@@ -31,7 +31,11 @@ const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, 
                 time={group.time}
                 joined={group.joined}
               />
-              {!(joinedID.includes(group.id)) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>}
+              {console.log(group.public)}
+              {/* : <Button className="private-btn" variant="secondary" disabled>private</Button> */}
+              {!group.public && !joinedID.includes(group.id) && <Button className="private-btn" variant="secondary" disabled>Private</Button>}
+              {group.public && !joinedID.includes(group.id) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button> }
+              {/* {!joinedID.includes(group.id) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>} */}
               {joinedID.includes(group.id) && <Button className="leave-btn" key={group.id} onClick={() => leaveQueue(studentData, group.id)} variant="danger">Leave</Button>}
             </ListGroup.Item>
           ))}

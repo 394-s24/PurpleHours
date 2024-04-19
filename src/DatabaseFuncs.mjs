@@ -3,6 +3,7 @@ import { getDatabase, ref, set, get, push, remove, onValue, update} from 'fireba
 import { useCallback, useEffect, useState, useRef } from 'react';
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -136,4 +137,22 @@ const useDbData = (course) => {
   return [data, error];
 };
 
-export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup};
+const signInWithGoogle = () => {
+  signInWithPopup(getAuth(app), new GoogleAuthProvider());
+};
+
+const firebaseSignOut = () => signOut(getAuth(app));
+
+// export { firebaseSignOut as signOut };
+
+const useAuthState = () => {
+  const [user, setUser] = useState();
+  
+  useEffect(() => (
+    onAuthStateChanged(getAuth(app), setUser)
+  ), []);
+
+  return [user];
+};
+
+export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup, signInWithGoogle, firebaseSignOut, useAuthState};
