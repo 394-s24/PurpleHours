@@ -13,6 +13,7 @@ const NewGroup = ({
 }) => {
   const [helpType, setHelpType] = useState('');
   const [helpDescription, setHelpDescription] = useState('');
+  const [helpPublic, setHelpPublic] = useState(true);
   const [validated, setValidated] = useState(false);
 
   const handleHelpTypeChange = (e) => {
@@ -22,6 +23,15 @@ const NewGroup = ({
   const handleHelpDescriptionChange = (e) => {
     setHelpDescription(e.target.value);
   };
+
+  const handleHelpPublicChange = (e) => {
+    if (e.target.id === "Public") {
+      setHelpPublic(true);
+    } else {
+      setHelpPublic(false);
+    }
+    // setHelpPublic(e.target.value);
+  }
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -34,7 +44,7 @@ const NewGroup = ({
         issue: `${helpType}: ${helpDescription}`,
         time: Math.floor(Date.now() / 1000),
         currentlyHelping: false,
-        public: true,
+        public: helpPublic,
       };
       // Pass the data to an external function
       let groupID = await createNewGroup(
@@ -70,6 +80,29 @@ const NewGroup = ({
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="helpType">
+            <Form.Label>Do you want it to be a private OH?</Form.Label>
+            <div key={`inline-radio`} className="mb-3">
+              <Form.Check
+                inline
+                label="Public"
+                value={true}
+                name="helpPublic"
+                type="radio"
+                id="Public"
+                onChange={handleHelpPublicChange}
+              />
+              <Form.Check
+                inline
+                label="Private"
+                value={false}
+                name="helpPublic"
+                type="radio"
+                id="Private"
+                onChange={handleHelpPublicChange}
+              />
+            </div>
+          </Form.Group>
           <Form.Group className="mb-3" controlId="helpType">
             <Form.Label>What type of help do you need?</Form.Label>
             <div key={`inline-radio`} className="mb-3">
