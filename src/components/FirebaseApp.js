@@ -1,6 +1,5 @@
-import 'firebase/database';
+import "firebase/database";
 import { initializeApp } from "firebase/app";
-
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -10,7 +9,7 @@ const firebaseConfig = {
   projectId: "purple-hours",
   storageBucket: "purple-hours.appspot.com",
   messagingSenderId: "289069179177",
-  appId: "1:289069179177:web:91b16f6e4da77b7f611738"
+  appId: "1:289069179177:web:91b16f6e4da77b7f611738",
 };
 
 // Initialize Firebase

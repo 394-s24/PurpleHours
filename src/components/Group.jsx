@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 // The Group component
 const Group = ({ names, issue, time }) => {

@@ -1,9 +1,24 @@
-import 'firebase/database';
-import { getDatabase, ref, set, get, push, remove, onValue, update} from 'firebase/database';
-import { useCallback, useEffect, useState, useRef } from 'react';
+import "firebase/database";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  push,
+  remove,
+  onValue,
+  update,
+} from "firebase/database";
+import { useCallback, useEffect, useState, useRef } from "react";
 // import app from './components/FirebaseApp';
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,7 +28,7 @@ const firebaseConfig = {
   storageBucket: "purple-hours-v2.appspot.com",
   messagingSenderId: "365596552992",
   appId: "1:365596552992:web:c5c5597f110b1b6d33b145",
-  measurementId: "G-46J1N3000X"
+  measurementId: "G-46J1N3000X",
 };
 
 // Initialize Firebase
@@ -23,7 +38,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 async function createNewGroup(course, groupsData) {
-  
   // Reference to the location where you want to save the data
   const groupRef = ref(db, `${course}/groups/`);
 
@@ -32,7 +46,7 @@ async function createNewGroup(course, groupsData) {
     let key = groupID.key;
 
     await update(ref(db, `${course}/groups/${key}`), {
-      id: key // Assuming you want to save the key as an `id` field inside the pushed object
+      id: key, // Assuming you want to save the key as an `id` field inside the pushed object
     });
 
     console.log("Data saved successfully!");
@@ -61,12 +75,11 @@ async function createNewGroup(course, groupsData) {
 async function addToGroup(course, name, id) {
   try {
     let newEntryRef = await push(ref(db, `${course}/groups/` + id + "/names"), {
-      name
+      name,
     });
     console.log("Data updated successfully!");
     return newEntryRef.key; // Return the unique ID of the new entry
-  }
-  catch (error) {
+  } catch (error) {
     console.error("The update failed...", error);
     return null;
   }
@@ -83,10 +96,14 @@ async function removeFromGroup(course, uniqueId, groupId) {
     // Check if the group is empty, remove the group if it is
     const snapshot = await get(groupRef);
 
-    console.log()
+    console.log();
 
     // Group is empty when the name field is empty or doesn't exist
-    if (!snapshot.exists() || !snapshot.val().names || Object.keys(snapshot.val().names).length === 0) {
+    if (
+      !snapshot.exists() ||
+      !snapshot.val().names ||
+      Object.keys(snapshot.val().names).length === 0
+    ) {
       await removeGroup(course, groupId);
     }
   } catch (error) {
@@ -106,19 +123,15 @@ async function removeGroup(course, id) {
 }
 
 async function setGroupHelping(course, id) {
-
   let groupRef = ref(db, `${course}/groups/` + id);
   try {
     await update(groupRef, {
-      currentlyHelping: true
+      currentlyHelping: true,
     });
     console.log("Data updated successfully!");
-
-  }
-  catch (error) {
+  } catch (error) {
     console.error("The update failed...", error);
   }
-
 }
 
 const useDbData = (course) => {
@@ -126,13 +139,19 @@ const useDbData = (course) => {
   const [error, setError] = useState(null);
   const groupsRef = ref(db, `${course}/groups/`);
 
-  useEffect(() => (
-    onValue(groupsRef, (snapshot) => {
-     setData( snapshot.val() );
-    }, (error) => {
-      setError(error);
-    })
-  ), [ course ]);
+  useEffect(
+    () =>
+      onValue(
+        groupsRef,
+        (snapshot) => {
+          setData(snapshot.val());
+        },
+        (error) => {
+          setError(error);
+        },
+      ),
+    [course],
+  );
 
   return [data, error];
 };
@@ -147,12 +166,20 @@ const firebaseSignOut = () => signOut(getAuth(app));
 
 const useAuthState = () => {
   const [user, setUser] = useState();
-  
-  useEffect(() => (
-    onAuthStateChanged(getAuth(app), setUser)
-  ), []);
+
+  useEffect(() => onAuthStateChanged(getAuth(app), setUser), []);
 
   return [user];
 };
 
-export { createNewGroup, addToGroup, removeFromGroup, useDbData, setGroupHelping, removeGroup, signInWithGoogle, firebaseSignOut, useAuthState};
+export {
+  createNewGroup,
+  addToGroup,
+  removeFromGroup,
+  useDbData,
+  setGroupHelping,
+  removeGroup,
+  signInWithGoogle,
+  firebaseSignOut,
+  useAuthState,
+};

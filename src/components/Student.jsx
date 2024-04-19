@@ -1,13 +1,13 @@
-import StudentQueue from './StudentQueue.jsx';
-import NewGroup from './NewGroup.jsx';
-import './Student.css';
+import StudentQueue from "./StudentQueue.jsx";
+import NewGroup from "./NewGroup.jsx";
+import "./Student.css";
 
-import 'firebase/database';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState } from 'react';
-import { addToGroup, removeFromGroup} from '../DatabaseFuncs.mjs';
-import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import "firebase/database";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect, useState } from "react";
+import { addToGroup, removeFromGroup } from "../DatabaseFuncs.mjs";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
@@ -25,25 +25,25 @@ const Student = ({ queue, studentData }) => {
         const unixTimestamp = item.time;
         const date = new Date(unixTimestamp * 1000);
         let hours = date.getHours();
-        const minutes = '0' + date.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const minutes = "0" + date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
         const month = date.getMonth() + 1; // Months are zero indexed, so add 1
         const day = date.getDate();
         const formattedTime = isNaN(date.getTime())
-          ? 'Invalid Date'
+          ? "Invalid Date"
           : `${hours}:${minutes.substr(-2)}${ampm}, ${month}/${day}`;
 
         // Convert list of names to string
-        const namesObjects = item['names'];
-        let namesArray = ['No members'];
+        const namesObjects = item["names"];
+        let namesArray = ["No members"];
         if (namesObjects) {
           namesArray = Object.values(namesObjects).map((obj) => {
-            return obj['name'];
+            return obj["name"];
           });
         }
-        const namesString = namesArray.join(', ');
+        const namesString = namesArray.join(", ");
 
         // Return a new object with formatted time and names
         return {
@@ -63,11 +63,7 @@ const Student = ({ queue, studentData }) => {
   const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
     setJoinedGroupId([...joinedGroupId, groupId]);
-    let id = await addToGroup(
-      studentData.course,
-      studentData.name,
-      groupId
-    );
+    let id = await addToGroup(studentData.course, studentData.name, groupId);
     setNameID([...nameID, id]);
     // setupUserPresence(studentData.course, id, groupId);
   };
@@ -75,19 +71,19 @@ const Student = ({ queue, studentData }) => {
   const handleLeaveQueue = (studentData, groupID) => {
     setClientJoined(false);
     setJoinedGroupId(
-      joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1)
+      joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1),
     );
     removeFromGroup(
       studentData.course,
       nameID[joinedGroupId.indexOf(groupID)],
-      groupID
+      groupID,
     );
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate('/');
+    navigate("/");
   };
   return (
     <div className="student_view">

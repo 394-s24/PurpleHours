@@ -11,8 +11,9 @@ cd your-app-name
 npx degit criesbeck/react-vitest
 npm install
 ```
-If the third step hangs after printing ``> cloned criesbeck/react-vitest#HEAD``, 
-just control-C to exit then run ``npm install``.
+
+If the third step hangs after printing `> cloned criesbeck/react-vitest#HEAD`,
+just control-C to exit then run `npm install`.
 
 ## Test
 
@@ -30,21 +31,20 @@ Verify that the unit tests work with
 npm test
 ```
 
-Two tests should run and pass. 
+Two tests should run and pass.
 
 ## Scripts
 
 **package.json** defines the following scripts:
 
 | Script           | Description                                         |
-| -----------------| --------------------------------------------------- |
+| ---------------- | --------------------------------------------------- |
 | npm start        | Runs the app in the development mode.               |
 | npm run dev      | Runs the app in the development mode.               |
 | npm run build    | Builds the app for production to the `dist` folder. |
 | npm run serve    | Serves the production build from the `dist` folder. |
 | npm test         | Starts a Jest-like test loop                        |
 | npm run coverage | Runs the tests, displays code coverage results      |
-
 
 ## Git
 
@@ -82,8 +82,6 @@ Thanks to Rich Harris for [degit](https://www.npmjs.com/package/degit).
 
 Gitignore file created with [the Toptal tool](https://www.toptal.com/developers/gitignore/api/react,firebase,visualstudiocode,macos,windows).
 
-
 ## License
 
 This project is licensed under the terms of the [MIT license](./LICENSE).
-

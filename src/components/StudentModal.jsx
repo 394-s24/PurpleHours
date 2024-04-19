@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal, Button, Form } from "react-bootstrap";
 
 const StudentModal = (props) => {
-  const [name, setName] = useState('');
-  const [course, setCourse] = useState('');
+  const [name, setName] = useState("");
+  const [course, setCourse] = useState("");
   const [validated, setValidated] = useState(false);
 
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const StudentModal = (props) => {
       props.setDbArgs(course);
       props.onHide();
 
-      navigate('/student');
+      navigate("/student");
     }
 
     setValidated(true);

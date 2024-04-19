@@ -1,10 +1,16 @@
-import Group from './Group';
-import './Queue.css';
-import { ListGroup, Card, Button } from 'react-bootstrap';
+import Group from "./Group";
+import "./Queue.css";
+import { ListGroup, Card, Button } from "react-bootstrap";
 
 // The Queue component
-const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, leaveQueue}) => {
-
+const StudentQueue = ({
+  queue,
+  studentData,
+  clientJoined,
+  joinedID,
+  joinQueue,
+  leaveQueue,
+}) => {
   return (
     <div className="queue">
       <div className="title">
@@ -13,32 +19,60 @@ const StudentQueue = ({ queue , studentData, clientJoined, joinedID, joinQueue, 
       <div>
         <h2>Currently helping</h2>
         <ListGroup className="helping">
-          {Object.values(queue).filter(group => group.currentlyHelping).map(group => (
-            <ListGroup.Item key={group.id}>
-              <Group names={group.names} issue={group.issue} time={group.time} />
-            </ListGroup.Item>
-          ))}
+          {Object.values(queue)
+            .filter((group) => group.currentlyHelping)
+            .map((group) => (
+              <ListGroup.Item key={group.id}>
+                <Group
+                  names={group.names}
+                  issue={group.issue}
+                  time={group.time}
+                />
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </div>
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-          {Object.values(queue).filter(group => !group.currentlyHelping).map((group) => (
-            <ListGroup.Item key={group.id}>
-              <Group
-                names={group.names}
-                issue={group.issue}
-                time={group.time}
-                joined={group.joined}
-              />
-              {console.log(group.public)}
-              {/* : <Button className="private-btn" variant="secondary" disabled>private</Button> */}
-              {!group.public && !joinedID.includes(group.id) && <Button className="private-btn" variant="secondary" disabled>Private</Button>}
-              {group.public && !joinedID.includes(group.id) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button> }
-              {/* {!joinedID.includes(group.id) && <Button className="join-btn" key={group.id} onClick={() => joinQueue(studentData, group.id)} variant="success" >Join</Button>} */}
-              {joinedID.includes(group.id) && <Button className="leave-btn" key={group.id} onClick={() => leaveQueue(studentData, group.id)} variant="danger">Leave</Button>}
-            </ListGroup.Item>
-          ))}
+          {Object.values(queue)
+            .filter((group) => !group.currentlyHelping)
+            .map((group) => (
+              <ListGroup.Item key={group.id}>
+                <Group
+                  names={group.names}
+                  issue={group.issue}
+                  time={group.time}
+                  joined={group.joined}
+                />
+                {console.log(group.public)}
+                {!group.public && !joinedID.includes(group.id) && (
+                  <Button className="private-btn" variant="secondary" disabled>
+                    Private
+                  </Button>
+                )}
+                {group.public && !joinedID.includes(group.id) && (
+                  <Button
+                    className="join-btn"
+                    key={group.id}
+                    onClick={() => joinQueue(studentData, group.id)}
+                    variant="success"
+                  >
+                    Join
+                  </Button>
+                )}
+                {joinedID.includes(group.id) && (
+                  <Button
+                    className="leave-btn"
+                    key={group.id}
+                    onClick={() => leaveQueue(studentData, group.id)}
+                    variant="danger"
+                  >
+                    Leave
+                  </Button>
+                )}
+              </ListGroup.Item>
+            ))}
         </ListGroup>
       </div>
     </div>

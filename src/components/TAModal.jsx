@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal, Button, Form } from "react-bootstrap";
 
 const TAModal = (props) => {
-  const [name, setName] = useState('');
-  const [course, setCourse] = useState('');
-  const [code, setCode] = useState('');
+  const [name, setName] = useState("");
+  const [course, setCourse] = useState("");
+  const [code, setCode] = useState("");
 
   const navigate = useNavigate();
 
@@ -23,13 +23,13 @@ const TAModal = (props) => {
 
   // Check if TA code is correct and navigate to TA page
   const handleSubmit = () => {
-    if (code === '1234') {
+    if (code === "1234") {
       props.setDbArgs(course);
       props.onHide();
 
-      navigate('/ta');
+      navigate("/ta");
     } else {
-      alert('Incorrect access code');
+      alert("Incorrect access code");
     }
   };
 

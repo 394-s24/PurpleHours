@@ -1,18 +1,26 @@
-import { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import StudentModal from './StudentModal.jsx';
-import TAModal from './TAModal.jsx';
-import { signInWithGoogle, firebaseSignOut, useAuthState } from '../DatabaseFuncs.mjs';
-import './Landing.css';
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import StudentModal from "./StudentModal.jsx";
+import TAModal from "./TAModal.jsx";
+import {
+  signInWithGoogle,
+  firebaseSignOut,
+  useAuthState,
+} from "../DatabaseFuncs.mjs";
+import "./Landing.css";
 
 const SignInButton = () => (
   <div className="btns">
-    <button className="ms-auto btn btn-dark" onClick={signInWithGoogle}>Sign in</button>
+    <button className="ms-auto btn btn-dark" onClick={signInWithGoogle}>
+      Sign in
+    </button>
   </div>
 );
 
 const SignOutButton = () => (
-  <button className="ms-auto btn btn-dark" onClick={firebaseSignOut}>Sign out</button>
+  <button className="ms-auto btn btn-dark" onClick={firebaseSignOut}>
+    Sign out
+  </button>
 );
 
 const Landing = (props) => {
@@ -29,8 +37,17 @@ const Landing = (props) => {
         I am a TA/PM
       </Button>
       <SignOutButton />
-      <StudentModal show={studentModalShow} onHide={() => setStudentModalShow(false)} setStudentData={props.setStudentData} setDbArgs={props.setDbArgs} />
-      <TAModal show={TAModalShow} onHide={() => setTAModalShow(false)} setDbArgs={props.setDbArgs} />
+      <StudentModal
+        show={studentModalShow}
+        onHide={() => setStudentModalShow(false)}
+        setStudentData={props.setStudentData}
+        setDbArgs={props.setDbArgs}
+      />
+      <TAModal
+        show={TAModalShow}
+        onHide={() => setTAModalShow(false)}
+        setDbArgs={props.setDbArgs}
+      />
     </div>
   );
 

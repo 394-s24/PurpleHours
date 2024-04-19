@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { useState } from "react";
+import { Button, Modal, Form } from "react-bootstrap";
 
-import { addToGroup, createNewGroup} from '../DatabaseFuncs.mjs';
+import { addToGroup, createNewGroup } from "../DatabaseFuncs.mjs";
 
 const NewGroup = ({
   joinedGroupId,
@@ -11,8 +11,8 @@ const NewGroup = ({
   studentData,
   ...props
 }) => {
-  const [helpType, setHelpType] = useState('');
-  const [helpDescription, setHelpDescription] = useState('');
+  const [helpType, setHelpType] = useState("");
+  const [helpDescription, setHelpDescription] = useState("");
   const [helpPublic, setHelpPublic] = useState(true);
   const [validated, setValidated] = useState(false);
 
@@ -31,7 +31,7 @@ const NewGroup = ({
       setHelpPublic(false);
     }
     // setHelpPublic(e.target.value);
-  }
+  };
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -47,23 +47,15 @@ const NewGroup = ({
         public: helpPublic,
       };
       // Pass the data to an external function
-      let groupID = await createNewGroup(
-        studentData.course,
-        groupsData
-      );
-      let id = await addToGroup(
-        studentData.course,
-        studentData.name,
-        groupID
-      );
+      let groupID = await createNewGroup(studentData.course, groupsData);
+      let id = await addToGroup(studentData.course, studentData.name, groupID);
       props.onHide();
       // setupUserPresence(studentData.course, id, groupID);
       setJoinedGroupId([...joinedGroupId, groupID]);
       setNameID([...nameID, id]);
 
       setValidated(false);
-    }
-    else {
+    } else {
       setValidated(true);
     }
   };

@@ -1,18 +1,18 @@
 .landing {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
-  
+
 .title {
-    font-size: 8em;
-    margin-bottom: 20px;
-    font-weight: bold;
+  font-size: 8em;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
-  
+
 .btns {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }

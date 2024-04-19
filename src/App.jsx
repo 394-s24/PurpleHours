@@ -1,28 +1,25 @@
-import './App.css';
-import Student from './components/Student.jsx';
-import TA from './components/TA.jsx';
-import Landing from './components/Landing.jsx'
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route} from "react-router-dom";
-import { useDbData } from './DatabaseFuncs.mjs';
+import "./App.css";
+import Student from "./components/Student.jsx";
+import TA from "./components/TA.jsx";
+import Landing from "./components/Landing.jsx";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDbData } from "./DatabaseFuncs.mjs";
 
-import 'firebase/database';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "firebase/database";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-
   const [dbArgs, setDbArgs] = useState("");
   const [studentData, setStudentData] = useState(null);
   const [data, error] = useDbData(dbArgs);
 
   // Placeholder student data
   useEffect(() => {
-    setStudentData(
-      {
-        name: "Jack",
-        course: "cs211",
-      },
-    );
+    setStudentData({
+      name: "Jack",
+      course: "cs211",
+    });
   }, []);
 
   // Placeholder db args
@@ -38,19 +35,21 @@ const App = () => {
     return <div>Error loading data: {error.toString()}</div>;
   }
 
-  return(
+  return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={
-            <Landing 
-              setStudentData={setStudentData}
-              setDbArgs={setDbArgs}
-            />
-          }
+          <Route
+            path="/"
+            element={
+              <Landing setStudentData={setStudentData} setDbArgs={setDbArgs} />
+            }
           />
-          <Route path="/student" element={<Student queue={data} studentData={studentData}/>} />
-          <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs}/>} />
+          <Route
+            path="/student"
+            element={<Student queue={data} studentData={studentData} />}
+          />
+          <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs} />} />
         </Routes>
       </BrowserRouter>
     </div>
