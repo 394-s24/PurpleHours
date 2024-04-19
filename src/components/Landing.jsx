@@ -2,11 +2,26 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import StudentModal from './StudentModal.jsx';
 import TAModal from './TAModal.jsx';
+import { signInWithGoogle, firebaseSignOut, useAuthState } from '../DatabaseFuncs.mjs';
 import './Landing.css';
+
+const SignInButton = () => (
+  <button className="ms-auto btn btn-dark" onClick={signInWithGoogle}>Sign in</button>
+);
+
+const SignOutButton = () => (
+  <button className="ms-auto btn btn-dark" onClick={firebaseSignOut}>Sign out</button>
+);
+
+const AuthButton = () => {
+  const [user] = useAuthState();
+  return user ? <SignOutButton /> : <SignInButton />;
+};
 
 const Landing = (props) => {
   const [studentModalShow, setStudentModalShow] = useState(false);
   const [TAModalShow, setTAModalShow] = useState(false);
+  
 
   return (
     <div className="landing">
@@ -20,18 +35,10 @@ const Landing = (props) => {
         <Button variant="dark" onClick={() => setTAModalShow(true)}>
           I am a TA/PM
         </Button>
-        <StudentModal
-          show={studentModalShow}
-          onHide={() => setStudentModalShow(false)}
-          setStudentData={props.setStudentData}
-          setDbArgs={props.setDbArgs}
-        />
-        <TAModal
-          show={TAModalShow}
-          onHide={() => setTAModalShow(false)}
-          setDbArgs={props.setDbArgs}
-        />
+        <StudentModal show={studentModalShow} onHide={() => setStudentModalShow(false)} setStudentData={props.setStudentData} setDbArgs={props.setDbArgs}/>
+        <TAModal show={TAModalShow} onHide={() => setTAModalShow(false)} setDbArgs={props.setDbArgs}/>
       </div>
+      <AuthButton />
     </div>
   );
 };
