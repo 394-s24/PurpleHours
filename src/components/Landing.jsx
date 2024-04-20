@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
 import StudentModal from "./StudentModal.jsx";
 import TAModal from "./TAModal.jsx";
-import {
-  signInWithGoogle,
-  firebaseSignOut,
-  useAuthState,
-} from "../DatabaseFuncs.mjs";
+import { signInWithGoogle, firebaseSignOut } from "../DatabaseFuncs.mjs";
 import "./Landing.css";
+import UserContext from "../UserContext.jsx";
 
 const SignInButton = () => (
   <div className="btns">
@@ -26,7 +23,8 @@ const SignOutButton = () => (
 const Landing = (props) => {
   const [studentModalShow, setStudentModalShow] = useState(false);
   const [TAModalShow, setTAModalShow] = useState(false);
-  const [user] = useAuthState();
+
+  const user = useContext(UserContext);
 
   const JoinButtons = () => (
     <div className="btns">

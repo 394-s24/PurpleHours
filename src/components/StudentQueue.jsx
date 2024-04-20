@@ -45,7 +45,6 @@ const StudentQueue = ({
                   time={group.time}
                   joined={group.joined}
                 />
-                {console.log(group.public)}
                 {!group.public && !joinedID.includes(group.id) && (
                   <Button className="private-btn" variant="secondary" disabled>
                     Private
