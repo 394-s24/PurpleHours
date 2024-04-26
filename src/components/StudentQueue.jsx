@@ -11,6 +11,7 @@ const StudentQueue = ({
   joinQueue,
   leaveQueue,
 }) => {
+  console.log(Object.values(queue));
   return (
     <div className="queue">
       <div className="title">

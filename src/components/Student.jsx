@@ -42,16 +42,18 @@ const Student = ({ queue, studentData }) => {
         let namesArray = ["No members"];
         if (namesObjects) {
           namesArray = Object.values(namesObjects).map((obj) => {
-            return obj["name"];
+            return {
+              name: obj["name"],
+              uid: obj["uid"],
+            };
           });
         }
-        const namesString = namesArray.join(", ");
 
         // Return a new object with formatted time and names
         return {
           ...item,
           time: formattedTime,
-          names: namesString,
+          names: namesArray,
         };
       });
 
