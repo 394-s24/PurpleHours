@@ -1,6 +1,8 @@
 import Group from "./Group";
 import "./Queue.css";
-import { ListGroup, Card, Button } from "react-bootstrap";
+import { ListGroup, Button } from "react-bootstrap";
+import {useContext} from "react";
+import UserContext from "../UserContext";
 
 // The Queue component
 const StudentQueue = ({
@@ -12,6 +14,7 @@ const StudentQueue = ({
   leaveQueue,
 }) => {
   console.log(Object.values(queue));
+  const user = useContext(UserContext);
   return (
     <div className="queue">
       <div className="title">
@@ -46,12 +49,12 @@ const StudentQueue = ({
                   time={group.time}
                   joined={group.joined}
                 />
-                {!group.public && !joinedID.includes(group.id) && (
+                {!group.public && !group.names.some((object) => object.uid === user.uid) && (
                   <Button className="private-btn" variant="secondary" disabled>
                     Private
                   </Button>
                 )}
-                {group.public && !joinedID.includes(group.id) && (
+                {group.public && !group.names.some((object) => object.uid === user.uid) && (
                   <Button
                     className="join-btn"
                     key={group.id}
@@ -61,7 +64,7 @@ const StudentQueue = ({
                     Join
                   </Button>
                 )}
-                {joinedID.includes(group.id) && (
+                {group.names.some((object) => object.uid === user.uid) && (
                   <Button
                     className="leave-btn"
                     key={group.id}
