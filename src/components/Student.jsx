@@ -20,6 +20,9 @@ const Student = ({ queue, studentData }) => {
 
   const renderQueue = () => {
     // Checks if queue is defined
+    if (!queue) {
+      setRefinedQueue([]);
+    }
     if (queue) {
       // Format queue data
       const formattedQueue = Object.values(queue).map((item) => {
@@ -77,11 +80,7 @@ const Student = ({ queue, studentData }) => {
     setJoinedGroupId(
       joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1),
     );
-    removeFromGroup(
-      studentData.course,
-      user.uid,
-      groupID,
-    );
+    removeFromGroup(studentData.course, user.uid, groupID);
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
