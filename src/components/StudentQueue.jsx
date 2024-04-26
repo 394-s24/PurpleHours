@@ -23,7 +23,7 @@ const StudentQueue = ({
       <div>
         <h2>Currently helping</h2>
         <ListGroup className="helping">
-          {Object.values(queue)
+          {queue && Object.values(queue)
             .filter((group) => group.currentlyHelping)
             .map((group) => (
               <ListGroup.Item key={group.id}>
@@ -39,7 +39,7 @@ const StudentQueue = ({
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-          {Object.values(queue)
+          {queue && Object.values(queue)
             .filter((group) => !group.currentlyHelping)
             .map((group) => (
               <ListGroup.Item key={group.id}>

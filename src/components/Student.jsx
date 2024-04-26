@@ -67,8 +67,8 @@ const Student = ({ queue, studentData }) => {
   const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
     setJoinedGroupId([...joinedGroupId, groupId]);
-    let id = await addToGroup(studentData.course, groupId, user.displayName, user.uid);
-    setNameID([...nameID, id]);
+    await addToGroup(studentData.course, groupId, user.displayName, user.uid);
+    setNameID([...nameID, 0]);
     // setupUserPresence(studentData.course, id, groupId);
   };
 
@@ -79,7 +79,7 @@ const Student = ({ queue, studentData }) => {
     );
     removeFromGroup(
       studentData.course,
-      nameID[joinedGroupId.indexOf(groupID)],
+      user.uid,
       groupID,
     );
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
