@@ -72,13 +72,13 @@ async function createNewGroup(course, groupsData) {
 //   });
 // }
 
-async function addToGroup(course, name, id) {
+async function addToGroup(course, groupId, displayName, uid) {
   try {
-    let newEntryRef = await push(ref(db, `${course}/groups/` + id + "/names"), {
-      name,
+    let newEntryRef = await set(ref(db, `${course}/groups/` + groupId + "/names/" + uid), {
+      name: displayName,
+      uid: uid,
     });
     console.log("Data updated successfully!");
-    return newEntryRef.key; // Return the unique ID of the new entry
   } catch (error) {
     console.error("The update failed...", error);
     return null;

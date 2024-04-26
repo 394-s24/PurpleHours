@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
 import { addToGroup, createNewGroup } from "../DatabaseFuncs.mjs";
+import UserContext from "../UserContext";
 
 const NewGroup = ({
   joinedGroupId,
@@ -15,7 +16,8 @@ const NewGroup = ({
   const [helpDescription, setHelpDescription] = useState("");
   const [helpPublic, setHelpPublic] = useState(true);
   const [validated, setValidated] = useState(false);
-
+  const user = useContext(UserContext);
+  
   const handleHelpTypeChange = (e) => {
     setHelpType(e.target.id);
   };
@@ -48,11 +50,11 @@ const NewGroup = ({
       };
       // Pass the data to an external function
       let groupID = await createNewGroup(studentData.course, groupsData);
-      let id = await addToGroup(studentData.course, studentData.name, groupID);
+      await addToGroup(studentData.course, groupID, user.displayName, user.uid);
       props.onHide();
       // setupUserPresence(studentData.course, id, groupID);
       setJoinedGroupId([...joinedGroupId, groupID]);
-      setNameID([...nameID, id]);
+      setNameID([...nameID, 0]);
 
       setValidated(false);
     } else {

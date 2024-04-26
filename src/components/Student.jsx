@@ -4,10 +4,11 @@ import "./Student.css";
 
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { addToGroup, removeFromGroup } from "../DatabaseFuncs.mjs";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../UserContext";
 
 const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
@@ -15,9 +16,13 @@ const Student = ({ queue, studentData }) => {
   const [modalShow, setModalShow] = useState(false); // State to track modal
   const [clientJoined, setClientJoined] = useState(false); // State to track if client clicked a join button
   const [joinedGroupId, setJoinedGroupId] = useState([]); // State to track the group id of a group the client joined
+  const user = useContext(UserContext);
 
   const renderQueue = () => {
     // Checks if queue is defined
+    if (!queue) {
+      setRefinedQueue([]);
+    }
     if (queue) {
       // Format queue data
       const formattedQueue = Object.values(queue).map((item) => {
@@ -40,16 +45,18 @@ const Student = ({ queue, studentData }) => {
         let namesArray = ["No members"];
         if (namesObjects) {
           namesArray = Object.values(namesObjects).map((obj) => {
-            return obj["name"];
+            return {
+              name: obj["name"],
+              uid: obj["uid"],
+            };
           });
         }
-        const namesString = namesArray.join(", ");
 
         // Return a new object with formatted time and names
         return {
           ...item,
           time: formattedTime,
-          names: namesString,
+          names: namesArray,
         };
       });
 
@@ -63,8 +70,8 @@ const Student = ({ queue, studentData }) => {
   const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
     setJoinedGroupId([...joinedGroupId, groupId]);
-    let id = await addToGroup(studentData.course, studentData.name, groupId);
-    setNameID([...nameID, id]);
+    await addToGroup(studentData.course, groupId, user.displayName, user.uid);
+    setNameID([...nameID, 0]);
     // setupUserPresence(studentData.course, id, groupId);
   };
 
@@ -73,11 +80,7 @@ const Student = ({ queue, studentData }) => {
     setJoinedGroupId(
       joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1),
     );
-    removeFromGroup(
-      studentData.course,
-      nameID[joinedGroupId.indexOf(groupID)],
-      groupID,
-    );
+    removeFromGroup(studentData.course, user.uid, groupID);
     setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
