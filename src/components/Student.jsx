@@ -4,10 +4,11 @@ import "./Student.css";
 
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { addToGroup, removeFromGroup } from "../DatabaseFuncs.mjs";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../UserContext";
 
 const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
@@ -15,6 +16,7 @@ const Student = ({ queue, studentData }) => {
   const [modalShow, setModalShow] = useState(false); // State to track modal
   const [clientJoined, setClientJoined] = useState(false); // State to track if client clicked a join button
   const [joinedGroupId, setJoinedGroupId] = useState([]); // State to track the group id of a group the client joined
+  const user = useContext(UserContext);
 
   const renderQueue = () => {
     // Checks if queue is defined
@@ -63,7 +65,7 @@ const Student = ({ queue, studentData }) => {
   const handleJoinQueue = async (studentData, groupId) => {
     setClientJoined(true);
     setJoinedGroupId([...joinedGroupId, groupId]);
-    let id = await addToGroup(studentData.course, studentData.name, groupId);
+    let id = await addToGroup(studentData.course, groupId, user.displayName, user.uid);
     setNameID([...nameID, id]);
     // setupUserPresence(studentData.course, id, groupId);
   };
