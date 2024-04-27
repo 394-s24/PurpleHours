@@ -19,7 +19,6 @@ const App = () => {
   // Placeholder student data
   useEffect(() => {
     setStudentData({
-      name: user ? user.displayName : null, // user also has unique id via user.uid
       course: "cs211",
     });
   }, [user]);

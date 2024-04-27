@@ -3,15 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const StudentModal = (props) => {
-  const [name, setName] = useState("");
   const [course, setCourse] = useState("");
   const [validated, setValidated] = useState(false);
 
   const navigate = useNavigate();
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
 
   const handleCourseChange = (e) => {
     setCourse(e.target.value);
@@ -25,7 +20,6 @@ const StudentModal = (props) => {
       event.stopPropagation();
     } else {
       props.setStudentData({
-        name: name,
         course: course,
       });
       props.setDbArgs(course);
@@ -52,19 +46,6 @@ const StudentModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="John Doe"
-                autoFocus
-                required
-                onChange={handleNameChange}
-              />
-              <Form.Control.Feedback type="invalid">
-                Please choose a name.
-              </Form.Control.Feedback>
-            </Form.Group>
             <Form.Select
               aria-label="Default select example"
               required
