@@ -25,6 +25,7 @@ const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
                     names={group.names}
                     issue={group.issue}
                     time={group.time}
+                    helper={group.helper}
                   />
                 </ListGroup.Item>
               ))}
@@ -49,6 +50,7 @@ const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
                     issue={group.issue}
                     time={group.time}
                     joined={group.joined}
+                    helper={group.helper}
                   />
                   {!group.public &&
                     !group.names.some((object) => object.uid === user.uid) && (

@@ -1,21 +1,24 @@
 import TAQueue from "./TAQueue.jsx";
+import UserContext from "../UserContext.jsx";
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { removeGroup, setGroupHelping } from "../DatabaseFuncs.mjs";
 
 const TA = ({ queue, dbArgs }) => {
+  
   const [refinedQueue, setRefinedQueue] = useState([]);
+  const user = useContext(UserContext);
 
   const renderQueue = () => {
     // Checks if queue is defined
     if (!queue) {
       setRefinedQueue([]);
-      return 
+      return;
     }
-  
+
     // Format queue data
     const formattedQueue = Object.values(queue).map((item) => {
       // Convert unix time to readable time with specific format: "4:10PM, 3/27"
@@ -54,11 +57,9 @@ const TA = ({ queue, dbArgs }) => {
 
     // Update state
     setRefinedQueue(formattedQueue);
-  
-  };  
+  };
 
   useEffect(renderQueue, [queue]);
-
 
   const handleDone = (groupId) => {
     // Logic for removing the done group from the database
@@ -67,7 +68,7 @@ const TA = ({ queue, dbArgs }) => {
 
   const handleHelping = (groupId) => {
     // Logic for setting a gorup to be currently helping in the database
-    setGroupHelping(dbArgs, groupId);
+    setGroupHelping(dbArgs, groupId, user);
   };
 
   const navigate = useNavigate();

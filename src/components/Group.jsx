@@ -1,7 +1,7 @@
 import React from "react";
 
 // The Group component
-const Group = ({ names, issue, time }) => {
+const Group = ({ names, issue, time, helper }) => {
   return (
     <div className="Group">
       <div className="name">
@@ -13,6 +13,11 @@ const Group = ({ names, issue, time }) => {
       </div>
       <div className="issue">{issue}</div>
       <div className="time">{time}</div>
+      {helper && (
+        <div className="helper">
+          <p>Being helped by: {helper.name}</p>
+        </div>
+      )}
     </div>
   );
 };
