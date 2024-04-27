@@ -9,7 +9,7 @@ const TAQueue = ({ queue, handleDone, handleHelping }) => {
       <div>
         <h2>Currently helping</h2>
         <ListGroup className="helping">
-          {Object.values(queue)
+          {queue && Object.values(queue)
             .filter((group) => group.currentlyHelping)
             .map((group) => (
               <ListGroup.Item key={group.id}>
@@ -32,7 +32,8 @@ const TAQueue = ({ queue, handleDone, handleHelping }) => {
       <div>
         <h2>Upcoming</h2>
         <ListGroup className="upcoming">
-          {Object.values(queue)
+          {queue && 
+          Object.values(queue)
             .filter((group) => !group.currentlyHelping)
             .map((group) => (
               <ListGroup.Item key={group.id}>
@@ -49,7 +50,13 @@ const TAQueue = ({ queue, handleDone, handleHelping }) => {
                   Help
                 </Button>
               </ListGroup.Item>
-            ))}
+            ))}           
+            {queue &&
+              !Object.values(queue).some((group) => !group.currentlyHelping) && (
+                <div>
+                  <p>No groups in the queue</p>
+                </div>
+              )}
         </ListGroup>
       </div>
     </div>

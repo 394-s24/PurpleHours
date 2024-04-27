@@ -17,7 +17,7 @@ const NewGroup = ({
   const [helpPublic, setHelpPublic] = useState(true);
   const [validated, setValidated] = useState(false);
   const user = useContext(UserContext);
-  
+
   const handleHelpTypeChange = (e) => {
     setHelpType(e.target.id);
   };
