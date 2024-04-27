@@ -11,8 +11,15 @@ const TA = ({ queue, dbArgs }) => {
   
   const [refinedQueue, setRefinedQueue] = useState([]);
   const user = useContext(UserContext);
-
+  const navigate = useNavigate();
+  
   const renderQueue = () => {
+    // go back if null data
+    if (!dbArgs) {
+      navigate("/");
+      return
+    }
+
     // Checks if queue is defined
     if (!queue) {
       setRefinedQueue([]);
@@ -71,7 +78,6 @@ const TA = ({ queue, dbArgs }) => {
     setGroupHelping(dbArgs, groupId, user);
   };
 
-  const navigate = useNavigate();
   const handleBack = () => {
     navigate("/");
   };

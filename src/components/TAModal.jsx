@@ -2,16 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const TAModal = (props) => {
-  const [name, setName] = useState("");
+const TAModal = ({setDbArgs, onHide, ...props}) => {
   const [course, setCourse] = useState("");
   const [code, setCode] = useState("");
 
   const navigate = useNavigate();
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
 
   const handleCourseChange = (e) => {
     setCourse(e.target.value);
@@ -24,8 +20,8 @@ const TAModal = (props) => {
   // Check if TA code is correct and navigate to TA page
   const handleSubmit = () => {
     if (code === "1234") {
-      props.setDbArgs(course);
-      props.onHide();
+      setDbArgs(course);
+      onHide();
 
       navigate("/ta");
     } else {
@@ -48,15 +44,6 @@ const TAModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="string"
-                placeholder="John Doe"
-                autoFocus
-                onChange={handleNameChange}
-              />
-            </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Course</Form.Label>
               <Form.Select

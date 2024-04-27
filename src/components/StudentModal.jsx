@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const StudentModal = (props) => {
+const StudentModal = ({setStudentData, setDbArgs, onHide, ...props}) => {
   const [course, setCourse] = useState("");
   const [validated, setValidated] = useState(false);
 
@@ -19,11 +19,11 @@ const StudentModal = (props) => {
       event.preventDefault();
       event.stopPropagation();
     } else {
-      props.setStudentData({
+      setStudentData({
         course: course,
       });
-      props.setDbArgs(course);
-      props.onHide();
+      setDbArgs(course);
+      onHide();
 
       navigate("/student");
     }
@@ -51,7 +51,7 @@ const StudentModal = (props) => {
               required
               onChange={handleCourseChange}
             >
-              <option value="" disabled selected>
+              <option value="" defaultValue>
                 Select a course
               </option>
               <option value="cs211">CS 211</option>

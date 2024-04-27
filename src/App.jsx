@@ -16,18 +16,6 @@ const App = () => {
   const [data, error] = useDbData(dbArgs);
   const [user] = useAuthState();
 
-  // Placeholder student data
-  useEffect(() => {
-    setStudentData({
-      course: "cs211",
-    });
-  }, [user]);
-
-  // Placeholder db args
-  useEffect(() => {
-    setDbArgs("cs211");
-  }, []);
-
   if (data === undefined) {
     return <div>Loading data...</div>;
   }
@@ -54,7 +42,10 @@ const App = () => {
               path="/student"
               element={<Student queue={data} studentData={studentData} />}
             />
-            <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs} />} />
+            <Route
+              path="/ta"
+              element={<TA queue={data} dbArgs={dbArgs} />}
+            />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
