@@ -12,10 +12,7 @@ import UserContext from "../UserContext";
 
 const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
-  const [nameID, setNameID] = useState([]);
   const [modalShow, setModalShow] = useState(false); // State to track modal
-  const [clientJoined, setClientJoined] = useState(false); // State to track if client clicked a join button
-  const [joinedGroupId, setJoinedGroupId] = useState([]); // State to track the group id of a group the client joined
   const user = useContext(UserContext);
 
   const renderQueue = () => {
@@ -68,20 +65,12 @@ const Student = ({ queue, studentData }) => {
   useEffect(renderQueue, [queue]);
 
   const handleJoinQueue = async (studentData, groupId) => {
-    setClientJoined(true);
-    setJoinedGroupId([...joinedGroupId, groupId]);
     await addToGroup(studentData.course, groupId, user.displayName, user.uid);
-    setNameID([...nameID, 0]);
     // setupUserPresence(studentData.course, id, groupId);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
-    setClientJoined(false);
-    setJoinedGroupId(
-      joinedGroupId.toSpliced(joinedGroupId.indexOf(groupID), 1),
-    );
     removeFromGroup(studentData.course, user.uid, groupID);
-    setNameID(nameID.toSpliced(joinedGroupId.indexOf(groupID), 1));
   };
 
   const navigate = useNavigate();
@@ -97,8 +86,6 @@ const Student = ({ queue, studentData }) => {
         <StudentQueue
           queue={refinedQueue}
           studentData={studentData}
-          clientJoined={clientJoined}
-          joinedID={joinedGroupId}
           joinQueue={handleJoinQueue}
           leaveQueue={handleLeaveQueue}
         />
@@ -111,10 +98,6 @@ const Student = ({ queue, studentData }) => {
         <NewGroup
           studentData={studentData}
           show={modalShow}
-          nameID={nameID}
-          setNameID={setNameID}
-          joinedGroupId={joinedGroupId}
-          setJoinedGroupId={setJoinedGroupId}
           onHide={() => setModalShow(false)}
         />
       </div>

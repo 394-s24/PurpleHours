@@ -5,20 +5,13 @@ import { useContext } from "react";
 import UserContext from "../UserContext";
 
 // The Queue component
-const StudentQueue = ({
-  queue,
-  studentData,
-  clientJoined,
-  joinedID,
-  joinQueue,
-  leaveQueue,
-}) => {
-  console.log(Object.values(queue));
+const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
   const user = useContext(UserContext);
+
   return (
     <div className="queue">
       <div className="title">
-        <h1>We are here to help, {studentData.name}</h1>
+        <h1>We are here to help, {user.displayName}</h1>
       </div>
       <div>
         <h2>Currently helping</h2>
