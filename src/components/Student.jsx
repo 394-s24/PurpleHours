@@ -14,52 +14,59 @@ const Student = ({ queue, studentData }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
   const [modalShow, setModalShow] = useState(false); // State to track modal
   const user = useContext(UserContext);
+  const navigate = useNavigate();
 
   const renderQueue = () => {
+    // go back if null data
+    if (!studentData) {
+      navigate("/");
+      return
+    }
+
     // Checks if queue is defined
     if (!queue) {
       setRefinedQueue([]);
+      return
     }
-    if (queue) {
-      // Format queue data
-      const formattedQueue = Object.values(queue).map((item) => {
-        // Convert unix time to readable time with specific format: "4:10PM, 3/27"
-        const unixTimestamp = item.time;
-        const date = new Date(unixTimestamp * 1000);
-        let hours = date.getHours();
-        const minutes = "0" + date.getMinutes();
-        const ampm = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12;
-        hours = hours ? hours : 12; // the hour '0' should be '12'
-        const month = date.getMonth() + 1; // Months are zero indexed, so add 1
-        const day = date.getDate();
-        const formattedTime = isNaN(date.getTime())
-          ? "Invalid Date"
-          : `${hours}:${minutes.substr(-2)}${ampm}, ${month}/${day}`;
 
-        // Convert list of names to string
-        const namesObjects = item["names"];
-        let namesArray = ["No members"];
-        if (namesObjects) {
-          namesArray = Object.values(namesObjects).map((obj) => {
-            return {
-              name: obj["name"],
-              uid: obj["uid"],
-            };
-          });
-        }
+    // Format queue data
+    const formattedQueue = Object.values(queue).map((item) => {
+      // Convert unix time to readable time with specific format: "4:10PM, 3/27"
+      const unixTimestamp = item.time;
+      const date = new Date(unixTimestamp * 1000);
+      let hours = date.getHours();
+      const minutes = "0" + date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const month = date.getMonth() + 1; // Months are zero indexed, so add 1
+      const day = date.getDate();
+      const formattedTime = isNaN(date.getTime())
+        ? "Invalid Date"
+        : `${hours}:${minutes.substr(-2)}${ampm}, ${month}/${day}`;
 
-        // Return a new object with formatted time and names
-        return {
-          ...item,
-          time: formattedTime,
-          names: namesArray,
-        };
-      });
+      // Convert list of names to string
+      const namesObjects = item["names"];
+      let namesArray = ["No members"];
+      if (namesObjects) {
+        namesArray = Object.values(namesObjects).map((obj) => {
+          return {
+            name: obj["name"],
+            uid: obj["uid"],
+          };
+        });
+      }
 
-      // Update state
-      setRefinedQueue(formattedQueue);
-    }
+      // Return a new object with formatted time and names
+      return {
+        ...item,
+        time: formattedTime,
+        names: namesArray,
+      };
+    });
+
+    // Update state
+    setRefinedQueue(formattedQueue);
   };
 
   useEffect(renderQueue, [queue]);
@@ -73,7 +80,6 @@ const Student = ({ queue, studentData }) => {
     removeFromGroup(studentData.course, user.uid, groupID);
   };
 
-  const navigate = useNavigate();
   const handleBack = () => {
     navigate("/");
   };

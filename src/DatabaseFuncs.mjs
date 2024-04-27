@@ -74,10 +74,13 @@ async function createNewGroup(course, groupsData) {
 
 async function addToGroup(course, groupId, displayName, uid) {
   try {
-    let newEntryRef = await set(ref(db, `${course}/groups/` + groupId + "/names/" + uid), {
-      name: displayName,
-      uid: uid,
-    });
+    let newEntryRef = await set(
+      ref(db, `${course}/groups/` + groupId + "/names/" + uid),
+      {
+        name: displayName,
+        uid: uid,
+      },
+    );
     console.log("Data updated successfully!");
   } catch (error) {
     console.error("The update failed...", error);
@@ -122,11 +125,13 @@ async function removeGroup(course, id) {
   }
 }
 
-async function setGroupHelping(course, id) {
-  let groupRef = ref(db, `${course}/groups/` + id);
+async function setGroupHelping(course, groupId, user) {
+  let groupRef = ref(db, `${course}/groups/` + groupId);
+
   try {
     await update(groupRef, {
       currentlyHelping: true,
+      helper: {name: user.displayName, uid: user.uid},
     });
     console.log("Data updated successfully!");
   } catch (error) {
