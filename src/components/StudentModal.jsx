@@ -63,7 +63,7 @@ const StudentModal = ({setStudentData, setDbArgs, onHide, ...props}) => {
               Please select a class.
             </Form.Control.Feedback>
             <br />
-            <Button variant="dark" type="submit">
+            <Button variant="outline-light" type="submit">
               Submit
             </Button>
           </Form>

@@ -14,9 +14,7 @@ const Group = ({ names, issue, time, helper }) => {
       <div className="issue">{issue}</div>
       <div className="time">{time}</div>
       {helper && (
-        <div className="helper">
-          <p>Being helped by: {helper.name}</p>
-        </div>
+        <div className="helper">Being helped by: {helper.name}</div>
       )}
     </div>
   );

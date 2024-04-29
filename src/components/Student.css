@@ -4,7 +4,6 @@
   text-decoration: none;
 }
 
-.go_back_btn {
-  margin-left: 3px;
-  margin-top: 20px;
+.queue .go_back_btn {
+  margin: 40px, 40px;
 }

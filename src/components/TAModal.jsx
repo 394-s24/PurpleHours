@@ -68,7 +68,7 @@ const TAModal = ({setDbArgs, onHide, ...props}) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="dark" onClick={handleSubmit}>
+          <Button variant="outline-light" onClick={handleSubmit}>
             Submit
           </Button>
         </Modal.Footer>

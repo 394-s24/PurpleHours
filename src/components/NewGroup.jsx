@@ -129,7 +129,7 @@ const NewGroup = ({ studentData, ...props }) => {
               Please enter a detailed description of the problem
             </Form.Control.Feedback>
           </Form.Group>
-          <Button type="submit" variant="dark">
+          <Button type="submit" variant="outline-light">
             Submit
           </Button>
         </Form>

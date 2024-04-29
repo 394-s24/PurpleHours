@@ -11,37 +11,46 @@
   margin: 20px 40px;
 }
 
+.queue h2 {
+  margin: 10px 0;
+}
+
 .queue .join-btn {
   position: absolute;
-  top: 26px;
+  top: 50%;
   right: 24px;
   padding: 5px 20px 5px 20px;
+  transform: translateY(-50%);
 }
 
 .queue .leave-btn {
   position: absolute;
-  top: 26px;
+  top: 50%;
   right: 24px;
   padding: 5px 20px 5px 20px;
+  transform: translateY(-50%);
 }
 
 .queue .private-btn {
   position: absolute;
-  top: 26px;
+  top: 50%;
   right: 24px;
   padding: 5px 17px 5px 17px;
+  transform: translateY(-50%);
 }
 
 .queue .done-btn {
   position: absolute;
-  top: 26px;
+  top: 50%;
   right: 24px;
   padding: 5px 20px 5px 20px;
+  transform: translateY(-50%);
 }
 
 .queue .help-btn {
   position: absolute;
-  top: 26px;
+  top: 50%;
   right: 24px;
   padding: 5px 20px 5px 20px;
+  transform: translateY(-50%);
 }

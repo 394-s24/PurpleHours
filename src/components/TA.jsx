@@ -1,5 +1,6 @@
 import TAQueue from "./TAQueue.jsx";
 import UserContext from "../UserContext.jsx";
+import "./TA.css";
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState, useContext } from "react";
@@ -84,7 +85,7 @@ const TA = ({ queue, dbArgs }) => {
 
   return (
     <div>
-      <Button variant="dark" onClick={() => handleBack()}>
+      <Button className="go-back-btn" variant="outline-light" onClick={() => handleBack()}>
         Go Back
       </Button>
       <TAQueue
