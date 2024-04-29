@@ -85,7 +85,7 @@ const Student = ({ queue, studentData }) => {
   };
   return (
     <div className="student_view">
-      <Button variant="dark" onClick={() => handleBack()}>
+      <Button className="go_back_btn" variant="dark" onClick={() => handleBack()}>
         Go Back
       </Button>
       <div className="queue">
