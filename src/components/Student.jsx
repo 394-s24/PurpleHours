@@ -73,7 +73,6 @@ const Student = ({ queue, studentData }) => {
 
   const handleJoinQueue = async (studentData, groupId) => {
     await addToGroup(studentData.course, groupId, user.displayName, user.uid);
-    // setupUserPresence(studentData.course, id, groupId);
   };
 
   const handleLeaveQueue = (studentData, groupID) => {
@@ -85,10 +84,13 @@ const Student = ({ queue, studentData }) => {
   };
   return (
     <div className="student_view">
-      <Button variant="dark" onClick={() => handleBack()}>
+      {/* <Button className="go_back_btn" variant="outline-light" onClick={() => handleBack()}>
         Go Back
-      </Button>
+      </Button> */}
       <div className="queue">
+        <Button className="go_back_btn" variant="outline-light" onClick={() => handleBack()}>
+          Go Back
+        </Button>
         <StudentQueue
           queue={refinedQueue}
           studentData={studentData}
@@ -97,7 +99,7 @@ const Student = ({ queue, studentData }) => {
         />
       </div>
       <div className="new">
-        <Button variant="dark" onClick={() => setModalShow(true)}>
+        <Button variant="outline-light" onClick={() => setModalShow(true)}>
           New Group
         </Button>
         {/* Bootstrap modal */}

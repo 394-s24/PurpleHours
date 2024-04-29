@@ -8,14 +8,14 @@ import UserContext from "../UserContext.jsx";
 
 const SignInButton = () => (
   <div className="btns">
-    <button className="ms-auto btn btn-dark" onClick={signInWithGoogle}>
+    <button className="ms-auto btn btn-outline-light" onClick={signInWithGoogle}>
       Sign in
     </button>
   </div>
 );
 
 const SignOutButton = () => (
-  <button className="ms-auto btn btn-dark" onClick={firebaseSignOut}>
+  <button className="ms-auto btn btn-outline-light" onClick={firebaseSignOut}>
     Sign out
   </button>
 );
@@ -28,10 +28,10 @@ const Landing = (props) => {
 
   const JoinButtons = () => (
     <div className="btns">
-      <Button variant="dark" onClick={() => setStudentModalShow(true)}>
+      <Button variant="outline-light" onClick={() => setStudentModalShow(true)}>
         I am a Student
       </Button>
-      <Button variant="dark" onClick={() => setTAModalShow(true)}>
+      <Button variant="outline-light" onClick={() => setTAModalShow(true)}>
         I am a TA/PM
       </Button>
       <SignOutButton />
