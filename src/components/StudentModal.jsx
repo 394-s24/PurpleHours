@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const StudentModal = ({setStudentData, setDbArgs, onHide, ...props}) => {
+const StudentModal = ({ setStudentData, setDbArgs, onHide, ...props }) => {
   const [course, setCourse] = useState("");
   const [validated, setValidated] = useState(false);
 
@@ -46,7 +46,11 @@ const StudentModal = ({setStudentData, setDbArgs, onHide, ...props}) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={(event) => event.preventDefault()}
+          >
             <Form.Select
               aria-label="Default select example"
               required
@@ -63,12 +67,13 @@ const StudentModal = ({setStudentData, setDbArgs, onHide, ...props}) => {
               Please select a class.
             </Form.Control.Feedback>
             <br />
-            <Button variant="outline-light" type="submit">
-              Submit
-            </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer></Modal.Footer>
+        <Modal.Footer>
+          <Button variant="outline-light" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );

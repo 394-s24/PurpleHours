@@ -2,12 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const TAModal = ({setDbArgs, onHide, ...props}) => {
+const TAModal = ({ setDbArgs, onHide, ...props }) => {
   const [course, setCourse] = useState("");
   const [code, setCode] = useState("");
 
   const navigate = useNavigate();
-
 
   const handleCourseChange = (e) => {
     setCourse(e.target.value);
@@ -44,7 +43,7 @@ const TAModal = ({setDbArgs, onHide, ...props}) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={(event) => event.preventDefault()}>
             <Form.Group className="mb-3">
               <Form.Label>Course</Form.Label>
               <Form.Select
