@@ -9,16 +9,15 @@ import { Button } from "react-bootstrap";
 import { removeGroup, setGroupHelping } from "../DatabaseFuncs.mjs";
 
 const TA = ({ queue, dbArgs }) => {
-  
   const [refinedQueue, setRefinedQueue] = useState([]);
   const user = useContext(UserContext);
   const navigate = useNavigate();
-  
+
   const renderQueue = () => {
     // go back if null data
     if (!dbArgs) {
       navigate("/");
-      return
+      return;
     }
 
     // Checks if queue is defined
@@ -85,14 +84,20 @@ const TA = ({ queue, dbArgs }) => {
 
   return (
     <div>
-      <Button className="go-back-btn" variant="outline-light" onClick={() => handleBack()}>
-        Go Back
-      </Button>
-      <TAQueue
-        queue={refinedQueue}
-        handleDone={handleDone}
-        handleHelping={handleHelping}
-      />
+      <div className="queue">
+        <Button
+          className="go-back-btn"
+          variant="outline-light"
+          onClick={() => handleBack()}
+        >
+          Go Back
+        </Button>
+        <TAQueue
+          queue={refinedQueue}
+          handleDone={handleDone}
+          handleHelping={handleHelping}
+        />
+      </div>
     </div>
   );
 };
