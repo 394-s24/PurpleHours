@@ -2,13 +2,16 @@ import { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
 import StudentModal from "./StudentModal.jsx";
 import TAModal from "./TAModal.jsx";
-import { signInWithGoogle, firebaseSignOut } from "../DatabaseFuncs.mjs";
+import { signInWithGoogle, firebaseSignOut } from "../DatabaseFuncs.js";
 import "./Landing.css";
 import UserContext from "../UserContext.jsx";
 
 const SignInButton = () => (
   <div className="btns">
-    <button className="ms-auto btn btn-outline-light" onClick={signInWithGoogle}>
+    <button
+      className="ms-auto btn btn-outline-light"
+      onClick={signInWithGoogle}
+    >
       Sign in
     </button>
   </div>

@@ -5,7 +5,7 @@ import "./Student.css";
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState, useContext } from "react";
-import { addToGroup, removeFromGroup } from "../DatabaseFuncs.mjs";
+import { addToGroup, removeFromGroup } from "../DatabaseFuncs.js";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
@@ -20,13 +20,13 @@ const Student = ({ queue, studentData }) => {
     // go back if null data
     if (!studentData) {
       navigate("/");
-      return
+      return;
     }
 
     // Checks if queue is defined
     if (!queue) {
       setRefinedQueue([]);
-      return
+      return;
     }
 
     // Format queue data
@@ -88,7 +88,11 @@ const Student = ({ queue, studentData }) => {
         Go Back
       </Button> */}
       <div className="queue">
-        <Button className="go_back_btn" variant="outline-light" onClick={() => handleBack()}>
+        <Button
+          className="go_back_btn"
+          variant="outline-light"
+          onClick={() => handleBack()}
+        >
           Go Back
         </Button>
         <StudentQueue

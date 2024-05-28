@@ -4,7 +4,7 @@ import TA from "./components/TA.jsx";
 import Landing from "./components/Landing.jsx";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useDbData, useAuthState } from "./DatabaseFuncs.mjs";
+import { useDbData, useAuthState } from "./DatabaseFuncs.js";
 import UserContext from "./UserContext.jsx";
 
 import "firebase/database";
@@ -42,10 +42,7 @@ const App = () => {
               path="/student"
               element={<Student queue={data} studentData={studentData} />}
             />
-            <Route
-              path="/ta"
-              element={<TA queue={data} dbArgs={dbArgs} />}
-            />
+            <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs} />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

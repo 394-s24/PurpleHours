@@ -1,12 +1,11 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import App from "./App";
-import * as DatabaseFuncs from './DatabaseFuncs.mjs';
+import * as DatabaseFuncs from "./DatabaseFuncs.js";
 
-vi.spyOn(DatabaseFuncs, 'useDbData').mockReturnValue([{ groups: {} }, null]);
+vi.spyOn(DatabaseFuncs, "useDbData").mockReturnValue([{ groups: {} }, null]);
 
-
-describe("PurpleHour Test", () => {
+describe("PurpleHours Test", () => {
   test("Should have a Sign in button at start", async () => {
     render(<App />);
     const signInButton = await screen.findByText("Sign in");
@@ -14,13 +13,14 @@ describe("PurpleHour Test", () => {
   });
 
   test("Should have I am a Student, I am a TA/PM, Sign out buttons after signing in", async () => {
-
-    vi.spyOn(DatabaseFuncs, 'signInWithGoogle').mockImplementation(() => {
-      const mockUser = { displayName: 'Test User', uid: '12345' };
+    vi.spyOn(DatabaseFuncs, "signInWithGoogle").mockImplementation(() => {
+      const mockUser = { displayName: "Test User", uid: "12345" };
       return Promise.resolve(mockUser);
     });
 
-    vi.spyOn(DatabaseFuncs, 'useAuthState').mockReturnValue([{ displayName: 'Test User', uid: '12345' }]);
+    vi.spyOn(DatabaseFuncs, "useAuthState").mockReturnValue([
+      { displayName: "Test User", uid: "12345" },
+    ]);
     render(<App />);
 
     expect(await screen.findByText("I am a Student")).toBeDefined();
@@ -29,17 +29,20 @@ describe("PurpleHour Test", () => {
   });
 
   test("Should have Submit and Select a course after clicking I am a Student button", async () => {
-
-    vi.spyOn(DatabaseFuncs, 'signInWithGoogle').mockImplementation(() => {
-      const mockUser = { displayName: 'Test User', uid: '12345' };
+    vi.spyOn(DatabaseFuncs, "signInWithGoogle").mockImplementation(() => {
+      const mockUser = { displayName: "Test User", uid: "12345" };
       return Promise.resolve(mockUser);
     });
 
-    vi.spyOn(DatabaseFuncs, 'useAuthState').mockReturnValue([{ displayName: 'Test User', uid: '12345' }]);
+    vi.spyOn(DatabaseFuncs, "useAuthState").mockReturnValue([
+      { displayName: "Test User", uid: "12345" },
+    ]);
 
     render(<App />);
 
-    const studentButton = await screen.findByText("I am a Student", { exact: false });
+    const studentButton = await screen.findByText("I am a Student", {
+      exact: false,
+    });
     fireEvent.click(studentButton);
 
     expect(await screen.findByText("Submit")).toBeDefined();
@@ -47,17 +50,20 @@ describe("PurpleHour Test", () => {
   });
 
   test("Should have Submit, Select a course, and Access Code after clicking I am a TA/PM button", async () => {
-
-    vi.spyOn(DatabaseFuncs, 'signInWithGoogle').mockImplementation(() => {
-      const mockUser = { displayName: 'Test User', uid: '12345' };
+    vi.spyOn(DatabaseFuncs, "signInWithGoogle").mockImplementation(() => {
+      const mockUser = { displayName: "Test User", uid: "12345" };
       return Promise.resolve(mockUser);
     });
 
-    vi.spyOn(DatabaseFuncs, 'useAuthState').mockReturnValue([{ displayName: 'Test User', uid: '12345' }]);
+    vi.spyOn(DatabaseFuncs, "useAuthState").mockReturnValue([
+      { displayName: "Test User", uid: "12345" },
+    ]);
 
     render(<App />);
 
-    const studentButton = await screen.findByText("I am a TA/PM", { exact: false });
+    const studentButton = await screen.findByText("I am a TA/PM", {
+      exact: false,
+    });
     fireEvent.click(studentButton);
 
     expect(await screen.findByText("Submit")).toBeDefined();
@@ -66,12 +72,14 @@ describe("PurpleHour Test", () => {
   });
 
   test("Should have Sign in after click Sign out button", async () => {
-    vi.spyOn(DatabaseFuncs, 'signInWithGoogle').mockImplementation(() => {
-      const mockUser = { displayName: 'Test User', uid: '12345' };
+    vi.spyOn(DatabaseFuncs, "signInWithGoogle").mockImplementation(() => {
+      const mockUser = { displayName: "Test User", uid: "12345" };
       return Promise.resolve(mockUser);
     });
 
-    vi.spyOn(DatabaseFuncs, 'useAuthState').mockReturnValue([{ displayName: 'Test User', uid: '12345' }]);
+    vi.spyOn(DatabaseFuncs, "useAuthState").mockReturnValue([
+      { displayName: "Test User", uid: "12345" },
+    ]);
 
     render(<App />);
 
@@ -80,6 +88,6 @@ describe("PurpleHour Test", () => {
 
     // expect(await screen.findByText("Sign in", { exact: false })).toBeDefined();
   });
+
+  test("Name matches logged-in user", () => {});
 });
-
-

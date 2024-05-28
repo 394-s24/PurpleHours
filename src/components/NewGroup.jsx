@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
-import { addToGroup, createNewGroup } from "../DatabaseFuncs.mjs";
+import { addToGroup, createNewGroup } from "../DatabaseFuncs.js";
 import UserContext from "../UserContext";
 
 const NewGroup = ({ studentData, ...props }) => {

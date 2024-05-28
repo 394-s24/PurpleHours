@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { removeGroup, setGroupHelping } from "../DatabaseFuncs.mjs";
+import { removeGroup, setGroupHelping } from "../DatabaseFuncs.js";
 
 const TA = ({ queue, dbArgs }) => {
   const [refinedQueue, setRefinedQueue] = useState([]);
