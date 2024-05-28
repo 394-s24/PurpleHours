@@ -22,7 +22,6 @@ const Student = ({ queue, studentData }) => {
       navigate("/");
       return;
     }
-
     // Checks if queue is defined
     if (!queue) {
       setRefinedQueue([]);

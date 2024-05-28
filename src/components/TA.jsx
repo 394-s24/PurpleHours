@@ -25,7 +25,7 @@ const TA = ({ queue, dbArgs }) => {
       setRefinedQueue([]);
       return;
     }
-
+    
     // Format queue data
     const formattedQueue = Object.values(queue).map((item) => {
       // Convert unix time to readable time with specific format: "4:10PM, 3/27"
