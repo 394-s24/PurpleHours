@@ -1,10 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "../UserContext";
 import Student from "./Student";
-import TA from "./TA";
-import App from "../App";
 import * as DatabaseFuncs from "../DatabaseFuncs";
 
 vi.spyOn(DatabaseFuncs, "useDbData").mockReturnValue([{ groups: {} }, null]);
