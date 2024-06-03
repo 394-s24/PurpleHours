@@ -89,7 +89,7 @@ describe("PurpleHours Test For Charlie Yin", () => {
           });
           fireEvent.click(joinButton);
   
-          // Check if student is removed from group
+          // Check if student is added to group
           expect(DatabaseFuncs.addToGroup).toHaveBeenCalledWith("cs211", "-NwvTN6oTAnoUwTgawCc", "John Doe", "12345");
       });
 });
