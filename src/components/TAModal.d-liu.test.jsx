@@ -1,7 +1,6 @@
 import { it, vi, describe, afterEach, expect, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useDbData, useAuthState } from "../DatabaseFuncs";
-import { BrowserRouter } from "react-router-dom";
 
 import App from "../App";
 
