@@ -3,7 +3,7 @@ import { Button, Modal, Form } from "react-bootstrap";
 
 import { addToGroup, createNewGroup } from "../DatabaseFuncs.js";
 import UserContext from "../UserContext";
-
+import React from 'react';
 const NewGroup = ({ studentData, ...props }) => {
   const [helpType, setHelpType] = useState("");
   const [helpDescription, setHelpDescription] = useState("");
@@ -121,6 +121,7 @@ const NewGroup = ({ studentData, ...props }) => {
             <Form.Control
               required
               as="textarea"
+              role={"help-content"}
               rows={3}
               name="helpDescription"
               onChange={handleHelpDescriptionChange}
