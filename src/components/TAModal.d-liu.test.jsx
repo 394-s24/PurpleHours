@@ -1,21 +1,25 @@
-import { it, vi, describe, afterEach, expect } from "vitest";
+import { it, vi, describe, afterEach, expect, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useDbData, useAuthState } from "../DatabaseFuncs";
+import { useNavigate } from "react-router-dom";
 
 import App from "../App";
 
 vi.mock("../DatabaseFuncs.js");
 
 describe("PurpleHours Test", () => {
-  const mockAlert = vi.spyOn(window, "alert").mockImplementation(() => {});
+  const alert = vi.spyOn(window, "alert").mockImplementation(() => {});
+
+  beforeEach(() => {
+    useDbData.mockReturnValue([[], null]);
+    useAuthState.mockReturnValue([{ displayName: "Test User", uid: "12345" }]);
+  });
 
   afterEach(() => {
-    mockAlert.mockClear();
+    alert.mockClear();
   });
 
   it("Should not let user in after entering incorrect access code", () => {
-    useDbData.mockReturnValue([[], null]);
-    useAuthState.mockReturnValue([{ displayName: "Test User", uid: "12345" }]);
     render(<App />);
 
     // Navigate to TA modal
@@ -39,13 +43,11 @@ describe("PurpleHours Test", () => {
     fireEvent.click(screen.getByText(/Submit/));
 
     // Check if an alert is shown
-    expect(mockAlert).toHaveBeenCalledOnce();
-    expect(mockAlert).toHaveBeenCalledWith("Incorrect access code");
+    expect(alert).toHaveBeenCalledOnce();
+    expect(alert).toHaveBeenCalledWith("Incorrect access code");
   });
 
   it("Should let user in after entering correct access code", () => {
-    useDbData.mockReturnValue([[], null]);
-    useAuthState.mockReturnValue([{ displayName: "Test User", uid: "12345" }]);
     render(<App />);
 
     // Navigate to TA modal
@@ -69,7 +71,7 @@ describe("PurpleHours Test", () => {
     fireEvent.click(screen.getByText(/Submit/));
 
     // Check if an alert is not shown
-    expect(mockAlert).not.toHaveBeenCalled();
+    expect(alert).not.toHaveBeenCalled();
 
     // Check if user was navigated to the TA page
   });
