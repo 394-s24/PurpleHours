@@ -55,6 +55,9 @@ describe("PurpleHours Test", () => {
     // Check if an alert is shown
     expect(alert).toHaveBeenCalledOnce();
     expect(alert).toHaveBeenCalledWith("Incorrect access code");
+
+    // Check if user was not navigated
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it("Should let user in after entering correct access code", () => {
