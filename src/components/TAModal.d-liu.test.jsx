@@ -1,11 +1,20 @@
 import { it, vi, describe, afterEach, expect, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { useDbData, useAuthState } from "../DatabaseFuncs";
-import { useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import App from "../App";
 
 vi.mock("../DatabaseFuncs.js");
+
+const navigate = vi.fn();
+vi.mock("react-router-dom", async () => {
+  const mod = await vi.importActual("react-router-dom");
+  return {
+    ...mod,
+    useNavigate: () => navigate,
+  };
+});
 
 describe("PurpleHours Test", () => {
   const alert = vi.spyOn(window, "alert").mockImplementation(() => {});
@@ -17,6 +26,7 @@ describe("PurpleHours Test", () => {
 
   afterEach(() => {
     alert.mockClear();
+    navigate.mockClear();
   });
 
   it("Should not let user in after entering incorrect access code", () => {
@@ -74,5 +84,7 @@ describe("PurpleHours Test", () => {
     expect(alert).not.toHaveBeenCalled();
 
     // Check if user was navigated to the TA page
+    expect(navigate).toHaveBeenCalledOnce();
+    expect(navigate).toHaveBeenCalledWith("/ta");
   });
 });
