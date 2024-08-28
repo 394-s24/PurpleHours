@@ -1,13 +1,14 @@
 import { Button } from "react-bootstrap";
 import useQueueManager from "../utils/useQueueManager";
 import TAQueue from "./TAQueue";
-import { removeGroup, setGroupHelping } from "../DatabaseFuncs.js";
+import { setGroupHelping, removeGroupAndIncrement } from "../database/DatabaseFuncs.js";
 
 const TA = ({ queue, dbArgs }) => {
   const { refinedQueue, user, handleBack } = useQueueManager(queue, dbArgs);
 
   const handleDone = (groupId) => {
-    removeGroup(dbArgs, groupId);
+    // Remove the group from the database
+    removeGroupAndIncrement(dbArgs, groupId);
   };
 
   const handleHelping = (groupId) => {

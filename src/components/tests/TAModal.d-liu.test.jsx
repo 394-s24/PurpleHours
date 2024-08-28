@@ -1,8 +1,8 @@
 import { it, vi, describe, afterEach, expect, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useDbData, useAuthState } from "../DatabaseFuncs";
+import { useDbData, useAuthState } from "../../DatabaseFuncs";
 
-import App from "../App";
+import App from "../../App";
 
 vi.mock("../DatabaseFuncs.js");
 

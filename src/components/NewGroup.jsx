@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
-import { addToGroup, createNewGroup } from "../DatabaseFuncs.js";
+import { addToGroup, createNewGroup } from "../database/DatabaseFuncs.js";
 import UserContext from "./UserContext.jsx";
 
 const NewGroup = ({ studentData, ...props }) => {
@@ -72,7 +72,12 @@ const NewGroup = ({ studentData, ...props }) => {
         <Modal.Title id="contained-modal-title-vcenter">New Group</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form id="new-group-form" noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form
+          id="new-group-form"
+          noValidate
+          validated={validated}
+          onSubmit={handleSubmit}
+        >
           <Form.Group className="mb-3" controlId="helpPublic">
             <Form.Label>Do you want it to be a private OH?</Form.Label>
             <div key={`inline-radio`} className="mb-3">
@@ -159,6 +164,7 @@ const NewGroup = ({ studentData, ...props }) => {
               rows={3}
               name="helpDescription"
               onChange={handleHelpDescriptionChange}
+              autoFocus
             />
             <Form.Control.Feedback type="invalid">
               Please enter a detailed description of the problem

@@ -3,7 +3,7 @@ import { useState } from "react";
 import useQueueManager from "../utils/useQueueManager";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
-import { addToGroup, removeFromGroup } from "../DatabaseFuncs.js";
+import { addToGroup, removeFromGroup } from "../database/DatabaseFuncs.js";
 import "./Student.css";
 
 const Student = ({ queue, studentData }) => {
