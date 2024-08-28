@@ -5,7 +5,7 @@ import Landing from "./components/Landing.jsx";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useDbData, useAuthState } from "./DatabaseFuncs.js";
-import UserContext from "./UserContext.jsx";
+import UserContext from "./components/UserContext.jsx";
 
 import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";

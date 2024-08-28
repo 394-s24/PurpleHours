@@ -2,12 +2,13 @@ import { useState, useContext } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
 import { addToGroup, createNewGroup } from "../DatabaseFuncs.js";
-import UserContext from "../UserContext";
-import React from 'react';
+import UserContext from "./UserContext.jsx";
+
 const NewGroup = ({ studentData, ...props }) => {
-  const [helpType, setHelpType] = useState("");
+  const [helpType, setHelpType] = useState("Conceptual");
   const [helpDescription, setHelpDescription] = useState("");
   const [helpPublic, setHelpPublic] = useState(true);
+  const [online, setOnline] = useState(false);
   const [validated, setValidated] = useState(false);
   const user = useContext(UserContext);
 
@@ -25,7 +26,14 @@ const NewGroup = ({ studentData, ...props }) => {
     } else {
       setHelpPublic(false);
     }
-    // setHelpPublic(e.target.value);
+  };
+
+  const handleOnlineChange = (e) => {
+    if (e.target.id === "Online") {
+      setOnline(true);
+    } else {
+      setOnline(false);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -40,6 +48,7 @@ const NewGroup = ({ studentData, ...props }) => {
         time: Math.floor(Date.now() / 1000),
         currentlyHelping: false,
         public: helpPublic,
+        online: online,
       };
       // Pass the data to an external function
       let groupID = await createNewGroup(studentData.course, groupsData);
@@ -63,8 +72,8 @@ const NewGroup = ({ studentData, ...props }) => {
         <Modal.Title id="contained-modal-title-vcenter">New Group</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="helpType">
+        <Form id="new-group-form" noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="helpPublic">
             <Form.Label>Do you want it to be a private OH?</Form.Label>
             <div key={`inline-radio`} className="mb-3">
               <Form.Check
@@ -75,6 +84,7 @@ const NewGroup = ({ studentData, ...props }) => {
                 type="radio"
                 id="Public"
                 onChange={handleHelpPublicChange}
+                defaultChecked={true}
               />
               <Form.Check
                 inline
@@ -97,6 +107,7 @@ const NewGroup = ({ studentData, ...props }) => {
                 type="radio"
                 id="Conceptual"
                 onChange={handleHelpTypeChange}
+                defaultChecked={true}
               />
               <Form.Check
                 inline
@@ -116,12 +127,35 @@ const NewGroup = ({ studentData, ...props }) => {
               />
             </div>
           </Form.Group>
+          <Form.Group className="mb-3" controlId="online">
+            <Form.Label>Are you in-person or online?</Form.Label>
+            <div key={`inline-radio`} className="mb-3">
+              <Form.Check
+                inline
+                label="In-Person"
+                value={false}
+                name="online"
+                type="radio"
+                id="In-Person"
+                onChange={handleOnlineChange}
+                defaultChecked={true}
+              />
+              <Form.Check
+                inline
+                label="Online"
+                value={true}
+                name="online"
+                type="radio"
+                id="Online"
+                onChange={handleOnlineChange}
+              />
+            </div>
+          </Form.Group>
           <Form.Group className="mb-3" controlId="helpDescription">
             <Form.Label>What do you need help with?</Form.Label>
             <Form.Control
               required
               as="textarea"
-              role={"help-content"}
               rows={3}
               name="helpDescription"
               onChange={handleHelpDescriptionChange}
@@ -130,12 +164,13 @@ const NewGroup = ({ studentData, ...props }) => {
               Please enter a detailed description of the problem
             </Form.Control.Feedback>
           </Form.Group>
-          <Button type="submit" variant="outline-light">
-            Submit
-          </Button>
         </Form>
       </Modal.Body>
-      <Modal.Footer></Modal.Footer>
+      <Modal.Footer>
+        <Button type="submit" form="new-group-form" variant="outline-light">
+          Submit
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

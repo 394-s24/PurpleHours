@@ -2,13 +2,12 @@ import { describe, expect, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import UserContext from "../UserContext";
-import Student from "./Student";
-import * as DatabaseFuncs from "../DatabaseFuncs";
+import Student from "../Student";
+import * as DatabaseFuncs from "../../DatabaseFuncs";
 
 vi.spyOn(DatabaseFuncs, "useDbData").mockReturnValue([{ groups: {} }, null]);
 
 describe("PurpleHours Test", () => {
-
   test("Student queue displays empty data properly", () => {
     const mockUser = { displayName: "John Doe", uid: "12345" };
     const studentData = { course: "cs211" };
@@ -19,9 +18,9 @@ describe("PurpleHours Test", () => {
         <UserContext.Provider value={mockUser}>
           <Student queue={mockQueue} studentData={studentData} />
         </UserContext.Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
-    
+
     // empty data
     screen.getByText("Not helping anyone");
     screen.getByText("No groups in the queue");
@@ -38,61 +37,61 @@ describe("PurpleHours Test", () => {
     const studentData = { course: "cs211" };
     const mockQueue = [
       {
-        "currentlyHelping": true,
-        "helper": {
-          "name": "Helper Helper",
-          "uid": "999"
+        currentlyHelping: true,
+        helper: {
+          name: "Helper Helper",
+          uid: "999",
         },
-        "id": "-aaa",
-        "issue": "Conceptual: helped right now",
-        "names": [
+        id: "-aaa",
+        issue: "Conceptual: helped right now",
+        names: [
           {
-            "name": "Alice Alice",
-            "uid": "1"
-          }
+            name: "Alice Alice",
+            uid: "1",
+          },
         ],
-        "public": true,
-        "time": "11:00AM, 6/2"
+        public: true,
+        time: "11:00AM, 6/2",
       },
       {
-        "currentlyHelping": false,
-        "id": "-bbb",
-        "issue": "Conceptual: in queue public",
-        "names": [
+        currentlyHelping: false,
+        id: "-bbb",
+        issue: "Conceptual: in queue public",
+        names: [
           {
-            "name": "Bob Bob",
-            "uid": "2"
-          }
+            name: "Bob Bob",
+            uid: "2",
+          },
         ],
-        "public": true,
-        "time": "11:15AM, 6/2"
+        public: true,
+        time: "11:15AM, 6/2",
       },
       {
-        "currentlyHelping": false,
-        "id": "-ccc",
-        "issue": "Debugging: in queue private",
-        "names": [
+        currentlyHelping: false,
+        id: "-ccc",
+        issue: "Debugging: in queue private",
+        names: [
           {
-            "name": "Trudy Trudy",
-            "uid": "3"
-          }
+            name: "Trudy Trudy",
+            uid: "3",
+          },
         ],
-        "public": false,
-        "time": "11:17AM, 6/2"
+        public: false,
+        time: "11:17AM, 6/2",
       },
       {
-        "currentlyHelping": false,
-        "id": "-ddd",
-        "issue": "Debugging: in queue me",
-        "names": [
+        currentlyHelping: false,
+        id: "-ddd",
+        issue: "Debugging: in queue me",
+        names: [
           {
-            "name": "John Doe",
-            "uid": "12345"
-          }
+            name: "John Doe",
+            uid: "12345",
+          },
         ],
-        "public": true,
-        "time": "12:00PM, 6/2"
-      }
+        public: true,
+        time: "12:00PM, 6/2",
+      },
     ];
 
     render(
@@ -100,14 +99,14 @@ describe("PurpleHours Test", () => {
         <UserContext.Provider value={mockUser}>
           <Student queue={mockQueue} studentData={studentData} />
         </UserContext.Provider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     // currently helped
     screen.getByText("Alice Alice");
     screen.getByText("Conceptual: helped right now");
     screen.getByText("Being helped by: Helper Helper");
-    
+
     // joinable group
     screen.getByText("Join");
     screen.getByText("Bob Bob");
@@ -117,7 +116,7 @@ describe("PurpleHours Test", () => {
     screen.getByText("Private");
     screen.getByText("Trudy Trudy");
     screen.getByText("Debugging: in queue private");
-    
+
     // group you're in
     screen.getByText("Leave");
     screen.getByText("John Doe");
