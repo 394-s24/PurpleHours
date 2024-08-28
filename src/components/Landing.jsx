@@ -4,7 +4,7 @@ import StudentModal from "./StudentModal.jsx";
 import TAModal from "./TAModal.jsx";
 import { signInWithGoogle, firebaseSignOut } from "../DatabaseFuncs.js";
 import "./Landing.css";
-import UserContext from "../UserContext.jsx";
+import UserContext from "./UserContext.jsx";
 
 const SignInButton = () => (
   <div className="btns">

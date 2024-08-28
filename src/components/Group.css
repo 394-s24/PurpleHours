@@ -1,0 +1,21 @@
+.helper-name {
+    color: #c8b6ff;
+    font-weight: bold;
+}
+
+.online {
+    padding: 5px;
+    border-radius: 3px;
+    color: white;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: inline-block
+}
+  
+.online-status {
+    background-color: rgb(40, 147, 205);
+}
+  
+.in-person-status {
+    background-color: rgb(129, 55, 220);
+}

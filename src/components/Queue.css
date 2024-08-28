@@ -11,6 +11,22 @@
   margin: 20px 40px;
 }
 
+.queue .title {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #c8b6ff;
+}
+
+.queue .title h1 {
+  margin-right: auto; /* Add some space between the h1 and p elements */
+}
+
+.queue .title p {
+  font-size: 1.5em;
+}
+
 .queue h2 {
   margin: 10px 0;
 }

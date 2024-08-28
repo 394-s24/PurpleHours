@@ -1,7 +1,9 @@
-import React from "react";
+// Group.jsx
+import "./Group.css";
+import { useEffect } from "react";
 
-// The Group component
-const Group = ({ names, issue, time, helper }) => {
+const Group = ({ names, issue, time, online, helper }) => {
+
   return (
     <div className="Group">
       <div className="name">
@@ -14,8 +16,13 @@ const Group = ({ names, issue, time, helper }) => {
       <div className="issue">{issue}</div>
       <div className="time">{time}</div>
       {helper && (
-        <div className="helper">Being helped by: {helper.name}</div>
+        <div className="helper">
+          Being helped by: <span className="helper-name">{helper.name}</span>
+        </div>
       )}
+      <div className={`online ${online ? "online-status" : "in-person-status"}`}>
+        {online ? "Online" : "In-Person"}
+      </div>
     </div>
   );
 };
