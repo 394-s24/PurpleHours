@@ -1,8 +1,8 @@
 import {beforeEach, afterEach, describe, expect, test, vi} from "vitest";
 import {fireEvent, render, screen, waitFor, act} from "@testing-library/react";
-import NewGroup from "./NewGroup";
+import NewGroup from "../NewGroup.jsx";
 import UserContext from "../UserContext";
-import * as DatabaseFuncs from "../DatabaseFuncs.js";
+import * as DatabaseFuncs from "../../DatabaseFuncs.js";
 import React, {useState} from 'react';
 
 describe("NewGroup Component", () => {

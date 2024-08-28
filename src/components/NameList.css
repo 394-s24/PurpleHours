@@ -1,0 +1,22 @@
+.names-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  
+.name-item {
+    display: flex;
+    align-items: center;
+}
+  
+.name-text {
+    font-size: 16px;
+}
+  
+.help-count {
+    font-size: 14px;    
+    line-height: 20px; /* Ensures the number is centered vertically */
+    color: white;
+}
+  

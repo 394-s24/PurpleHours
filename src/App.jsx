@@ -4,7 +4,7 @@ import TA from "./components/TA.jsx";
 import Landing from "./components/Landing.jsx";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useDbData, useAuthState } from "./DatabaseFuncs.js";
+import { useDbData, useAuthState, initializeUserIfNeeded } from "./database/DatabaseFuncs.js";
 import UserContext from "./components/UserContext.jsx";
 
 import "firebase/database";
@@ -15,6 +15,12 @@ const App = () => {
   const [studentData, setStudentData] = useState(null);
   const [data, error] = useDbData(dbArgs);
   const [user] = useAuthState();
+
+  useEffect(() => {
+    if (user) {
+      initializeUserIfNeeded(user.uid, user.displayName);
+    }
+  }, [user]);
 
   if (data === undefined) {
     return <div>Loading data...</div>;
