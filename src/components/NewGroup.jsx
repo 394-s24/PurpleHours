@@ -4,7 +4,7 @@ import { Button, Modal, Form } from "react-bootstrap";
 import { addToGroup, createNewGroup } from "../database/DatabaseFuncs.js";
 import UserContext from "./UserContext.jsx";
 
-const NewGroup = ({ studentData, ...props }) => {
+const NewGroup = ({ course, ...props }) => {
   const [helpType, setHelpType] = useState("Conceptual");
   const [helpDescription, setHelpDescription] = useState("");
   const [helpPublic, setHelpPublic] = useState(true);
@@ -51,10 +51,9 @@ const NewGroup = ({ studentData, ...props }) => {
         online: online,
       };
       // Pass the data to an external function
-      let groupID = await createNewGroup(studentData.course, groupsData);
-      await addToGroup(studentData.course, groupID, user.displayName, user.uid);
+      let groupID = await createNewGroup(course, groupsData);
+      await addToGroup(course, groupID, user.displayName, user.uid);
       props.onHide();
-      // setupUserPresence(studentData.course, id, groupID);
       setValidated(false);
     } else {
       setValidated(true);

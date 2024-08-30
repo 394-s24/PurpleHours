@@ -46,9 +46,9 @@ const App = () => {
             />
             <Route
               path="/student"
-              element={<Student queue={data} studentData={studentData} />}
+              element={<Student studentData={studentData} />}
             />
-            <Route path="/ta" element={<TA queue={data} dbArgs={dbArgs} />} />
+            <Route path="/ta" element={<TA dbArgs={dbArgs} />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

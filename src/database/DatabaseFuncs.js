@@ -10,8 +10,7 @@ import {
   update,
   increment,
 } from "firebase/database";
-import { useCallback, useEffect, useState, useRef } from "react";
-// import app from './components/FirebaseApp';
+import { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -21,7 +20,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCX11UIGxTsIeu_so42xYeXT0RA9nhTWLg",
   authDomain: "purple-hours-v2.firebaseapp.com",
@@ -60,41 +59,67 @@ async function createNewGroup(course, groupsData) {
 
 async function addToGroup(course, groupId, displayName, uid) {
   try {
-    let newEntryRef = await set(
-      ref(db, `${course}/groups/` + groupId + "/names/" + uid),
-      {
-        name: displayName,
-        uid: uid,
-      },
-    );
-    console.log("Data updated successfully!");
+    const helpCount = await getUserHelpCountsSingle(uid);
+
+    // Generate a new entry with a unique key based on a timestamp
+    const newEntryRef = push(ref(db, `${course}/groups/` + groupId + "/names/"));
+    
+    // Set the data for this entry
+    await set(newEntryRef, {
+      name: displayName,
+      uid: uid,
+      helpCount: helpCount
+    });
+
+    console.log("Data added successfully in order!");
   } catch (error) {
     console.error("The update failed...", error);
     return null;
   }
 }
 
-async function removeFromGroup(course, uniqueId, groupId) {
+async function removeFromGroup(course, uid, groupId) {
   try {
-    const nameRef = ref(db, `${course}/groups/` + groupId + "/names/" + uniqueId);
-    const groupRef = ref(db, `${course}/groups/` + groupId);
-
-    await remove(nameRef);
-    console.log("Data removed successfully!");
-
-    // Check if the group is empty, remove the group if it is
+    const groupRef = ref(db, `${course}/groups/` + groupId + "/names/");
     const snapshot = await get(groupRef);
-    if (
-      !snapshot.exists() ||
-      !snapshot.val().names ||
-      Object.keys(snapshot.val().names).length === 0
-    ) {
-      await removeGroup(course, groupId);
+
+    if (!snapshot.exists()) {
+      console.log("Group does not exist or no names found.");
+      return;
+    }
+
+    const names = snapshot.val();
+    let keyToRemove = null;
+
+    // Find the correct key that matches the uid
+    for (const key in names) {
+      if (names[key].uid === uid) {
+        keyToRemove = key;
+        break;
+      }
+    }
+
+    if (keyToRemove) {
+      const nameRef = ref(db, `${course}/groups/` + groupId + "/names/" + keyToRemove);
+      await remove(nameRef);
+      console.log("User removed successfully!");
+
+      // Check if the group is now empty and remove the group if it is
+      const updatedSnapshot = await get(groupRef);
+      if (
+        !updatedSnapshot.exists() ||
+        Object.keys(updatedSnapshot.val()).length === 0
+      ) {
+        await removeGroup(course, groupId);
+      }
+    } else {
+      console.log("User not found in the group.");
     }
   } catch (error) {
     console.error("The removal failed...", error);
   }
 }
+
 
 async function removeGroup(course, id) {
   try {
@@ -125,8 +150,8 @@ async function removeGroupAndIncrement(course, id) {
     // Update help counters for all users in the group concurrently
     const updatePromises = Object.keys(names).map(async (uid) => {
       try {
-        await updateHelpCountersIfNeeded(uid);
-        await incrementHelpCounters(uid);
+        await updateHelpCountersIfNeeded(names[uid].uid, names[uid].name);
+        await incrementHelpCounters(names[uid].uid);
       } catch (error) {
         console.error(`Failed to update counters for user ${uid}:`, error);
       }
@@ -161,13 +186,14 @@ async function setGroupHelping(course, groupId, user) {
 }
 
 // Utility to reset the help counters if it's a new day or month
-const updateHelpCountersIfNeeded = async (uid) => {
+const updateHelpCountersIfNeeded = async (uid, displayName) => {
   const userRef = ref(db, `users/${uid}`);
   const snapshot = await get(userRef);
 
   if (!snapshot.exists()) {
     // Initialize the user counters if they don't exist
     await set(userRef, {
+      displayName: displayName,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -211,16 +237,17 @@ const incrementHelpCounters = async (uid) => {
   });
 };
 
+export const getUserHelpCountsSingle = async (uid) => {
+  const userRef = ref(db, `users/${uid}/dailyHelpCount`);
+  const snapshot = await get(userRef);
+  return snapshot.exists() ? snapshot.val() : 0;
+}
+
 const getUserHelpCounts = async (names) => {
-  const db = getDatabase();
   const counts = {};
-
   for (const nameObj of names) {
-    const userRef = ref(db, `users/${nameObj.uid}/dailyHelpCount`);
-    const snapshot = await get(userRef);
-    counts[nameObj.uid] = snapshot.exists() ? snapshot.val() : 0;
+    counts[nameObj.uid] = await getUserHelpCountsSingle(nameObj.uid);
   }
-
   return counts;
 };
 
@@ -230,7 +257,7 @@ const initializeUserIfNeeded = async (uid, displayName) => {
 
   if (!snapshot.exists()) {
     await set(userRef, {
-      displayName,
+      displayName: displayName,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -245,19 +272,26 @@ const useDbData = (course) => {
   const [error, setError] = useState(null);
   const groupsRef = ref(db, `${course}/groups/`);
 
-  useEffect(
-    () =>
-      onValue(
-        groupsRef,
-        (snapshot) => {
-          setData(snapshot.val());
-        },
-        (error) => {
-          setError(error);
-        },
-      ),
-    [course],
-  );
+  useEffect(() => {
+    const unsubscribe = onValue(groupsRef, async (snapshot) => {
+      if (snapshot.exists()) {
+        const groupsData = snapshot.val();
+        for (const groupId in groupsData) {
+          for (const uid in groupsData[groupId].names) {
+            const helpCount = await getUserHelpCountsSingle(uid);
+            groupsData[groupId].names[uid].helpCount = helpCount;
+          }
+        }
+        setData(groupsData);
+      } else {
+        setData(null);
+      }
+    }, (error) => {
+      setError(error);
+    });
+
+    return () => unsubscribe();
+  }, [course]);
 
   return [data, error];
 };
@@ -290,3 +324,4 @@ export {
   firebaseSignOut,
   useAuthState,
 };
+
