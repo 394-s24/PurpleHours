@@ -22,6 +22,7 @@ export const formatQueue = (queue) => {
         namesArray = Object.values(namesObjects).map((obj) => ({
           name: obj["name"],
           uid: obj["uid"],
+          helpCount: obj["helpCount"],
         }));
       }
   

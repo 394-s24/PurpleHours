@@ -1,24 +1,30 @@
 import { Button } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useQueueManager from "../utils/useQueueManager";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
-import { addToGroup, removeFromGroup } from "../database/DatabaseFuncs.js";
+import { addToGroup, removeFromGroup, useDbData } from "../database/DatabaseFuncs.js";
 import "./Student.css";
 
-const Student = ({ queue, studentData }) => {
+const Student = ({ studentData }) => {
+
+  const course = "cs211"
+
+  const [queue, error] = useDbData(course)
+
   const { refinedQueue, user, handleBack } = useQueueManager(
     queue,
     studentData,
-  );
+  ); 
+
   const [modalShow, setModalShow] = useState(false);
 
-  const handleJoinQueue = async (studentData, groupId) => {
-    await addToGroup(studentData.course, groupId, user.displayName, user.uid);
+  const handleJoinQueue = async (course, groupId) => {
+    addToGroup(course, groupId, user.displayName, user.uid);
   };
 
-  const handleLeaveQueue = (studentData, groupID) => {
-    removeFromGroup(studentData.course, user.uid, groupID);
+  const handleLeaveQueue = (course, groupID) => {
+    removeFromGroup(course, user.uid, groupID);
   };
 
   return (
@@ -32,7 +38,7 @@ const Student = ({ queue, studentData }) => {
       </Button>
       <StudentQueue
         queue={refinedQueue}
-        studentData={studentData}
+        course={course}
         joinQueue={handleJoinQueue}
         leaveQueue={handleLeaveQueue}
       />
@@ -41,7 +47,7 @@ const Student = ({ queue, studentData }) => {
           New Group
         </Button>
         <NewGroup
-          studentData={studentData}
+          course={course}
           show={modalShow}
           onHide={() => setModalShow(false)}
         />

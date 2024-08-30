@@ -9,11 +9,6 @@ const Group = ({ names, issue, time, online, helper }) => {
   return (
     <div className="Group">
       <div className="name">
-        {/* {names
-          .reduce((total, name) => {
-            return total + " " + name.name + ",";
-          }, "")
-          .slice(0, -1)} */}
           <NameList names={names} />
       </div>
       <div className="issue">{issue}</div>

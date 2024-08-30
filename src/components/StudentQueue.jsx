@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import UserContext from "./UserContext";
 import Queue from "./Queue";
 
-const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
+const StudentQueue = ({ queue, course, joinQueue, leaveQueue }) => {
   const user = useContext(UserContext);
 
   const renderCurrentlyHelpingButton = (group) => null; // No special button for StudentQueue currently helping
@@ -26,7 +26,7 @@ const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
       return (
         <Button
           className="join-btn"
-          onClick={() => joinQueue(studentData, group.id)}
+          onClick={() => joinQueue(course, group.id)}
           variant="success"
         >
           Join
@@ -37,7 +37,7 @@ const StudentQueue = ({ queue, studentData, joinQueue, leaveQueue }) => {
       return (
         <Button
           className="leave-btn"
-          onClick={() => leaveQueue(studentData, group.id)}
+          onClick={() => leaveQueue(course, group.id)}
           variant="danger"
         >
           Leave

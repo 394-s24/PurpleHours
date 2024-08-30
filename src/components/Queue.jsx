@@ -25,6 +25,11 @@ const Queue = ({
           {queue &&
             Object.values(queue)
               .filter((group) => group.currentlyHelping)
+              .sort((a, b) => {
+                const aHelpCount = Object.values(a.names)[0]?.helpCount || 0;
+                const bHelpCount = Object.values(b.names)[0]?.helpCount || 0;
+                return aHelpCount - bHelpCount;
+              })
               .map((group) => (
                 <ListGroup.Item key={group.id}>
                   <Group
@@ -51,6 +56,11 @@ const Queue = ({
           {queue &&
             Object.values(queue)
               .filter((group) => !group.currentlyHelping)
+              .sort((a, b) => {
+                const aHelpCount = Object.values(a.names)[0]?.helpCount || 0;
+                const bHelpCount = Object.values(b.names)[0]?.helpCount || 0;
+                return aHelpCount - bHelpCount;
+              })
               .map((group) => (
                 <ListGroup.Item key={group.id}>
                   <Group
