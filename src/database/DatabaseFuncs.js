@@ -276,12 +276,13 @@ const useDbData = (course) => {
     const unsubscribe = onValue(groupsRef, async (snapshot) => {
       if (snapshot.exists()) {
         const groupsData = snapshot.val();
-        for (const groupId in groupsData) {
-          for (const uid in groupsData[groupId].names) {
-            const helpCount = await getUserHelpCountsSingle(uid);
-            groupsData[groupId].names[uid].helpCount = helpCount;
-          }
-        }
+        console.log(groupsData);
+        // for (const groupId in groupsData) {
+        //   for (const uid in groupsData[groupId].names) {
+        //     const helpCount = await getUserHelpCountsSingle(groupsData[groupId].names[uid].uid);
+        //     groupsData[groupId].names[uid].helpCount = helpCount;
+        //   }
+        // }
         setData(groupsData);
       } else {
         setData(null);

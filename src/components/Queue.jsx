@@ -59,6 +59,7 @@ const Queue = ({
               .sort((a, b) => {
                 const aHelpCount = Object.values(a.names)[0]?.helpCount || 0;
                 const bHelpCount = Object.values(b.names)[0]?.helpCount || 0;
+                console.log(a, b)
                 return aHelpCount - bHelpCount;
               })
               .map((group) => (
