@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
 import UserContext from "./UserContext";
 import Queue from "./Queue";
 
-const StudentQueue = ({ queue, course, joinQueue, leaveQueue }) => {
+const StudentQueue = ({ queue, course, joinQueue, leaveQueue, inGroup }) => {
   const user = useContext(UserContext);
 
   const renderCurrentlyHelpingButton = (group) => null; // No special button for StudentQueue currently helping
@@ -21,7 +21,8 @@ const StudentQueue = ({ queue, course, joinQueue, leaveQueue }) => {
     }
     if (
       group.public &&
-      !group.names.some((object) => object.uid === user.uid)
+      !group.names.some((object) => object.uid === user.uid) &&
+      !inGroup
     ) {
       return (
         <Button

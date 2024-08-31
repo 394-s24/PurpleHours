@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
-import { addToGroup, createNewGroup } from "../database/DatabaseFuncs.js";
+import { addToGroup, createNewGroup, isUserInGroup } from "../database/DatabaseFuncs.js";
 import UserContext from "./UserContext.jsx";
 
-const NewGroup = ({ course, ...props }) => {
+const NewGroup = ({ course, setInGroup, ...props }) => {
   const [helpType, setHelpType] = useState("Conceptual");
   const [helpDescription, setHelpDescription] = useState("");
   const [helpPublic, setHelpPublic] = useState(true);
@@ -53,6 +53,11 @@ const NewGroup = ({ course, ...props }) => {
       // Pass the data to an external function
       let groupID = await createNewGroup(course, groupsData);
       await addToGroup(course, groupID, user.displayName, user.uid);
+
+      // update inGroup value
+      const inGroup = await isUserInGroup(user.uid);
+      setInGroup(inGroup);
+
       props.onHide();
       setValidated(false);
     } else {

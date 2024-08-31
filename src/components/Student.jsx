@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import useQueueManager from "../utils/useQueueManager";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
-import { addToGroup, removeFromGroup, useDbData } from "../database/DatabaseFuncs.js";
+import { addToGroup, removeFromGroup, isUserInGroup, useDbData } from "../database/DatabaseFuncs.js";
 import "./Student.css";
 
 const Student = ({ studentData }) => {
@@ -17,14 +17,29 @@ const Student = ({ studentData }) => {
     studentData,
   ); 
 
+  const [inGroup, setInGroup] = useState(false);
+
+  useEffect(() => {
+    const checkUserGroupStatus = async () => {
+      const inGroupStatus = await isUserInGroup(user.uid);
+      setInGroup(inGroupStatus);
+    };
+
+    checkUserGroupStatus();
+  }, [queue, user.uid]);
+
   const [modalShow, setModalShow] = useState(false);
 
   const handleJoinQueue = async (course, groupId) => {
-    addToGroup(course, groupId, user.displayName, user.uid);
+    await addToGroup(course, groupId, user.displayName, user.uid);
+    const inGroupStatus = await isUserInGroup(user.uid);
+    setInGroup(inGroupStatus);
   };
 
-  const handleLeaveQueue = (course, groupID) => {
-    removeFromGroup(course, user.uid, groupID);
+  const handleLeaveQueue = async (course, groupID) => {
+    await removeFromGroup(course, user.uid, groupID);
+    const inGroupStatus = await isUserInGroup(user.uid);
+    setInGroup(inGroupStatus);
   };
 
   return (
@@ -41,15 +56,17 @@ const Student = ({ studentData }) => {
         course={course}
         joinQueue={handleJoinQueue}
         leaveQueue={handleLeaveQueue}
+        inGroup={inGroup}
       />
       <div className="new">
-        <Button variant="outline-light" onClick={() => setModalShow(true)}>
+        {!inGroup && <Button variant="outline-light" onClick={() => setModalShow(true)}>
           New Group
-        </Button>
+        </Button>}
         <NewGroup
           course={course}
           show={modalShow}
           onHide={() => setModalShow(false)}
+          setInGroup={setInGroup}
         />
       </div>
     </div>
