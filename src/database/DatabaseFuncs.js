@@ -71,6 +71,8 @@ async function addToGroup(course, groupId, displayName, uid) {
       helpCount: helpCount
     });
 
+    setInGroupStatus(uid, true); // Update user status to indicate they are in a group
+
     console.log("Data added successfully in order!");
   } catch (error) {
     console.error("The update failed...", error);
@@ -80,6 +82,7 @@ async function addToGroup(course, groupId, displayName, uid) {
 
 async function removeFromGroup(course, uid, groupId) {
   try {
+    const removeRef = ref(db, `${course}/groups/` + groupId);
     const groupRef = ref(db, `${course}/groups/` + groupId + "/names/");
     const snapshot = await get(groupRef);
 
@@ -102,6 +105,9 @@ async function removeFromGroup(course, uid, groupId) {
     if (keyToRemove) {
       const nameRef = ref(db, `${course}/groups/` + groupId + "/names/" + keyToRemove);
       await remove(nameRef);
+
+      setInGroupStatus(uid, false); // Update user status to indicate they are not in a group
+
       console.log("User removed successfully!");
 
       // Check if the group is now empty and remove the group if it is
@@ -110,7 +116,7 @@ async function removeFromGroup(course, uid, groupId) {
         !updatedSnapshot.exists() ||
         Object.keys(updatedSnapshot.val()).length === 0
       ) {
-        await removeGroup(course, groupId);
+        await remove(removeRef);
       }
     } else {
       console.log("User not found in the group.");
@@ -123,9 +129,16 @@ async function removeFromGroup(course, uid, groupId) {
 
 async function removeGroup(course, id) {
   try {
-    let groupRef = ref(db, `${course}/groups/` + id);
-    console.log(`${course}/groups/` + id);
-    await remove(groupRef);
+    const groupRef = ref(db, `${course}/groups/` + id + "/names/");
+    const snapshot = await get(groupRef);
+
+    if (snapshot.exists()) {
+      const members = Object.values(snapshot.val());
+      for (const member of members) {
+        await removeFromGroup(course, member.uid, id);
+      }
+    }
+
     console.log("Group removed successfully!");
   } catch (error) {
     console.error("The removal failed...", error);
@@ -161,7 +174,7 @@ async function removeGroupAndIncrement(course, id) {
     await Promise.all(updatePromises);
 
     // Remove the group after all updates are completed
-    await remove(groupRef);
+    await removeGroup(course, id);
     console.log("Group removed successfully!");
 
   } catch (error) {
@@ -194,6 +207,7 @@ const updateHelpCountersIfNeeded = async (uid, displayName) => {
     // Initialize the user counters if they don't exist
     await set(userRef, {
       displayName: displayName,
+      inGroup: false,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -258,6 +272,7 @@ const initializeUserIfNeeded = async (uid, displayName) => {
   if (!snapshot.exists()) {
     await set(userRef, {
       displayName: displayName,
+      inGroup: false,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -266,6 +281,23 @@ const initializeUserIfNeeded = async (uid, displayName) => {
     });
   }
 };
+
+export const isUserInGroup = async (uid) => {
+  const userRef = ref(db, `users/${uid}`);
+  const snapshot = await get(userRef);
+
+  if (snapshot.exists()) {
+    const userData = snapshot.val();
+    return userData.inGroup;
+  } else {
+    throw new Error(`User with uid ${uid} does not exist.`);
+  }
+};
+
+const setInGroupStatus = async (uid, inGroup) => {
+  const userRef = ref(db, `users/${uid}`);
+  await update(userRef, { inGroup });
+}
 
 const useDbData = (course) => {
   const [data, setData] = useState();
@@ -276,13 +308,6 @@ const useDbData = (course) => {
     const unsubscribe = onValue(groupsRef, async (snapshot) => {
       if (snapshot.exists()) {
         const groupsData = snapshot.val();
-        console.log(groupsData);
-        // for (const groupId in groupsData) {
-        //   for (const uid in groupsData[groupId].names) {
-        //     const helpCount = await getUserHelpCountsSingle(groupsData[groupId].names[uid].uid);
-        //     groupsData[groupId].names[uid].helpCount = helpCount;
-        //   }
-        // }
         setData(groupsData);
       } else {
         setData(null);
