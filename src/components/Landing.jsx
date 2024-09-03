@@ -1,13 +1,16 @@
 import { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
-import StudentModal from "./StudentModal.jsx";
-import TAModal from "./TAModal.jsx";
+
 import {
   signInWithGoogle,
   firebaseSignOut,
-} from "../database/DatabaseFuncs.js";
-import "./Landing.css";
+} from "../../server/database/AuthFuncs.js";
+
+import StudentModal from "./StudentModal.jsx";
+import TAModal from "./TAModal.jsx";
 import UserContext from "./UserContext.jsx";
+
+import "./Landing.css";
 
 const SignInButton = () => (
   <div className="btns">

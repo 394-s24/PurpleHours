@@ -1,21 +1,28 @@
-import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+
+import {
+  addToGroup,
+  removeFromGroup,
+} from "../../server/database/GroupFuncs.js";
+import { isUserInGroup } from "../../server/database/UserFuncs.js";
+import { useDbData } from "../../server/database/DataHooks.js";
+
 import useQueueManager from "../utils/useQueueManager";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
-import { addToGroup, removeFromGroup, isUserInGroup, useDbData } from "../database/DatabaseFuncs.js";
+
 import "./Student.css";
 
 const Student = ({ studentData }) => {
+  const course = "cs211";
 
-  const course = "cs211"
-
-  const [queue, error] = useDbData(course)
+  const [queue, error] = useDbData(course);
 
   const { refinedQueue, user, handleBack } = useQueueManager(
     queue,
     studentData,
-  ); 
+  );
 
   const [inGroup, setInGroup] = useState(false);
 
@@ -59,9 +66,11 @@ const Student = ({ studentData }) => {
         inGroup={inGroup}
       />
       <div className="new">
-        {!inGroup && <Button variant="outline-light" onClick={() => setModalShow(true)}>
-          New Group
-        </Button>}
+        {!inGroup && (
+          <Button variant="outline-light" onClick={() => setModalShow(true)}>
+            New Group
+          </Button>
+        )}
         <NewGroup
           course={course}
           show={modalShow}

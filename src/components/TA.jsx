@@ -1,11 +1,17 @@
 import { Button } from "react-bootstrap";
+
+import {
+  setGroupHelping,
+  removeGroupAndIncrement,
+} from "../../server/database/GroupFuncs.js";
+
+import { useDbData } from "../../server/database/DataHooks.js";
+
 import useQueueManager from "../utils/useQueueManager";
 import TAQueue from "./TAQueue";
-import { setGroupHelping, removeGroupAndIncrement, useDbData } from "../database/DatabaseFuncs.js";
 
 const TA = ({ dbArgs }) => {
-
-  const course = "cs211"
+  const course = "cs211";
 
   const [queue, error] = useDbData(course);
 

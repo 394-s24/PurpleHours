@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { getUserHelpCounts } from "../database/DatabaseFuncs"; // Adjust the import path accordingly
+import { useState, useEffect } from "react";
+
+import { getUserHelpCounts } from "../../server/database/UserFuncs.js";
+
 import "./NameList.css";
 
 const pastelColors = [
