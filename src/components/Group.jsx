@@ -1,8 +1,6 @@
 // Group.jsx
 import "./Group.css";
 import NameList from "./NameList";
-import { useState, useEffect } from "react";
-import { getDatabase, ref, get } from "firebase/database";
 
 const Group = ({ names, issue, time, online, helper }) => {
 

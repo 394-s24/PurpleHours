@@ -1,5 +1,6 @@
 // Queue.jsx
-import { ListGroup, Button } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
+
 import Group from "./Group";
 import "./Queue.css";
 

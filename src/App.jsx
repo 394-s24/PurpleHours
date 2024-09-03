@@ -1,14 +1,18 @@
-import "./App.css";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { initializeUserIfNeeded } from "../server/database/UserFuncs.js";
+import { useDbData } from "../server/database/DataHooks.js";
+import { useAuthState } from "../server/database/AuthFuncs.js";
+
 import Student from "./components/Student.jsx";
 import TA from "./components/TA.jsx";
 import Landing from "./components/Landing.jsx";
-import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useDbData, useAuthState, initializeUserIfNeeded } from "./database/DatabaseFuncs.js";
 import UserContext from "./components/UserContext.jsx";
 
-import "firebase/database";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import "./App.css";
 
 const App = () => {
   const [dbArgs, setDbArgs] = useState("");
