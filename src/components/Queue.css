@@ -55,12 +55,15 @@
   transform: translateY(-50%);
 }
 
-.queue .done-btn {
+.queue .button-group {
   position: absolute;
   top: 50%;
   right: 24px;
   padding: 5px 20px 5px 20px;
   transform: translateY(-50%);
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .queue .help-btn {
@@ -69,4 +72,16 @@
   right: 24px;
   padding: 5px 20px 5px 20px;
   transform: translateY(-50%);
+}
+
+.ListGroup.Item {
+  position: relative;  /* Required to position the button relative to this container */
+  padding: 15px;
+  min-height: 60px;    /* Set a minimum height to ensure button fits within the box */
+}
+
+.Group {
+  max-width: calc(100% - 150px);  /* Reduce the width of the Group content to leave space for the button */
+  word-wrap: break-word;          /* Ensure long words break into new lines */
+  white-space: normal;            /* Ensure text can wrap onto the next line */
 }

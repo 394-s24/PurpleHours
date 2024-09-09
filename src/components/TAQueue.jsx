@@ -4,19 +4,28 @@ import { Button } from "react-bootstrap";
 import UserContext from "./UserContext";
 import Queue from "./Queue";
 
-const TAQueue = ({ queue, handleDone, handleHelping }) => {
+const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
   const user = useContext(UserContext);
 
   const renderCurrentlyHelpingButton = (group) => {
     if (group.helper.uid === user.uid) {
       return (
-        <Button
-          className="done-btn"
-          onClick={() => handleDone(group.id)}
-          variant="success"
-        >
-          Done
-        </Button>
+        <div className="button-group">
+          <Button
+            className="done-btn"
+            onClick={() => handleDone(group.id)}
+            variant="success"
+          >
+            Done
+          </Button>
+          <Button
+            className="put-back-btn"
+            onClick={() => handlePutBack(group.id)}
+            variant="secondary"
+          >
+            Put Back
+          </Button>
+        </div>
       );
     }
     return null;

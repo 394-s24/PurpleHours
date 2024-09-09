@@ -1,21 +1,35 @@
 .helper-name {
-    color: #c8b6ff;
-    font-weight: bold;
+  color: #c8b6ff;
+  font-weight: bold;
 }
 
 .online {
-    padding: 5px;
-    border-radius: 3px;
-    color: white;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    display: inline-block
+  padding: 5px;
+  border-radius: 3px;
+  color: white;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  display: inline-block;
 }
-  
+
 .online-status {
-    background-color: rgb(40, 147, 205);
+  background-color: rgb(40, 147, 205);
 }
-  
+
 .in-person-status {
-    background-color: rgb(129, 55, 220);
+  background-color: rgb(129, 55, 220);
+}
+
+/* Add text wrapping for the issue text */
+.issue, .helper {
+  white-space: normal; /* Allow text to wrap naturally */
+  word-wrap: break-word; /* Break long words if necessary */
+  word-break: break-word; /* Ensure long unbreakable strings wrap */
+}
+
+/* Add responsiveness - Adjust max-width for smaller screens */
+@media (max-width: 768px) {
+  .Group > * {
+    max-width: 90%; /* For smaller screens, make the max-width smaller */
+  }
 }

@@ -1,4 +1,24 @@
 /* App.css or styles.css */
 body {
-    font-family: 'IBM Plex Mono', monospace;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* Center the main content and apply a max width to squeeze it */
+.App {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  min-height: 100vh; /* Make the container take full viewport height */
+  box-sizing: border-box; /* Make sure padding is included in the width/height calculation */
+}
+
+.App > * {
+  max-width: 1000px; /* Limit the width of the content to "squeeze" it */
+  width: 100%; /* Ensure the content takes full width up to max-width */
+}
+
+/* Add responsiveness - Adjust max-width for smaller screens */
+@media (max-width: 768px) {
+  .App > * {
+    max-width: 90%; /* For smaller screens, make the max-width smaller */
+  }
 }

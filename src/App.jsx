@@ -52,7 +52,7 @@ const App = () => {
               path="/student"
               element={<Student studentData={studentData} />}
             />
-            <Route path="/ta" element={<TA dbArgs={dbArgs} />} />
+            <Route path="/ta" element={<TA />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
