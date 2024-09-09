@@ -188,3 +188,19 @@ export async function setGroupHelping(course, groupId, user) {
     console.error("The update failed...", error);
   }
 }
+
+export async function putBackGroup(course, groupId) {
+  const groupRef = ref(db, `queues/${course}/groups/` + groupId);
+
+  try {
+    // Update the group to indicate the user is no longer helping
+    await update(groupRef, {
+      currentlyHelping: false,
+      helper: null,
+    });
+
+    console.log("Data updated successfully!");
+  } catch (error) {
+    console.error("The update failed...", error);
+  }
+}
