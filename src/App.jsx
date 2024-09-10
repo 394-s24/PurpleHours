@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { initializeUserIfNeeded } from "../server/database/UserFuncs.js";
 import { useAuthState } from "../server/database/AuthFuncs.js";
 
+import Landing from "./components/Landing.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 import Student from "./components/Student.jsx";
 import TA from "./components/TA.jsx";
 import UserContext from "./components/UserContext.jsx";
@@ -26,9 +28,10 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/:course" element={<Student />} />
-            <Route path="/ta/:course" element={<TA />} />
-            <Route path="/404" element={<div>404 - Course Not Found</div>} />
-            <Route path="*" element={<div>404 - Page Not Found</div>} />
+            <Route path="/:course/ta" element={<TA />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/404" element={<ErrorPage message={"Course Not Found"}/>} />
+            <Route path="*" element={<ErrorPage message={"Page Not Found"}/>} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

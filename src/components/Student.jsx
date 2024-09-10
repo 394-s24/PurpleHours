@@ -14,6 +14,7 @@ import useCourseValidation from "../utils/useCourseValidation";
 import SignInOutButton from "./SignInOutButton";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
+import LoadingScreen from "./LoadingScreen.jsx";
 
 import "./Student.css";
 
@@ -25,13 +26,12 @@ const Student = () => {
   const [validating, isValid] = useCourseValidation(course, navigate);
 
   // Loading and data fetching states
-  const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
-  
+
   // Fetch queue data and user info
   const [queue, error] = useDbData(course);
   const { refinedQueue, user } = useQueueManager(queue, course);
-  
+
   // User group status state
   const [inGroup, setInGroup] = useGroupStatus(course, user);
 
@@ -41,7 +41,6 @@ const Student = () => {
   // Handle loading state after data fetch
   useEffect(() => {
     if (user && queue) {
-      setLoading(false);
       setLoggedIn(true);
     }
   }, [user, queue]);
@@ -60,15 +59,12 @@ const Student = () => {
   // Component JSX rendering
   return (
     <div className="student_view">
-      {validating && <div>Validating course...</div>}
-      {!loggedIn && loading && <div>Loading data...</div>}
-      {!loading && (
-        <div className="title">
-          <h1>{course.toUpperCase()} Office Hours</h1>
-          <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-        </div>
-      )}
-      {loggedIn && !loading && (
+      {validating && <LoadingScreen />}
+      <div className="title">
+        <h1>{course.toUpperCase()} Office Hours</h1>
+        <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+      </div>
+      {loggedIn && (
         <>
           <StudentQueue
             queue={refinedQueue}
@@ -79,7 +75,10 @@ const Student = () => {
           />
           <div className="new">
             {!inGroup && (
-              <Button variant="outline-light" onClick={() => setModalShow(true)}>
+              <Button
+                variant="outline-light"
+                onClick={() => setModalShow(true)}
+              >
                 New Group
               </Button>
             )}

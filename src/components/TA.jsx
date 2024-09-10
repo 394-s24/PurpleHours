@@ -7,15 +7,15 @@ import {
   removeGroupAndIncrement,
   putBackGroup,
 } from "../../server/database/GroupFuncs.js";
-import {
-  clearQueue,
-} from "../../server/database/QueueFuncs.js";
+import { clearQueue } from "../../server/database/QueueFuncs.js";
 import { useDbData } from "../../server/database/DataHooks.js";
 
 import useQueueManager from "../utils/useQueueManager";
 import useCourseValidation from "../utils/useCourseValidation";
 import SignInOutButton from "./SignInOutButton";
 import TAQueue from "./TAQueue";
+import LoadingScreen from "./LoadingScreen.jsx";
+
 import "./TA.css";
 
 const TA = () => {
@@ -26,7 +26,6 @@ const TA = () => {
   const [validating, isValid] = useCourseValidation(course, navigate);
 
   // Loading and data fetching states
-  const [loading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
   // Fetch queue data and user info
@@ -39,7 +38,6 @@ const TA = () => {
   // Handle loading state after data fetch
   useEffect(() => {
     if (user && queue) {
-      setLoading(false);
       setLoggedIn(true);
     }
   }, [user, queue]);
@@ -76,15 +74,12 @@ const TA = () => {
   // Render the component
   return (
     <div className="ta_view">
-      {validating && <div>Validating course...</div>}
-      {!loggedIn && loading && <div>Loading data...</div>}
-      {!loading && (
-        <div className="title">
-          <h1>{course.toUpperCase()} Office Hours</h1>
-          <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-        </div>
-      )}
-      {loggedIn && !loading && (
+      {validating && <LoadingScreen />}
+      <div className="title">
+        <h1>{course.toUpperCase()} Office Hours</h1>
+        <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+      </div>
+      {loggedIn && (
         <>
           <TAQueue
             queue={refinedQueue}

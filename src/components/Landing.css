@@ -5,15 +5,3 @@
   align-items: center;
   height: 100vh;
 }
-
-.landing .title {
-  font-size: 8em;
-  margin-bottom: 20px;
-  font-weight: bold;
-  color: #c8b6ff;
-}
-
-.btns {
-  display: flex;
-  gap: 10px;
-}

@@ -1,69 +1,12 @@
-import { useState, useContext } from "react";
-import { Button } from "react-bootstrap";
-
-import {
-  signInWithGoogle,
-  firebaseSignOut,
-} from "../../server/database/AuthFuncs.js";
-
-import StudentModal from "./StudentModal.jsx";
-import TAModal from "./TAModal.jsx";
-import UserContext from "./UserContext.jsx";
-
 import "./Landing.css";
 
-const SignInButton = () => (
-  <div className="btns">
-    <button
-      className="ms-auto btn btn-outline-light"
-      onClick={signInWithGoogle}
-    >
-      Sign in
-    </button>
-  </div>
-);
-
-const SignOutButton = () => (
-  <button className="ms-auto btn btn-outline-light" onClick={firebaseSignOut}>
-    Sign out
-  </button>
-);
-
 const Landing = (props) => {
-  const [studentModalShow, setStudentModalShow] = useState(false);
-  const [TAModalShow, setTAModalShow] = useState(false);
-
-  const user = useContext(UserContext);
-
-  const JoinButtons = () => (
-    <div className="btns">
-      <Button variant="outline-light" onClick={() => setStudentModalShow(true)}>
-        I am a Student
-      </Button>
-      <Button variant="outline-light" onClick={() => setTAModalShow(true)}>
-        I am a TA/PM
-      </Button>
-      <SignOutButton />
-      <StudentModal
-        show={studentModalShow}
-        onHide={() => setStudentModalShow(false)}
-        setStudentData={props.setStudentData}
-        setDbArgs={props.setDbArgs}
-      />
-      <TAModal
-        show={TAModalShow}
-        onHide={() => setTAModalShow(false)}
-        setDbArgs={props.setDbArgs}
-      />
-    </div>
-  );
 
   return (
     <div className="landing">
-      <div className="title">
-        <h1>Purple Hours</h1>
-      </div>
-      {user ? <JoinButtons /> : <SignInButton />}
+      <h1>:(</h1>
+      <h2>Try appending /course_number to the URL</h2>
+      <h2>e.g. https://purple-hours-v2.web.app/cs211</h2>
     </div>
   );
 };
