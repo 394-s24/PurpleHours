@@ -1,6 +1,16 @@
+.ta_view .title {
+  display: flex;
+  justify-content: space-between; /* This pushes the elements to the far ends */
+  align-items: center; /* This aligns the items vertically in the center */
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-weight: bold;
+  color: #c8b6ff;
+}
+
 .clear {
-    text-align: center;
-    text-decoration: none;
-    margin: 20px;
-  }
-  
+  text-align: center;
+  text-decoration: none;
+  margin: 20px;
+}

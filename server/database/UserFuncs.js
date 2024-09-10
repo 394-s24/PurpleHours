@@ -19,19 +19,19 @@ export const updateHelpCountersIfNeeded = async (uid, displayName) => {
     // Initialize the user counters if they don't exist
     await set(userRef, {
       displayName: displayName,
-      inGroup: false,
+      inGroup: {},
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
-      lastHelpedDate: new Date().toISOString().split("T")[0],
-      lastHelpedMonth: new Date().toISOString().slice(0, 7),
+      lastHelpedDate: getChicagoDate(), // Use Chicago time for date initialization
+      lastHelpedMonth: getChicagoMonth(), // Use Chicago time for month initialization
     });
     return;
   }
 
   const userData = snapshot.val();
-  const today = new Date().toISOString().split("T")[0];
-  const currentMonth = new Date().toISOString().slice(0, 7);
+  const today = getChicagoDate(); // Use Chicago time for today's date
+  const currentMonth = getChicagoMonth(); // Use Chicago time for the current month
 
   let updates = {};
 
@@ -50,6 +50,31 @@ export const updateHelpCountersIfNeeded = async (uid, displayName) => {
   if (Object.keys(updates).length > 0) {
     await update(userRef, updates);
   }
+};
+
+// Helper function to get today's date in Chicago timezone (YYYY-MM-DD)
+const getChicagoDate = () => {
+  const chicagoDate = new Date().toLocaleDateString("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const [month, day, year] = chicagoDate.split("/");
+  return `${year}-${month}-${day}`;
+};
+
+// Helper function to get the current month in Chicago timezone (YYYY-MM)
+const getChicagoMonth = () => {
+  const chicagoDate = new Date().toLocaleDateString("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+  });
+
+  const [month, , year] = chicagoDate.split("/");
+  return `${year}-${month}`;
 };
 
 export const incrementHelpCounters = async (uid) => {
@@ -84,7 +109,7 @@ export const initializeUserIfNeeded = async (uid, displayName) => {
   if (!snapshot.exists()) {
     await set(userRef, {
       displayName: displayName,
-      inGroup: false,
+      inGroup: {},
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -94,19 +119,25 @@ export const initializeUserIfNeeded = async (uid, displayName) => {
   }
 };
 
-export const isUserInGroup = async (uid) => {
-  const userRef = ref(db, `users/${uid}`);
+export const isUserInGroup = async (uid, course) => {
+  const userRef = ref(db, `users/${uid}/inGroup/${course}`);
   const snapshot = await get(userRef);
 
   if (snapshot.exists()) {
-    const userData = snapshot.val();
-    return userData.inGroup;
+    return snapshot.val() === true; // Return true if the course flag is set to true
   } else {
-    throw new Error(`User with uid ${uid} does not exist.`);
+    return false; // Return false if the flag doesn't exist
   }
 };
 
-export const setInGroupStatus = async (uid, inGroup) => {
-  const userRef = ref(db, `users/${uid}`);
-  await update(userRef, { inGroup });
+export const setInGroupStatus = async (uid, course, inGroup) => {
+  const userRef = ref(db, `users/${uid}/inGroup`);
+
+  if (inGroup) {
+    // User joins the group for the course, set the flag to true
+    await update(userRef, { [course]: true });
+  } else {
+    // User leaves the group for the course, set the flag to false
+    await update(userRef, { [course]: false });
+  }
 };
