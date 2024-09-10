@@ -68,13 +68,14 @@ const getChicagoDate = () => {
 
 // Helper function to get the current month in Chicago timezone (YYYY-MM)
 const getChicagoMonth = () => {
-  const chicagoDate = new Date().toLocaleDateString("en-US", {
+  const chicagoDate = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Chicago",
     year: "numeric",
     month: "2-digit",
-  });
+  }).format(new Date());
 
-  const [month, , year] = chicagoDate.split("/");
+  // Since `Intl.DateTimeFormat` returns the date in the format "MM/YYYY"
+  const [month, year] = chicagoDate.split("/");
   return `${year}-${month}`;
 };
 
