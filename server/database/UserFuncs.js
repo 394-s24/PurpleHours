@@ -20,6 +20,7 @@ export const updateHelpCountersIfNeeded = async (uid, displayName) => {
     await set(userRef, {
       displayName: displayName,
       inGroup: {},
+      isTA: {},
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -110,6 +111,7 @@ export const initializeUserIfNeeded = async (uid, displayName) => {
     await set(userRef, {
       displayName: displayName,
       inGroup: {},
+      isTA: {},
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -141,3 +143,14 @@ export const setInGroupStatus = async (uid, course, inGroup) => {
     await update(userRef, { [course]: false });
   }
 };
+
+export const isUserTA = async (uid, course) => {
+  const userRef = ref(db, `users/${uid}/isTA/${course}`);
+  const snapshot = await get(userRef);
+
+  if (snapshot.exists()) {
+    return snapshot.val() === true; // Return true if the course flag is set to true
+  } else {
+    return false; // Return false if the flag doesn't exist
+  }
+}

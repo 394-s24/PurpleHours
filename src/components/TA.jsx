@@ -9,9 +9,11 @@ import {
 } from "../../server/database/GroupFuncs.js";
 import { clearQueue } from "../../server/database/QueueFuncs.js";
 import { useDbData } from "../../server/database/DataHooks.js";
+import { isUserTA } from "../../server/database/UserFuncs.js";
 
 import useQueueManager from "../utils/useQueueManager";
 import useCourseValidation from "../utils/useCourseValidation";
+import useTaValidation from "../utils/useTAValidation";
 import SignInOutButton from "./SignInOutButton";
 import TAQueue from "./TAQueue";
 import LoadingScreen from "./LoadingScreen.jsx";
@@ -32,15 +34,18 @@ const TA = () => {
   const [queue, error] = useDbData(course);
   const { refinedQueue, user } = useQueueManager(queue, course);
 
-  // Modal state for confirming queue clearance
-  const [showConfirm, setShowConfirm] = useState(false);
-
   // Handle loading state after data fetch
   useEffect(() => {
     if (user && queue) {
       setLoggedIn(true);
     }
   }, [user, queue]);
+
+  // TA validation state
+  const [validatingTA, isValidTA] = useTaValidation(user, course, navigate);
+
+  // Modal state for confirming queue clearance
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Handle group actions (Done, Helping, Put Back)
   const handleDone = (groupId) => {
@@ -74,7 +79,7 @@ const TA = () => {
   // Render the component
   return (
     <div className="ta_view">
-      {validating && <LoadingScreen />}
+      {(validating || validatingTA) && <LoadingScreen />}
       <div className="title">
         <h1>{course.toUpperCase()} Office Hours</h1>
         <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
