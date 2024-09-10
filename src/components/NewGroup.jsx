@@ -60,7 +60,7 @@ const NewGroup = ({ course, setInGroup, ...props }) => {
       await addToGroup(course, groupID, user.displayName, user.uid);
 
       // update inGroup value
-      const inGroup = await isUserInGroup(user.uid);
+      const inGroup = await isUserInGroup(user.uid, course);
       setInGroup(inGroup);
 
       props.onHide();

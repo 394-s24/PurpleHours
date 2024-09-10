@@ -16,9 +16,6 @@ const Queue = ({
   return (
     <div className="queue">
       <div className="title">
-        <h1>
-          {title}, {user.displayName}
-        </h1>
       </div>
       <div>
         <h2>{currentlyHelpingTitle}</h2>

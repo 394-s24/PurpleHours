@@ -17,7 +17,7 @@ export const useDbData = (course) => {
           const groupsData = snapshot.val();
           setData(groupsData);
         } else {
-          setData(null);
+          setData([]);
         }
       },
       (error) => {

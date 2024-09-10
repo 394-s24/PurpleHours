@@ -57,7 +57,7 @@ export async function addToGroup(course, groupId, displayName, uid) {
       helpCount: helpCount,
     });
 
-    setInGroupStatus(uid, true); // Update user status to indicate they are in a group
+    setInGroupStatus(uid, course, true); // Update user status to indicate they are in a group
 
     console.log("Data added successfully in order!");
   } catch (error) {
@@ -95,7 +95,7 @@ export async function removeFromGroup(course, uid, groupId) {
       );
       await remove(nameRef);
 
-      setInGroupStatus(uid, false); // Update user status to indicate they are not in a group
+      setInGroupStatus(uid, course, false); // Update user status to indicate they are not in a group
 
       console.log("User removed successfully!");
 
@@ -123,7 +123,7 @@ export async function removeGroup(course, id) {
     if (snapshot.exists()) {
       const members = Object.values(snapshot.val());
       for (const member of members) {
-        setInGroupStatus(member.uid, false);
+        setInGroupStatus(member.uid, course, false);
       }
     }
 
@@ -156,7 +156,7 @@ export async function removeGroupAndIncrement(course, id) {
       try {
         await updateHelpCountersIfNeeded(names[uid].uid, names[uid].name);
         incrementHelpCounters(names[uid].uid);
-        setInGroupStatus(names[uid].uid, false);
+        setInGroupStatus(names[uid].uid, course, false);
       } catch (error) {
         console.error(`Failed to update counters for user ${uid}:`, error);
       }
