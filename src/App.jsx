@@ -31,6 +31,7 @@ const App = () => {
             <Route path="/:course/ta" element={<TA />} />
             <Route path="/" element={<Landing />} />
             <Route path="/404" element={<ErrorPage message={"Course Not Found"}/>} />
+            <Route path="/invalid-ta" element={<ErrorPage message={"You do not have TA permissions!"}/>} />
             <Route path="*" element={<ErrorPage message={"Page Not Found"}/>} />
           </Routes>
         </BrowserRouter>
