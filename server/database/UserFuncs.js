@@ -21,6 +21,7 @@ export const updateHelpCountersIfNeeded = async (uid, displayName) => {
       displayName: displayName,
       inGroup: {},
       isTA: {},
+      isAdmin: false,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -104,15 +105,17 @@ export const getUserHelpCounts = async (names) => {
   return counts;
 };
 
-export const initializeUserIfNeeded = async (uid, displayName) => {
-  const userRef = ref(db, `users/${uid}`);
+export const initializeUserIfNeeded = async (user) => {
+  const userRef = ref(db, `users/${user.uid}`);
   const snapshot = await get(userRef);
 
   if (!snapshot.exists()) {
     await set(userRef, {
-      displayName: displayName,
+      displayName: user.displayName,
+      email: user.email,
       inGroup: {},
       isTA: {},
+      isAdmin: false,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
@@ -149,9 +152,12 @@ export const isUserTA = async (uid, course) => {
   const userRef = ref(db, `users/${uid}/isTA/${course}`);
   const snapshot = await get(userRef);
 
-  if (snapshot.exists()) {
-    return snapshot.val() === true; // Return true if the course flag is set to true
-  } else {
-    return false; // Return false if the flag doesn't exist
-  }
+  return snapshot.val() === true ? snapshot.exists() : false;
+}
+
+export const isUserAdmin = async (uid) => {
+  const userRef = ref(db, `users/${uid}/isAdmin`);
+  const snapshot = await get(userRef);
+
+  return snapshot.val() === true ? snapshot.exists() : false;
 }

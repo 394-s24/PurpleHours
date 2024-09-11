@@ -1,0 +1,93 @@
+/* General styling for the Admin Dashboard */
+.admin-dashboard {
+  max-width: 600px; /* Limit the width of the dashboard for readability */
+  margin: 50px auto; /* Center the dashboard on the page */
+  padding: 20px;
+}
+
+.admin-dashboard .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-dashboard h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #c8b6ff;
+}
+
+.admin-dashboard .sign_in_out button {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.admin-dashboard p {
+  text-align: center;
+  color: #6c757d;
+}
+
+/* Form group styling */
+.admin-dashboard .form-group {
+  margin-bottom: 20px;
+}
+
+.admin-dashboard .form-group label {
+  font-weight: bold;
+}
+
+.admin-dashboard .form-control {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease;
+}
+
+.admin-dashboard .form-control:focus {
+  border-color: #c8b6ff;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5); /* Blue shadow on focus */
+}
+
+/* Styling for the Button */
+.admin-dashboard .mt-4 {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-dashboard .btn:disabled {
+  background-color: #6c757d;
+  border: none;
+}
+
+/* Spinner alignment */
+.admin-dashboard .btn .spinner-border {
+  margin-left: 10px;
+}
+
+/* Alert styling */
+.admin-dashboard .alert {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    width: 90%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .admin-dashboard h2 {
+    font-size: 1.5rem;
+  }
+
+  .admin-dashboard .btn {
+    font-size: 0.9rem;
+  }
+}
