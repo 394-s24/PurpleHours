@@ -1,24 +1,28 @@
 import { useState, useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 
 import { getUserHelpCounts } from "../../server/database/UserFuncs.js";
 
 import "./NameList.css";
 
-const pastelColors = [
-  "#D9534F", // Darker Pink/Red
-  "#F0AD4E", // Darker Orange
-  "#FFD700", // Darker Yellow/Gold
-  "#5CB85C", // Darker Green
-  "#5BC0DE", // Darker Blue/Cyan
+// Define 4 balanced shades of purple based on the help count ranges
+const helpCountColors = [
+  "#B88FD4", // 0-3 Helps - Light Purple
+  "#9A6AB3", // 4-7 Helps - Medium Purple
+  "#784497", // 8-12 Helps - Dark Purple
+  "#55297C", // 13+ Helps - Very Dark Purple
 ];
 
 const NameList = ({ names }) => {
   const [helpCounts, setHelpCounts] = useState({});
+  const [loadingCounts, setLoadingCounts] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchHelpCounts = async () => {
+      setLoadingCounts(true); // Set loading to true before fetching
       const counts = await getUserHelpCounts(names);
       setHelpCounts(counts);
+      setLoadingCounts(false); // Set loading to false after fetching
     };
 
     if (names.length > 0) {
@@ -26,8 +30,12 @@ const NameList = ({ names }) => {
     }
   }, [names]);
 
-  const getColorByIndex = (index) => {
-    return pastelColors[index % pastelColors.length]; // Cycle through colors
+  // Function to determine the color based on help count
+  const getColorByHelpCount = (helpCount) => {
+    if (helpCount <= 3) return helpCountColors[0]; // Light Purple
+    if (helpCount <= 7) return helpCountColors[1]; // Medium Purple
+    if (helpCount <= 12) return helpCountColors[2]; // Dark Purple
+    return helpCountColors[3]; // Very Dark Purple
   };
 
   return (
@@ -38,7 +46,7 @@ const NameList = ({ names }) => {
           <span
             className="help-count"
             style={{
-              backgroundColor: getColorByIndex(index), // Use color based on index
+              backgroundColor: loadingCounts ? "#784497" : getColorByHelpCount(helpCounts[nameObj.uid] || 0), // Determine color based on help count
               display: "inline-block",
               width: "20px",
               height: "20px",
@@ -48,7 +56,11 @@ const NameList = ({ names }) => {
               color: "white", // Ensuring white text for better contrast
             }}
           >
-            {helpCounts[nameObj.uid] || 0}
+            {loadingCounts ? (
+              <Spinner as="span" animation="border" size="sm" />
+            ) : (
+              helpCounts[nameObj.uid] || 0
+            )}
           </span>
           {index < names.length - 1 && ", "}
         </span>

@@ -1,3 +1,5 @@
+import { Button } from "react-bootstrap";
+
 import {
   signInWithGoogle,
   firebaseSignOut,
@@ -6,19 +8,12 @@ import {
 const SignInOutButton = ({ loggedIn, setLoggedIn }) => {
   const SignInButton = () => (
     <div className="btns">
-      <button
-        className="ms-auto btn btn-outline-light"
-        onClick={signInWithGoogle}
-      >
-        Sign in
-      </button>
+      <Button variant="outline-light" onClick={signInWithGoogle}>Sign In</Button>
     </div>
   );
 
   const SignOutButton = () => (
-    <button className="ms-auto btn btn-outline-light" onClick={handleSignOut}>
-      Sign out
-    </button>
+    <Button variant="outline-light" onClick={handleSignOut}>Sign Out</Button>
   );
 
   const handleSignOut = () => {
