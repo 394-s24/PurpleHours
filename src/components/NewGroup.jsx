@@ -56,14 +56,12 @@ const NewGroup = ({ course, setInGroup, ...props }) => {
         online: online,
       };
       // Pass the data to an external function
-      let groupID = await createNewGroup(course, groupsData);
-      await addToGroup(course, groupID, user.displayName, user.uid);
-
-      // update inGroup value
-      const inGroup = await isUserInGroup(user.uid, course);
-      setInGroup(inGroup);
-
       props.onHide();
+
+      let groupID = await createNewGroup(course, groupsData);
+      addToGroup(course, groupID, user.displayName, user.uid);
+
+      setInGroup(true);
       setValidated(false);
     } else {
       setValidated(true);
