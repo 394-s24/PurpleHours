@@ -7,7 +7,7 @@ const SignInOutButton = ({ loggedIn, setLoggedIn }) => {
   const SignInButton = () => (
     <div className="btns">
       <button
-        className="ms-auto btn btn-outline-light"
+        className="signInButton"
         onClick={signInWithGoogle}
       >
         Sign in

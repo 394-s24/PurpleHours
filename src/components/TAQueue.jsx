@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { Button } from "react-bootstrap";
+import { useContext, useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 
 import UserContext from "./UserContext";
 import Queue from "./Queue";
@@ -7,23 +7,53 @@ import Queue from "./Queue";
 const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
   const user = useContext(UserContext);
 
+  const [loadingGroup, setLoadingGroup] = useState(null); // Track which group is loading
+
+  const handleDoneClick = async (groupId) => {
+    setLoadingGroup(groupId); // Set the group as loading
+    await handleDone(groupId);
+    setLoadingGroup(null); // Reset loading state
+  };
+
+  const handleHelpingClick = async (groupId) => {
+    setLoadingGroup(groupId); // Set the group as loading
+    await handleHelping(groupId);
+    setLoadingGroup(null); // Reset loading state
+  };
+
+  const handlePutBackClick = async (groupId) => {
+    setLoadingGroup(groupId); // Set the group as loading
+    await handlePutBack(groupId);
+    setLoadingGroup(null); // Reset loading state
+  };
+
   const renderCurrentlyHelpingButton = (group) => {
     if (group.helper.uid === user.uid) {
       return (
         <div className="button-group">
           <Button
             className="done-btn"
-            onClick={() => handleDone(group.id)}
+            onClick={() => handleDoneClick(group.id)}
             variant="success"
+            disabled={loadingGroup === group.id} // Disable button while loading
           >
-            Done
+            {loadingGroup === group.id ? (
+              <Spinner as="span" animation="border" size="sm" />
+            ) : (
+              "Done"
+            )}
           </Button>
           <Button
             className="put-back-btn"
-            onClick={() => handlePutBack(group.id)}
+            onClick={() => handlePutBackClick(group.id)}
             variant="secondary"
+            disabled={loadingGroup === group.id} // Disable button while loading
           >
-            Put Back
+            {loadingGroup === group.id ? (
+              <Spinner as="span" animation="border" size="sm" />
+            ) : (
+              "Put Back"
+            )}
           </Button>
         </div>
       );
@@ -34,10 +64,15 @@ const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
   const renderUpcomingButton = (group) => (
     <Button
       className="help-btn"
-      onClick={() => handleHelping(group.id)}
+      onClick={() => handleHelpingClick(group.id)}
       variant="primary"
+      disabled={loadingGroup === group.id} // Disable button while loading
     >
-      Help
+      {loadingGroup === group.id ? (
+        <Spinner as="span" animation="border" size="sm" />
+      ) : (
+        "Help"
+      )}
     </Button>
   );
 
@@ -50,6 +85,7 @@ const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
       upcomingTitle="Upcoming"
       renderCurrentlyHelpingButton={renderCurrentlyHelpingButton}
       renderUpcomingButton={renderUpcomingButton}
+      loadingGroup={loadingGroup} // Pass loading state to Queue if needed
     />
   );
 };

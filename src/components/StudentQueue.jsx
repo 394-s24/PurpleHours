@@ -1,11 +1,25 @@
-import { useContext } from "react";
-import { Button } from "react-bootstrap";
+import { useContext, useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
 
 import UserContext from "./UserContext";
 import Queue from "./Queue";
 
 const StudentQueue = ({ queue, course, joinQueue, leaveQueue, inGroup }) => {
   const user = useContext(UserContext);
+
+  const [loadingGroup, setLoadingGroup] = useState(null); // Track which group is loading
+
+  const handleJoinQueue = async (course, groupId) => {
+    setLoadingGroup(groupId); // Set the group as loading
+    await joinQueue(course, groupId);
+    setLoadingGroup(null); // Reset loading state
+  };
+
+  const handleLeaveQueue = async (course, groupId) => {
+    setLoadingGroup(groupId); // Set the group as loading
+    await leaveQueue(course, groupId);
+    setLoadingGroup(null); // Reset loading state
+  };
 
   const renderCurrentlyHelpingButton = (group) => null; // No special button for StudentQueue currently helping
 
@@ -25,24 +39,34 @@ const StudentQueue = ({ queue, course, joinQueue, leaveQueue, inGroup }) => {
       !group.names.some((object) => object.uid === user.uid) &&
       !inGroup
     ) {
-      return (
+      return loadingGroup === group.id ? (
+        null
+      ) : (
         <Button
           className="join-btn"
-          onClick={() => joinQueue(course, group.id)}
+          onClick={() => handleJoinQueue(course, group.id)}
           variant="success"
+          disabled={loadingGroup === group.id} // Disable button while loading
         >
           Join
         </Button>
       );
     }
     if (group.names.some((object) => object.uid === user.uid)) {
-      return (
+      return loadingGroup === group.id ? (
+        null
+      ) : (
         <Button
           className="leave-btn"
-          onClick={() => leaveQueue(course, group.id)}
+          onClick={() => handleLeaveQueue(course, group.id)}
           variant="danger"
+          disabled={loadingGroup === group.id} // Disable button while loading
         >
-          Leave
+          {loadingGroup === group.id ? (
+            <Spinner as="span" animation="border" size="sm" />
+          ) : (
+            "Leave"
+          )}
         </Button>
       );
     }
@@ -58,6 +82,7 @@ const StudentQueue = ({ queue, course, joinQueue, leaveQueue, inGroup }) => {
       upcomingTitle="Upcoming"
       renderCurrentlyHelpingButton={renderCurrentlyHelpingButton}
       renderUpcomingButton={renderUpcomingButton}
+      loadingGroup={loadingGroup}
     />
   );
 };

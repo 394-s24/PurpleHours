@@ -6,12 +6,11 @@ import "./Queue.css";
 
 const Queue = ({
   queue,
-  user,
-  title,
   currentlyHelpingTitle,
   upcomingTitle,
   renderCurrentlyHelpingButton,
   renderUpcomingButton,
+  loadingGroup,
 }) => {
   return (
     <div className="queue">
@@ -36,6 +35,7 @@ const Queue = ({
                     time={group.time}
                     online={group.online}
                     helper={group.helper}
+                    loading={loadingGroup === group.id}
                   />
                   {renderCurrentlyHelpingButton(group)}
                 </ListGroup.Item>
@@ -67,6 +67,7 @@ const Queue = ({
                     time={group.time}
                     online={group.online}
                     helper={group.helper}
+                    loading={loadingGroup === group.id}
                   />
                   {renderUpcomingButton(group)}
                 </ListGroup.Item>
