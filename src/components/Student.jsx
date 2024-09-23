@@ -15,11 +15,14 @@ import SignInOutButton from "./SignInOutButton";
 import StudentQueue from "./StudentQueue";
 import NewGroup from "./NewGroup";
 import LoadingScreen from "./LoadingScreen.jsx";
+import useInitializeUser from "../utils/useInitializeUser.js";
 
 import "./Student.css";
 
 const Student = () => {
+  // Get course id
   const { course } = useParams();
+
   const navigate = useNavigate();
 
   // Course validation state
@@ -30,7 +33,10 @@ const Student = () => {
 
   // Fetch queue data and user info
   const [queue, error] = useDbData(course);
-  const { refinedQueue, user } = useQueueManager(queue, course);
+  const refinedQueue = useQueueManager(queue, course);
+  
+  // Initialize user
+  const user = useInitializeUser(course);
 
   // User group status state
   const [inGroup, setInGroup] = useGroupStatus(course, user);

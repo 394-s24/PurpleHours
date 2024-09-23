@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { initializeUserIfNeeded } from "../server/database/UserFuncs.js";
 import { useAuthState } from "../server/database/AuthFuncs.js";
 
 import Landing from "./components/Landing.jsx";
@@ -16,12 +14,6 @@ import "./App.css";
 
 const App = () => {
   const [user] = useAuthState();
-
-  useEffect(() => {
-    if (user) {
-      initializeUserIfNeeded(user);
-    }
-  }, [user]);
 
   return (
     <div className="App">

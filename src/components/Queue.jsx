@@ -11,6 +11,7 @@ const Queue = ({
   renderCurrentlyHelpingButton,
   renderUpcomingButton,
   loadingGroup,
+  course,
 }) => {
   return (
     <div className="queue">
@@ -36,6 +37,7 @@ const Queue = ({
                     online={group.online}
                     helper={group.helper}
                     loading={loadingGroup === group.id}
+                    course={course}
                   />
                   {renderCurrentlyHelpingButton(group)}
                 </ListGroup.Item>
@@ -60,7 +62,7 @@ const Queue = ({
                 return aHelpCount - bHelpCount;
               })
               .map((group) => (
-                <ListGroup.Item key={group.id}>
+                <ListGroup.Item key={`upcoming-group-${group.id}`}>
                   <Group
                     names={group.names}
                     issue={group.issue}
@@ -68,6 +70,7 @@ const Queue = ({
                     online={group.online}
                     helper={group.helper}
                     loading={loadingGroup === group.id}
+                    course={course}
                   />
                   {renderUpcomingButton(group)}
                 </ListGroup.Item>

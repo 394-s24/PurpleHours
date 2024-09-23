@@ -83,6 +83,7 @@ const StudentQueue = ({ queue, course, joinQueue, leaveQueue, inGroup }) => {
       renderCurrentlyHelpingButton={renderCurrentlyHelpingButton}
       renderUpcomingButton={renderUpcomingButton}
       loadingGroup={loadingGroup}
+      course={course}
     />
   );
 };

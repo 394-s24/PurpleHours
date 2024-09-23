@@ -13,14 +13,14 @@ const helpCountColors = [
   "#55297C", // 13+ Helps - Very Dark Purple
 ];
 
-const NameList = ({ names }) => {
+const NameList = ({ names, course }) => {
   const [helpCounts, setHelpCounts] = useState({});
   const [loadingCounts, setLoadingCounts] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchHelpCounts = async () => {
       setLoadingCounts(true); // Set loading to true before fetching
-      const counts = await getUserHelpCounts(names);
+      const counts = await getUserHelpCounts(names, course);
       setHelpCounts(counts);
       setLoadingCounts(false); // Set loading to false after fetching
     };
@@ -32,16 +32,16 @@ const NameList = ({ names }) => {
 
   // Function to determine the color based on help count
   const getColorByHelpCount = (helpCount) => {
-    if (helpCount <= 3) return helpCountColors[0]; // Light Purple
-    if (helpCount <= 7) return helpCountColors[1]; // Medium Purple
-    if (helpCount <= 12) return helpCountColors[2]; // Dark Purple
-    return helpCountColors[3]; // Very Dark Purple
+    if (helpCount <= 3) return helpCountColors[0];
+    if (helpCount <= 7) return helpCountColors[1];
+    if (helpCount <= 12) return helpCountColors[2];
+    return helpCountColors[3];
   };
 
   return (
     <div className="names-list">
       {names.map((nameObj, index) => (
-        <span key={nameObj.uid} className="name-item">
+        <span key={`${nameObj.uid}-${index}`} className="name-item">
           <span className="name-text">{nameObj.name}</span>
           <span
             className="help-count"
@@ -53,7 +53,7 @@ const NameList = ({ names }) => {
               textAlign: "center",
               borderRadius: "4px",
               marginLeft: "8px",
-              color: "white", // Ensuring white text for better contrast
+              color: "white",
             }}
           >
             {loadingCounts ? (
