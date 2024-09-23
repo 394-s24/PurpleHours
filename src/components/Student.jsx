@@ -36,7 +36,7 @@ const Student = () => {
   const refinedQueue = useQueueManager(queue, course);
   
   // Initialize user
-  const user = useInitializeUser(course);
+  const user = useInitializeUser(course, isValid);
 
   // User group status state
   const [inGroup, setInGroup] = useGroupStatus(course, user);
