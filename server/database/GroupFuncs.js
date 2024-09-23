@@ -41,14 +41,14 @@ export async function createNewGroup(course, groupsData) {
 
 export async function addToGroup(course, groupId, displayName, uid) {
   try {
-    const helpCount = await getUserHelpCountsSingle(uid);
+    const helpCount = await getUserHelpCountsSingle(uid, course);
 
     // Generate a new entry with a unique key based on a timestamp
     const newEntryRef = push(
       ref(db, `queues/${course}/groups/` + groupId + "/names/"),
     );
 
-    await updateHelpCountersIfNeeded(uid, displayName);
+    await updateHelpCountersIfNeeded(uid, displayName, course);
 
     // Set the data for this entry
     await set(newEntryRef, {
@@ -117,20 +117,36 @@ export async function removeFromGroup(course, uid, groupId) {
 
 export async function removeGroup(course, id) {
   try {
-    const namesRef = ref(db, `queues/${course}/groups/` + id + "/names/");
-    const snapshot = await get(namesRef);
+    const groupRef = ref(db, `queues/${course}/groups/${id}`);
+    const namesRef = ref(db, `queues/${course}/groups/${id}/names/`);
+    
+    // Fetch the group's data
+    const snapshot = await get(groupRef);
 
     if (snapshot.exists()) {
-      const members = Object.values(snapshot.val());
+      let groupData = snapshot.val();
+
+      // Remove the currentlyHelping field from the data
+      delete groupData.currentlyHelping;
+
+      const members = Object.values(groupData.names);
+
+      // Set inGroup status to false for all members
       for (const member of members) {
-        setInGroupStatus(member.uid, course, false);
+        await setInGroupStatus(member.uid, course, false);
       }
+
+      // Save the modified group data (without currentlyHelping) to the history field under the course
+      const historyRef = ref(db, `courses/${course}/history/${id}`);
+      await set(historyRef, groupData);
+
+      console.log("Group data saved to history successfully!");
     }
 
-    const groupRef = ref(db, `queues/${course}/groups/` + id);
+    // Remove the group from the active queue
     await remove(groupRef);
 
-    console.log("Group removed successfully!");
+    console.log("Group removed from active queue successfully!");
   } catch (error) {
     console.error("The removal failed...", error);
   }
@@ -138,9 +154,9 @@ export async function removeGroup(course, id) {
 
 export async function removeGroupAndIncrement(course, id) {
   try {
-    const groupRef = ref(db, `queues/${course}/groups/` + id);
-
-    // Fetch group data
+    const groupRef = ref(db, `queues/${course}/groups/${id}`);
+    
+    // Fetch the group data
     const snapshot = await get(groupRef);
     const group = snapshot.val();
 
@@ -149,13 +165,16 @@ export async function removeGroupAndIncrement(course, id) {
       return;
     }
 
+    // Remove the currentlyHelping field from the data
+    delete group.currentlyHelping;
+
     const names = group.names;
 
     // Update help counters for all users in the group concurrently
     const updatePromises = Object.keys(names).map(async (uid) => {
       try {
-        await updateHelpCountersIfNeeded(names[uid].uid, names[uid].name);
-        incrementHelpCounters(names[uid].uid);
+        await updateHelpCountersIfNeeded(names[uid].uid, names[uid].name, course);
+        incrementHelpCounters(names[uid].uid, course);
         setInGroupStatus(names[uid].uid, course, false);
       } catch (error) {
         console.error(`Failed to update counters for user ${uid}:`, error);
@@ -165,13 +184,21 @@ export async function removeGroupAndIncrement(course, id) {
     // Wait for all counter updates to complete
     await Promise.all(updatePromises);
 
-    // Remove the group after all updates are completed
+    // Save the modified group data (without currentlyHelping) to the history field under the course
+    const historyRef = ref(db, `courses/${course}/history/${id}`);
+    await set(historyRef, group);
+
+    console.log("Group data saved to history successfully!");
+
+    // Remove the group from the active queue
     await remove(groupRef);
-    console.log("Group removed successfully!");
+
+    console.log("Group removed from active queue successfully!");
   } catch (error) {
     console.error("Failed to remove group or update counters:", error);
   }
 }
+
 
 export async function setGroupHelping(course, groupId, user) {
   const groupRef = ref(db, `queues/${course}/groups/` + groupId);

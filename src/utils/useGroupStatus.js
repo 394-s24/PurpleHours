@@ -8,13 +8,13 @@ const useGroupStatus = (course, user) => {
   const [inGroup, setInGroup] = useState(false);
 
   useEffect(() => {
-    if (user && user.uid) {
-      const userRef = ref(db, `users/${user.uid}/inGroup`);
+    if (user) {
+      const userRef = ref(db, `courses/${course}/users/${user.uid}/inGroup`);
 
       // Listen to inGroup changes in the database in real-time
       const unsubscribe = onValue(userRef, (snapshot) => {
-        const inGroupData = snapshot.val() || {};
-        setInGroup(inGroupData[course] || false); // Set based on the course flag
+        const inGroupData = snapshot.val() || false;
+        setInGroup(inGroupData || false); // Set based on the course flag
       });
 
       return () => {

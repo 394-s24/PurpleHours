@@ -16,13 +16,15 @@ import useTAValidation from "../utils/useTAValidation";
 import SignInOutButton from "./SignInOutButton";
 import TAQueue from "./TAQueue";
 import LoadingScreen from "./LoadingScreen.jsx";
+import useInitializeUser from "../utils/useInitializeUser.js";
 
 import "./TA.css";
 
 const TA = () => {
+  // Get course id
   const { course } = useParams();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   // Course validation state
   const [validating, isValid] = useCourseValidation(course, navigate);
 
@@ -31,7 +33,10 @@ const TA = () => {
 
   // Fetch queue data and user info
   const [queue, error] = useDbData(course);
-  const { refinedQueue, user } = useQueueManager(queue, course);
+  const refinedQueue = useQueueManager(queue, course);
+
+  // Initialize user
+  const user = useInitializeUser(course);
 
   // Handle loading state after data fetch
   useEffect(() => {
@@ -91,6 +96,7 @@ const TA = () => {
             handleDone={handleDone}
             handleHelping={handleHelping}
             handlePutBack={handlePutBack}
+            course={course}
           />
           <div className="clear">
             <Button

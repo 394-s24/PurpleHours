@@ -41,12 +41,12 @@ export const getCourses = async () => {
 
 // Update TA permissions for a user on a specific course
 export const updateTAPermissions = async (uid, courseId, isTA) => {
-  const userRef = ref(db, `users/${uid}`);
+  const userRef = ref(db, `courses/${courseId}/users/${uid}`);
   const snapshot = await get(userRef);
 
   if (snapshot.exists()) {
     const updates = {};
-    updates[`/isTA/${courseId}`] = isTA;
+    updates[`/isTA`] = isTA;
     await update(userRef, updates);
   } else {
     throw new Error("User does not exist");

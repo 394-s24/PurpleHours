@@ -11,29 +11,28 @@ import app from "./FirebaseApp";
 const db = getDatabase(app);
 
 // Utility to reset the help counters if it's a new day or month
-export const updateHelpCountersIfNeeded = async (uid, displayName) => {
-  const userRef = ref(db, `users/${uid}`);
-  const snapshot = await get(userRef);
+export const updateHelpCountersIfNeeded = async (uid, displayName, course) => {
+  const userCourseRef = ref(db, `courses/${course}/users/${uid}`);
+  const userCourseSnapshot = await get(userCourseRef);
 
-  if (!snapshot.exists()) {
+  if (!userCourseSnapshot.exists()) {
     // Initialize the user counters if they don't exist
-    await set(userRef, {
+    await set(userCourseRef, {
       displayName: displayName,
-      inGroup: {},
-      isTA: {},
-      isAdmin: false,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
-      lastHelpedDate: getChicagoDate(), // Use Chicago time for date initialization
-      lastHelpedMonth: getChicagoMonth(), // Use Chicago time for month initialization
+      lastHelpedDate: getChicagoDate(),
+      lastHelpedMonth: getChicagoMonth(),
+      inGroup: false,
+      isTA: true,
     });
     return;
   }
 
-  const userData = snapshot.val();
-  const today = getChicagoDate(); // Use Chicago time for today's date
-  const currentMonth = getChicagoMonth(); // Use Chicago time for the current month
+  const userData = userCourseSnapshot.val();
+  const today = getChicagoDate();
+  const currentMonth = getChicagoMonth();
 
   let updates = {};
 
@@ -50,7 +49,7 @@ export const updateHelpCountersIfNeeded = async (uid, displayName) => {
   }
 
   if (Object.keys(updates).length > 0) {
-    await update(userRef, updates);
+    await update(userCourseRef, updates);
   }
 };
 
@@ -80,9 +79,9 @@ const getChicagoMonth = () => {
   return `${year}-${month}`;
 };
 
-export const incrementHelpCounters = async (uid) => {
-  const userRef = ref(db, `users/${uid}`);
-
+export const incrementHelpCounters = async (uid, course) => {
+  const userRef = ref(db, `courses/${course}/users/${uid}`);
+  
   // Update counters
   await update(userRef, {
     dailyHelpCount: increment(1),
@@ -91,65 +90,65 @@ export const incrementHelpCounters = async (uid) => {
   });
 };
 
-export const getUserHelpCountsSingle = async (uid) => {
-  const userRef = ref(db, `users/${uid}/dailyHelpCount`);
+export const getUserHelpCountsSingle = async (uid, course) => {
+  const userRef = ref(db, `courses/${course}/users/${uid}/dailyHelpCount`);
   const snapshot = await get(userRef);
   return snapshot.exists() ? snapshot.val() : 0;
 };
 
-export const getUserHelpCounts = async (names) => {
+export const getUserHelpCounts = async (names, course) => {
   const counts = {};
   for (const nameObj of names) {
-    counts[nameObj.uid] = await getUserHelpCountsSingle(nameObj.uid);
+    counts[nameObj.uid] = await getUserHelpCountsSingle(nameObj.uid, course);
   }
   return counts;
 };
 
-export const initializeUserIfNeeded = async (user) => {
+export const initializeUserIfNeeded = async (user, course) => {
   const userRef = ref(db, `users/${user.uid}`);
   const snapshot = await get(userRef);
 
   if (!snapshot.exists()) {
-    await set(userRef, {
+    set(userRef, {
       displayName: user.displayName,
       email: user.email,
-      inGroup: {},
-      isTA: {},
       isAdmin: false,
+    });
+  }
+
+  const userCourseRef = ref(db, `courses/${course}/users/${user.uid}`);
+  const userCourseSnapshot = await get(userCourseRef);
+
+  if (!userCourseSnapshot.exists()) {
+    // Initialize the user counters if they don't exist
+    set(userCourseRef, {
+      displayName: user.displayName,
       dailyHelpCount: 0,
       monthlyHelpCount: 0,
       lifetimeHelpCount: 0,
-      lastHelpedDate: new Date().toISOString().split("T")[0],
-      lastHelpedMonth: new Date().toISOString().slice(0, 7),
+      lastHelpedDate: getChicagoDate(),
+      lastHelpedMonth: getChicagoMonth(),
+      inGroup: false,
+      isTA: false,
     });
+    return;
   }
 };
 
 export const isUserInGroup = async (uid, course) => {
-  const userRef = ref(db, `users/${uid}/inGroup/${course}`);
+  const userRef = ref(db, `courses/${course}/users/${uid}/inGroup`);
   const snapshot = await get(userRef);
 
-  if (snapshot.exists()) {
-    return snapshot.val() === true; // Return true if the course flag is set to true
-  } else {
-    return false; // Return false if the flag doesn't exist
-  }
+  return snapshot.val() === true ? snapshot.exists() : false;
 };
 
 export const setInGroupStatus = async (uid, course, inGroup) => {
-  const userRef = ref(db, `users/${uid}/inGroup`);
-
-  if (inGroup) {
-    // User joins the group for the course, set the flag to true
-    await update(userRef, { [course]: true });
-  } else {
-    // User leaves the group for the course, set the flag to false
-    await update(userRef, { [course]: false });
-  }
+  const userRef = ref(db, `courses/${course}/users/${uid}`);
+  await update(userRef, { inGroup: inGroup });
 };
 
 export const isUserTA = async (uid, course) => {
-  const userRef = ref(db, `users/${uid}/isTA/${course}`);
+  const userRef = ref(db, `courses/${course}/users/${uid}/isTA`);
   const snapshot = await get(userRef);
 
   return snapshot.val() === true ? snapshot.exists() : false;

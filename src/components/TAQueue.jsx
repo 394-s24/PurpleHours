@@ -4,7 +4,7 @@ import { Button, Spinner } from "react-bootstrap";
 import UserContext from "./UserContext";
 import Queue from "./Queue";
 
-const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
+const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack, course }) => {
   const user = useContext(UserContext);
 
   const [loadingGroup, setLoadingGroup] = useState(null); // Track which group is loading
@@ -85,7 +85,8 @@ const TAQueue = ({ queue, handleDone, handleHelping, handlePutBack }) => {
       upcomingTitle="Upcoming"
       renderCurrentlyHelpingButton={renderCurrentlyHelpingButton}
       renderUpcomingButton={renderUpcomingButton}
-      loadingGroup={loadingGroup} // Pass loading state to Queue if needed
+      loadingGroup={loadingGroup}
+      course={course}
     />
   );
 };

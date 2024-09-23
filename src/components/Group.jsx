@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 import "./Group.css";
 import NameList from "./NameList";
 
-const Group = ({ names, issue, time, online, helper, loading }) => {
+const Group = ({ names, issue, time, online, helper, loading, course }) => {
   return (
     <div className={`Group ${loading ? "loading" : ""}`}>
       {loading ? (
@@ -11,7 +11,7 @@ const Group = ({ names, issue, time, online, helper, loading }) => {
       ) : (
         <>
           <div className="name">
-            <NameList names={names} />
+            <NameList names={names} course={course} />
           </div>
           <div className="issue">{issue}</div>
           <div className="time">{time}</div>
