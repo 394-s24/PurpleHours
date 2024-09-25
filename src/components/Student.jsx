@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
@@ -20,38 +20,21 @@ import useInitializeUser from "../utils/useInitializeUser.js";
 import "./Student.css";
 
 const Student = () => {
-  // Get course id
   const { course } = useParams();
-
   const navigate = useNavigate();
 
-  // Course validation state
   const [validating, isValid] = useCourseValidation(course, navigate);
-
-  // Loading and data fetching states
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // Fetch queue data and user info
+  // Fetch queue data and user info with real-time updates
   const [queue, error] = useDbData(course);
   const refinedQueue = useQueueManager(queue, course);
-  
-  // Initialize user
-  const user = useInitializeUser(course, isValid);
 
-  // User group status state
+  const user = useInitializeUser(course, isValid, setLoggedIn);
   const [inGroup, setInGroup] = useGroupStatus(course, user);
 
-  // New Group modal state
   const [modalShow, setModalShow] = useState(false);
 
-  // Handle loading state after data fetch
-  useEffect(() => {
-    if (user && queue) {
-      setLoggedIn(true);
-    }
-  }, [user, queue]);
-
-  // Handle group join and leave logic
   const handleJoinQueue = async (course, groupId) => {
     await addToGroup(course, groupId, user.displayName, user.uid);
     setInGroup(true);
@@ -62,14 +45,13 @@ const Student = () => {
     setInGroup(false);
   };
 
-  // Component JSX rendering
   return (
     <div className="student_view">
       {validating && <LoadingScreen />}
-      <div className="title">
+      {isValid && <div className="title">
         <h1>{course.toUpperCase()} Office Hours</h1>
         <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      </div>
+      </div>}
       {loggedIn && (
         <>
           <StudentQueue
@@ -81,11 +63,8 @@ const Student = () => {
           />
           <div className="new">
             {!inGroup && (
-              <Button
-                variant="outline-light"
-                onClick={() => setModalShow(true)}
-              >
-                New Group
+              <Button variant="outline-light" onClick={() => setModalShow(true)}>
+                Join Queue
               </Button>
             )}
             <NewGroup

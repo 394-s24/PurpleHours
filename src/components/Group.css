@@ -39,6 +39,6 @@
 /* Add responsiveness - Adjust max-width for smaller screens */
 @media (max-width: 768px) {
   .Group > * {
-    max-width: 90%; /* For smaller screens, make the max-width smaller */
+    max-width: 100%; /* For smaller screens, make the max-width smaller */
   }
 }

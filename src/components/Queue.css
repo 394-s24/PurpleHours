@@ -1,6 +1,9 @@
 .queue {
-  padding: 10px;
-  margin: 10px;
+  margin: 20px;
+}
+
+.queue h2 {
+  margin: 10px 0;
 }
 
 .helping {
@@ -11,61 +14,95 @@
   margin: 20px 40px;
 }
 
-.queue h2 {
-  margin: 10px 0;
-}
-
-.queue .join-btn {
+/* General button styles */
+.queue .join-btn,
+.queue .leave-btn,
+.queue .private-btn,
+.queue .help-btn {
   position: absolute;
   top: 50%;
   right: 24px;
-  padding: 5px 20px 5px 20px;
+  padding: 5px 20px;
   transform: translateY(-50%);
-}
-
-.queue .leave-btn {
-  position: absolute;
-  top: 50%;
-  right: 24px;
-  padding: 5px 20px 5px 20px;
-  transform: translateY(-50%);
-}
-
-.queue .private-btn {
-  position: absolute;
-  top: 50%;
-  right: 24px;
-  padding: 5px 17px 5px 17px;
-  transform: translateY(-50%);
+  font-size: 14px; /* Default font size */
 }
 
 .queue .button-group {
   position: absolute;
   top: 50%;
   right: 24px;
-  padding: 5px 20px 5px 20px;
   transform: translateY(-50%);
   gap: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.queue .help-btn {
-  position: absolute;
-  top: 50%;
-  right: 24px;
-  padding: 5px 20px 5px 20px;
-  transform: translateY(-50%);
-}
-
 .ListGroup.Item {
-  position: relative;  /* Required to position the button relative to this container */
+  position: relative; /* Required to position the button relative to this container */
   padding: 15px;
-  min-height: 60px;    /* Set a minimum height to ensure button fits within the box */
+  min-height: 60px; /* Set a minimum height to ensure button fits within the box */
 }
 
 .Group {
-  max-width: calc(100% - 150px);  /* Reduce the width of the Group content to leave space for the button */
-  word-wrap: break-word;          /* Ensure long words break into new lines */
-  white-space: normal;            /* Ensure text can wrap onto the next line */
+  max-width: calc(100% - 150px); /* Reduce the width of the Group content to leave space for the button */
+  word-wrap: break-word; /* Ensure long words break into new lines */
+  white-space: normal; /* Ensure text can wrap onto the next line */
+}
+
+/* Media query for smaller screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .queue .join-btn,
+  .queue .leave-btn,
+  .queue .private-btn,
+  .queue .help-btn {
+    padding: 4px 15px; /* Reduce padding */
+    font-size: 12px; /* Reduce font size */
+    right: 16px; /* Adjust right margin */
+  }
+
+  .queue .button-group {
+    gap: 5px; /* Reduce gap between buttons */
+    right: 16px; /* Adjust the position */
+  }
+
+  .helping {
+    margin: 20px 20px;
+  }
+  
+  .upcoming {
+    margin: 20px 20px;
+  }
+
+  .Group {
+    max-width: calc(100% - 100px); /* Adjust max-width to fit buttons */
+  }
+}
+
+/* Media query for extra small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .queue .join-btn,
+  .queue .leave-btn,
+  .queue .private-btn,
+  .queue .help-btn {
+    padding: 6px 16px; /* Further reduce padding */
+    font-size: 12px; /* Further reduce font size */
+    right: 12px; /* Adjust right margin */
+  }
+
+  .queue .button-group {
+    gap: 3px; /* Reduce gap between buttons even more */
+    right: 12px; /* Adjust the position */
+  }
+
+  .helping {
+    margin: 20px 20px;
+  }
+  
+  .upcoming {
+    margin: 20px 20px;
+  }
+
+  .Group {
+    max-width: calc(100% - 80px); /* Adjust max-width to fit buttons */
+  }
 }

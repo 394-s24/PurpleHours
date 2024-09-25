@@ -1,7 +1,45 @@
+/* Base styles for landing page */
 .landing {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.courses-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.course-btn {
+  background-color: #784497;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+.course-btn:hover {
+  background-color: #5a3374;
+}
+
+.course-btn:focus {
+  outline: none;
+  box-shadow: 0px 0px 5px rgba(120, 68, 151, 0.5);
+}
+
+/* Media query for extra small screens */
+@media (max-width: 480px) {
+  .course-btn {
+    padding: 12px 18px; /* Increase padding for bigger buttons */
+    font-size: 20px; /* Increase font size */
+  }
 }

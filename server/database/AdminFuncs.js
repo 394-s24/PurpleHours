@@ -34,6 +34,7 @@ export const getCourses = async () => {
   const courses = Object.keys(coursesData).map((courseKey) => ({
     number: courseKey,
     name: coursesData[courseKey].name,
+    active: coursesData[courseKey].active,
   }));
 
   return courses;

@@ -36,14 +36,7 @@ const TA = () => {
   const refinedQueue = useQueueManager(queue, course);
 
   // Initialize user
-  const user = useInitializeUser(course);
-
-  // Handle loading state after data fetch
-  useEffect(() => {
-    if (user && queue) {
-      setLoggedIn(true);
-    }
-  }, [user, queue]);
+  const user = useInitializeUser(course, isValid, setLoggedIn);
 
   // TA validation state
   // States not being used since we're redirecting to an error page
@@ -85,10 +78,10 @@ const TA = () => {
   return (
     <div className="ta_view">
       {validating && <LoadingScreen />}
-      <div className="title">
+      {isValid && <div className="title">
         <h1>{course.toUpperCase()} Office Hours</h1>
         <SignInOutButton loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      </div>
+      </div>}
       {loggedIn && (
         <>
           <TAQueue

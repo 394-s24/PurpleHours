@@ -4,14 +4,15 @@ import UserContext from '../components/UserContext.jsx';
 
 import { initializeUserIfNeeded } from '../../server/database/UserFuncs';
 
-const useInitializeUser = (course, isValid) => {
+const useInitializeUser = (course, isValid, setLoggedIn) => {
   const user = useContext(UserContext);
 
   useEffect(() => {
     if (user && isValid) {
         initializeUserIfNeeded(user, course);
+        setLoggedIn(true)
     }
-  }, [user, course]);
+  }, [user, course, isValid]);
 
   return user;
 };

@@ -5,7 +5,6 @@ import {
   addToGroup,
   createNewGroup,
 } from "../../server/database/GroupFuncs.js";
-import { isUserInGroup } from "../../server/database/UserFuncs.js";
 
 import UserContext from "./UserContext.jsx";
 

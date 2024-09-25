@@ -5,26 +5,27 @@ import app from "./FirebaseApp";
 const db = getDatabase(app);
 
 export const useDbData = (course) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const groupsRef = ref(db, `queues/${course}/groups/`);
 
   useEffect(() => {
+    const courseRef = ref(db, `queues/${course}/groups`);
+    // Set up a real-time listener for the queue data
     const unsubscribe = onValue(
-      groupsRef,
-      async (snapshot) => {
+      courseRef,
+      (snapshot) => {
         if (snapshot.exists()) {
-          const groupsData = snapshot.val();
-          setData(groupsData);
+          setData(snapshot.val());
         } else {
-          setData([]);
+          setData(null);
         }
       },
       (error) => {
         setError(error);
-      },
+      }
     );
 
+    // Cleanup the listener on component unmount
     return () => unsubscribe();
   }, [course]);
 
