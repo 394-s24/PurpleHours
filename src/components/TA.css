@@ -14,3 +14,12 @@
   text-decoration: none;
   margin: 20px;
 }
+
+/* Media query for smaller screens */
+@media (max-width: 480px) {
+  .ta_view .title {
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 10px;
+  }
+}

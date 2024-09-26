@@ -4,6 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 
 import {
   setGroupHelping,
+  removeGroup,
   removeGroupAndIncrement,
   putBackGroup,
 } from "../../server/database/GroupFuncs.js";
@@ -45,6 +46,10 @@ const TA = () => {
   // Modal state for confirming queue clearance
   const [showConfirm, setShowConfirm] = useState(false);
 
+  // Modal state for confirming group deletion
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [groupToDelete, setGroupToDelete] = useState(null);
+
   // Handle group actions (Done, Helping, Put Back)
   const handleDone = (groupId) => {
     removeGroupAndIncrement(course, groupId);
@@ -56,6 +61,20 @@ const TA = () => {
 
   const handlePutBack = (groupId) => {
     putBackGroup(course, groupId);
+  };
+
+  const handleDelete = (groupId) => {
+    setGroupToDelete(groupId); // Set the group ID to be deleted
+    setShowDeleteConfirm(true); // Show the delete confirmation modal
+  };
+
+  // Confirm group deletion
+  const handleConfirmDelete = async () => {
+    if (groupToDelete) {
+      await removeGroup(course, groupToDelete);
+      setGroupToDelete(null); // Reset the group ID
+      setShowDeleteConfirm(false); // Close the modal
+    }
   };
 
   // Handle queue clearance
@@ -74,6 +93,12 @@ const TA = () => {
     setShowConfirm(false);
   };
 
+  // Hide the delete confirmation modal
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setGroupToDelete(null);
+  };
+
   // Render the component
   return (
     <div className="ta_view">
@@ -89,6 +114,7 @@ const TA = () => {
             handleDone={handleDone}
             handleHelping={handleHelping}
             handlePutBack={handlePutBack}
+            handleDelete={handleDelete}
             course={course}
           />
           <div className="clear">
@@ -100,6 +126,8 @@ const TA = () => {
               Clear Queue
             </Button>
           </div>
+
+          {/* Clear Queue Confirmation Modal */}
           <Modal show={showConfirm} onHide={handleCancel}>
             <Modal.Header closeButton>
               <Modal.Title>Confirm Clear Queue</Modal.Title>
@@ -113,6 +141,24 @@ const TA = () => {
                 Cancel
               </Button>
               <Button variant="danger" onClick={handleClearQueue}>
+                Confirm
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Delete Confirmation Modal */}
+          <Modal show={showDeleteConfirm} onHide={handleCancelDelete}>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm Delete Group</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Are you sure you want to delete this group? This action cannot be undone.
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCancelDelete}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleConfirmDelete}>
                 Confirm
               </Button>
             </Modal.Footer>

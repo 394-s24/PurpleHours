@@ -118,7 +118,6 @@ export async function removeFromGroup(course, uid, groupId) {
 export async function removeGroup(course, id) {
   try {
     const groupRef = ref(db, `queues/${course}/groups/${id}`);
-    const namesRef = ref(db, `queues/${course}/groups/${id}/names/`);
     
     // Fetch the group's data
     const snapshot = await get(groupRef);
@@ -135,12 +134,6 @@ export async function removeGroup(course, id) {
       for (const member of members) {
         await setInGroupStatus(member.uid, course, false);
       }
-
-      // Save the modified group data (without currentlyHelping) to the history field under the course
-      const historyRef = ref(db, `courses/${course}/history/${id}`);
-      await set(historyRef, groupData);
-
-      console.log("Group data saved to history successfully!");
     }
 
     // Remove the group from the active queue

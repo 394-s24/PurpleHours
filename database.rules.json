@@ -3,15 +3,16 @@
     "courses": {
       ".read": true,
       "$courseId": {
-        ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true", // Only admins can write
+        ".read": true,
+        ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
         "history": {
           ".read": true,
           ".write": "auth != null && root.child('courses/' + $courseId + '/users/' + auth.uid + '/isTA').val() === true"
         },
         "users": {
           "$userId": {
-            ".read": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
-            ".write": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
+            ".read": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true || root.child('courses/' + $courseId + '/users/' + auth.uid + '/isTA').val() === true)", 
+            ".write": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true || root.child('courses/' + $courseId + '/users/' + auth.uid + '/isTA').val() === true)", 
             "isTA": {
               ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true"
             }
@@ -20,22 +21,20 @@
       }
     },
     "queues": {
-      "$courseId": {
-        ".read": true,
-        ".write": "auth != null"
-      }
+      ".read": true,
+      ".write": "auth != null"
     },
     "users": {
       "$userId": {
-        ".read": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)", // User themselves or admin can read
-        ".write": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)", // User themselves or admin can write
+        ".read": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
+        ".write": "auth != null && (auth.uid === $userId || root.child('users/' + auth.uid + '/isAdmin').val() === true)",
         "isAdmin": {
           ".read": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true", 
           ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true"
         }
       },
-      ".read": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true", // Admins can read all user data
-      ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true" // Admins can write all user data
+      ".read": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true",
+      ".write": "auth != null && root.child('users/' + auth.uid + '/isAdmin').val() === true"
     }
   }
 }
