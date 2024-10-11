@@ -90,7 +90,10 @@ export const incrementHelpCounters = async (uid, course) => {
   });
 };
 
-export const getUserHelpCountsSingle = async (uid, course) => {
+export const getUserHelpCountsSingle = async (uid, course, displayName) => {
+  // Ensure help counters are updated
+  await updateHelpCountersIfNeeded(uid, displayName, course);
+
   const userRef = ref(db, `courses/${course}/users/${uid}/dailyHelpCount`);
   const snapshot = await get(userRef);
   return snapshot.exists() ? snapshot.val() : 0;
@@ -99,7 +102,7 @@ export const getUserHelpCountsSingle = async (uid, course) => {
 export const getUserHelpCounts = async (names, course) => {
   const counts = {};
   for (const nameObj of names) {
-    counts[nameObj.uid] = await getUserHelpCountsSingle(nameObj.uid, course);
+    counts[nameObj.uid] = await getUserHelpCountsSingle(nameObj.uid, course, nameObj.name);
   }
   return counts;
 };

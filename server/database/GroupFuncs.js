@@ -41,7 +41,7 @@ export async function createNewGroup(course, groupsData) {
 
 export async function addToGroup(course, groupId, displayName, uid) {
   try {
-    const helpCount = await getUserHelpCountsSingle(uid, course);
+    const helpCount = await getUserHelpCountsSingle(uid, course, displayName);
 
     // Generate a new entry with a unique key based on a timestamp
     const newEntryRef = push(
